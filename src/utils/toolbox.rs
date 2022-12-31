@@ -63,3 +63,12 @@ macro_rules! hashmap {
          map
     }}
 }
+
+#[macro_export]
+macro_rules! measure {
+    ($s:stmt) => {
+        let timer = std::time::Instant::now();
+        $s
+        println!("{}", format!("Elapsed: {:?}", timer.elapsed()).italic().dimmed());
+    };
+}

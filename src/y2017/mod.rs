@@ -3,6 +3,7 @@ extern crate regex;
 
 use colored::Colorize;
 use std::env;
+use crate::measure;
 use crate::y2017::day01::day01;
 use crate::y2017::day02::day02;
 use crate::y2017::day03::day03;
@@ -54,14 +55,6 @@ mod day22;
 mod day23;
 mod day24;
 mod day25;
-
-macro_rules! measure {
-    ($s:stmt) => {
-        let timer = std::time::Instant::now();
-        $s
-        println!("{}", format!("Elapsed: {:?}", timer.elapsed()).italic().dimmed());
-    };
-}
 
 pub(crate) fn y2017() {
     let args: Vec<String> = env::args().collect();
