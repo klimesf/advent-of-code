@@ -5,7 +5,7 @@ use crate::y2022::y2022;
 mod y2017;
 mod y2022;
 
-mod utils { pub mod toolbox; pub mod io; }
+mod utils { pub mod toolbox; }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
