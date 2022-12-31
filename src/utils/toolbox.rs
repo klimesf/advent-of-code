@@ -1,4 +1,5 @@
 use core::mem;
+use regex::Match;
 
 #[allow(dead_code)]
 pub(crate) fn gcd(mut a: i32, mut b: i32) -> i32 {
@@ -42,6 +43,16 @@ pub(crate) fn lcm_64(a: i64, b: i64) -> i64 {
     } else {
         (a * b) / gcd_64(b, a)
     }
+}
+
+#[allow(dead_code)]
+pub(crate) fn parse_usize(g: Option<Match>) -> usize {
+    g.map_or(0, |m| m.as_str().parse().unwrap())
+}
+
+#[allow(dead_code)]
+pub(crate) fn parse_i32(g: Option<Match>) -> i32 {
+    return g.map_or(0, |m| m.as_str().parse().unwrap());
 }
 
 #[macro_export]
