@@ -1,0 +1,15 @@
+# Advent of Code
+
+[Advent of Code](https://adventofcode.com/) solved in [Rust](https://www.rust-lang.org/).
+
+This is a monorepo for all years I solved. Some ideas are mine, but I often go through
+[AoC subreddit](https://www.reddit.com/r/adventofcode/) after I solve the day and optimize
+my solution. Some days I'm in a hurry and the code is a mess, some days I'm proud of it.
+
+My inputs are not committed here because I respect Topaz's wish. Therefore, if you download
+the repo and try to run it, you won't succeed. But you can copy your own inputs and try it that way.
+
+## Nav
+
+- [Year 2022](/src/y2022)
+- [Utils](/src/utils)
