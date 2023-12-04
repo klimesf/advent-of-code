@@ -8,7 +8,7 @@ pub(crate) fn day04() {
 
 fn part_a(cards: String) -> i32 {
     cards.lines().map(|line| {
-        let (card_id_str, numbers) = line.split_once(": ").unwrap();
+        let (_, numbers) = line.split_once(": ").unwrap();
 
         let (winning_s, right) = numbers.split_once(" | ").unwrap();
 
