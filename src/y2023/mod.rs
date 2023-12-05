@@ -45,7 +45,7 @@ pub(crate) fn y2023() {
         measure!(day04());
     }
 
-    if args.contains(&"all".to_string()) && args.contains(&"day05".to_string()) { // TODO: disable until optimized
+    if args.contains(&"all".to_string()) || args.contains(&"day05".to_string()) {
         println!("{}", format!("--- day05:").underline().green());
         measure!(day05());
     }
