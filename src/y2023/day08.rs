@@ -1,5 +1,6 @@
 use std::collections::{HashMap};
 use std::fs;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use crate::utils::toolbox::lcm_64;
 
 pub(crate) fn day08() {
@@ -49,18 +50,12 @@ fn part_b(input: String) -> i64 {
         }
     });
 
-    let mut all: Vec<i64> = vec!();
-    for ghost in start_points {
+    let mut all: Vec<i64> = start_points.par_iter().map(|ghost| {
         let mut pos = ghost;
         let mut steps: i64 = 0;
-        let mut ends = HashMap::new();
         loop {
-            if pos.ends_with("Z") && ends.contains_key(pos) {
-                let start = ends.get(pos).unwrap();
-                all.push(steps - *start);
-                break;
-            } else if pos.ends_with("Z") {
-                ends.insert(pos, steps);
+            if pos.ends_with("Z") {
+                return steps;
             }
 
             let instruction = instructions.chars().nth(steps as usize % instructions.len()).unwrap();
@@ -72,7 +67,7 @@ fn part_b(input: String) -> i64 {
             }
             steps += 1;
         }
-    }
+    }).collect();
 
     let mut res = all.pop().unwrap();
     for i in 0..all.len() {
