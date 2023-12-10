@@ -23,21 +23,19 @@ fn part_a(input: String) -> i32 {
         let time = times[i];
         let record = distances[i];
 
-        let mut ans = 0;
-        for t in 0..time {
-            let travel_time = time - t;
-            let travel_speed = t;
+        // dist = x * (t - x)
+        // dist = tx - x^2
+        // x^2 - tx + dist = 0
+        // x = (t +- sqrt(t^2 - 4 dist) / 2)
 
-            if travel_time * travel_speed > record {
-                ans += 1
-            }
-        }
+        let x1 = (time as f64 + ((time.pow(2) - 4 * record) as f64).sqrt()) / 2.0;
+        let x2 = (time as f64 - ((time.pow(2) - 4 * record) as f64).sqrt()) / 2.0;
 
-        ans
+        (x1.ceil() - x2.floor()) as i32 - 1
     }).product()
 }
 
-fn part_b(input: String) -> u64 {
+fn part_b(input: String) -> i64 {
     let (time_str, distance_str) = input.split_once("\n").unwrap();
 
     let time = time_str.split_whitespace().enumerate()
@@ -52,16 +50,10 @@ fn part_b(input: String) -> u64 {
         .into_iter().join("")
         .parse::<i64>().unwrap();
 
-    let mut ans = 0;
-    for t in 0..time {
-        let travel_time = time - t;
-        let travel_speed = t;
+    let x1 = (time as f64 + ((time.pow(2) - 4 * record) as f64).sqrt()) / 2.0;
+    let x2 = (time as f64 - ((time.pow(2) - 4 * record) as f64).sqrt()) / 2.0;
 
-        if travel_time * travel_speed > record {
-            ans += 1
-        }
-    }
-    ans
+    (x1.ceil() - x2.floor()) as i64 - 1
 }
 
 #[cfg(test)]
