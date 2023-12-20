@@ -88,29 +88,19 @@ fn part_b(input: String) -> i64 {
         modules.insert(name_fr, tp);
 
         let dests: Vec<&str> = destinations_str.split(", ").collect();
-        match tp {
-            Type::FlipFlop => {
-                flip_flop_states.insert(name_fr, false);
-                destinations.insert(name_fr, dests);
-            }
-            Type::Conjunction => {
-                destinations.insert(name_fr, dests);
-            }
-            Type::Broadcaster => {
-                destinations.insert(name_fr, dests);
-            }
-        }
+        destinations.insert(name_fr, dests);
     });
 
-    for (from, dests) in &destinations {
-        for dest in dests {
+    // Pre-populate conjunction states
+    destinations.iter().for_each(|(from, dests)| {
+        dests.iter().for_each(|dest| {
             if let Some(tp) = modules.get(dest) {
                 if *tp == Type::Conjunction {
                     conjunction_states.entry(dest).or_insert(HashMap::new()).insert(from, false);
                 }
             }
-        }
-    }
+        })
+    });
 
     let mut ans = 0;
     let mut lcms = HashMap::new();
@@ -136,11 +126,10 @@ fn part_b(input: String) -> i64 {
                 lcms.insert("kk", ans);
             }
             if lcms.contains_key("vt") && lcms.contains_key("sk") && lcms.contains_key("xc") && lcms.contains_key("kk") {
-                let vt = *lcms.get("vt").unwrap() as i64;
-                let sk = *lcms.get("sk").unwrap() as i64;
-                let xc = *lcms.get("xc").unwrap() as i64;
-                let kk = *lcms.get("kk").unwrap() as i64;
-
+                let vt = *lcms.get("vt").unwrap();
+                let sk = *lcms.get("sk").unwrap();
+                let xc = *lcms.get("xc").unwrap();
+                let kk = *lcms.get("kk").unwrap();
                 return lcm_64(lcm_64(lcm_64(vt, sk), xc), kk);
             }
 
@@ -148,50 +137,24 @@ fn part_b(input: String) -> i64 {
                 return ans;
             }
 
-            if !modules.contains_key(key) { continue; }
-            let tp = *modules.get(key).unwrap();
-            match tp {
+            if !modules.contains_key(key) { continue }
+            let send_high: bool;
+            match *modules.get(key).unwrap() {
                 Type::FlipFlop => {
-                    let state = *flip_flop_states.get(key).unwrap();
-                    let dests = destinations.get(key).unwrap();
-
-                    if !high {
-                        if !state {
-                            flip_flop_states.insert(key, true);
-                            for dest in dests {
-                                stack.push_back((true, dest, key));
-                            }
-                        } else {
-                            flip_flop_states.insert(key, false);
-                            for dest in dests {
-                                stack.push_back((false, dest, key));
-                            }
-                        }
-                    }
+                    if high { continue; }
+                    let state = *flip_flop_states.entry(key).or_insert(false);
+                    flip_flop_states.insert(key, !state);
+                    send_high = !state;
                 }
                 Type::Conjunction => {
                     let state = conjunction_states.entry(key).or_insert(HashMap::new());
                     state.insert(from, high);
-                    let dests = destinations.get(key).unwrap();
-
-                    if state.values().all(|v| *v) {
-                        // send low
-                        for dest in dests {
-                            stack.push_back((false, dest, key));
-                        }
-                    } else {
-                        // send high
-                        for dest in dests {
-                            stack.push_back((true, dest, key));
-                        }
-                    }
+                    if state.values().all(|v| *v) { send_high = false } else { send_high = true }
                 }
-                Type::Broadcaster => {
-                    let dests = destinations.get(key).unwrap();
-                    for dest in dests {
-                        stack.push_back((high, dest, key));
-                    }
-                }
+                Type::Broadcaster => { send_high = high }
+            }
+            for dest in destinations.get(key).unwrap() {
+                stack.push_back((send_high, dest, key));
             }
         }
     }
