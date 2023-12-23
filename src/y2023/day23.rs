@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day23() {
@@ -20,40 +20,36 @@ fn part_a(input: String) -> usize {
         }
     }
 
-    let mut stack = VecDeque::new();
-    stack.push_back(Pos { r: start.0, c: start.1, dist: 0, visited: HashSet::new() });
+    dfs(start, end, 0, &mut HashSet::new(), &matrix)
+}
 
-    let mut max = 0;
+fn dfs(pos: (usize, usize), end: (usize, usize), dist: usize, visited: &mut HashSet<(usize, usize)>,
+       matrix: &Vec<Vec<char>>) -> usize {
+    if pos == end { return dist; }
+    if matrix[pos.0][pos.1] == '#' { return 0; }
+    if !visited.insert(pos) { return 0; }
 
-    while let Some(mut pos) = stack.pop_back() {
-        if matrix[pos.r][pos.c] == '#' { continue }
-
-        if !pos.visited.insert((pos.r, pos.c)) { continue }
-        if pos.r == end.0 && pos.c == end.1 {
-            if pos.dist > max { max = pos.dist }
-            continue
-        }
-
-        if matrix[pos.r][pos.c] == '>' {
-            stack.push_back(Pos { r: pos.r, c: pos.c + 1, dist: pos.dist + 1, visited: pos.visited.clone() });
-            continue
-        } else if matrix[pos.r][pos.c] == '<' {
-            stack.push_back(Pos { r: pos.r, c: pos.c - 1, dist: pos.dist + 1, visited: pos.visited.clone() });
-            continue
-        } else if matrix[pos.r][pos.c] == '^' {
-            stack.push_back(Pos { r: pos.r - 1, c: pos.c, dist: pos.dist + 1, visited: pos.visited.clone() });
-            continue
-        } else if matrix[pos.r][pos.c] == 'v' {
-            stack.push_back(Pos { r: pos.r + 1, c: pos.c, dist: pos.dist + 1, visited: pos.visited.clone() });
-            continue
-        } else {
-            stack.push_back(Pos { r: pos.r, c: pos.c + 1, dist: pos.dist + 1, visited: pos.visited.clone() });
-            stack.push_back(Pos { r: pos.r, c: pos.c - 1, dist: pos.dist + 1, visited: pos.visited.clone() });
-            if pos.r > 0 { stack.push_back(Pos { r: pos.r - 1, c: pos.c, dist: pos.dist + 1, visited: pos.visited.clone() }) }
-            stack.push_back(Pos { r: pos.r + 1, c: pos.c, dist: pos.dist + 1, visited: pos.visited.clone() });
-        }
+    let mut neighbors = vec!();
+    if matrix[pos.0][pos.1] == '>' {
+        neighbors.push((pos.0, pos.1 + 1));
+    } else if matrix[pos.0][pos.1] == '<' {
+        neighbors.push((pos.0, pos.1 - 1));
+    } else if matrix[pos.0][pos.1] == '^' {
+        neighbors.push((pos.0 - 1, pos.1));
+    } else if matrix[pos.0][pos.1] == 'v' {
+        neighbors.push((pos.0 + 1, pos.1));
+    } else {
+        neighbors.push((pos.0, pos.1 + 1));
+        neighbors.push((pos.0, pos.1 - 1));
+        if pos.0 > 0 { neighbors.push((pos.0 - 1, pos.1)) }
+        neighbors.push((pos.0 + 1, pos.1));
     }
 
+    let max = neighbors.iter()
+        .map(|new_pos| dfs(*new_pos, end, dist + 1, visited, matrix))
+        .max().unwrap();
+
+    visited.remove(&pos);
     max
 }
 
@@ -74,8 +70,8 @@ fn part_b(input: String) -> usize {
     let mut crossroads = HashSet::new();
 
     for r in 1..(matrix.len() - 1) {
-        for c in 1.. (matrix[0].len() - 1) {
-            if matrix[r][c] == '#' { continue }
+        for c in 1..(matrix[0].len() - 1) {
+            if matrix[r][c] == '#' { continue; }
             let mut neighbors = 0;
             if matrix[r - 1][c] != '#' {
                 neighbors += 1;
@@ -106,8 +102,8 @@ fn part_b(input: String) -> usize {
         stack.push((crossroad.0, crossroad.1 - 1, 1));
 
         while let Some((r, c, dist)) = stack.pop() {
-            if matrix[r][c] == '#' { continue }
-            if !visited.insert((r, c)) { continue }
+            if matrix[r][c] == '#' { continue; }
+            if !visited.insert((r, c)) { continue; }
             if r == start.0 && c == start.1 {
                 map.entry(*crossroad).or_insert(vec!()).push((r, c, dist));
                 map.entry(start).or_insert(vec!()).push((crossroad.0, crossroad.1, dist));
@@ -130,27 +126,19 @@ fn part_b(input: String) -> usize {
         }
     }
 
-    let mut max = 0;
-    let mut stack = vec!();
-    let mut visited = HashSet::new();
-    visited.insert(start);
-    stack.push(Pos { r: start.0, c: start.1, dist: 0, visited: visited });
+    dfs_b(start, end, 0, &map, &mut HashSet::new())
+}
 
-    while let Some(mut pos) = stack.pop() {
-        if pos.r == end.0 && pos.c == end.1 {
-            if pos.dist > max { max = pos.dist }
-            continue
-        }
+fn dfs_b(pos: (usize, usize), end: (usize, usize), dist: usize,
+         map: &HashMap<(usize, usize), Vec<(usize, usize, usize)>>,
+         visited: &mut HashSet<(usize, usize)>) -> usize {
+    if pos == end { return dist }
 
-        pos.visited.insert((pos.r, pos.c));
-        let edges = map.get(&(pos.r, pos.c)).unwrap();
-        for (r, c, dist_to) in edges {
-            if !pos.visited.contains(&(*r, *c)) {
-                stack.push(Pos { r: *r, c: *c, dist: pos.dist + dist_to, visited: pos.visited.clone() })
-            }
-        }
-    }
-
+    if !visited.insert(pos) { return 0 }
+    let max = map.get(&pos).unwrap().iter()
+        .map(|(r, x, dist_to)| dfs_b((*r, *x), end, dist + dist_to, map, visited))
+        .max().unwrap();
+    visited.remove(&pos);
     max
 }
 
