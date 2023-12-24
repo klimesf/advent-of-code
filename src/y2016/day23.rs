@@ -16,7 +16,7 @@ fn solve(input: String, a_initial: i32) -> i32 {
 
     let mut i = 0;
     while i < instructions.len() as i32 {
-        println!("a:{:3} b:{:3} c:{:3} d:{:3}", registers.get(&"a".to_string()).unwrap(), registers.get(&"b".to_string()).unwrap(), registers.get(&"c".to_string()).unwrap(), registers.get(&"d".to_string()).unwrap());
+        // println!("a:{:3} b:{:3} c:{:3} d:{:3}", registers.get(&"a".to_string()).unwrap(), registers.get(&"b".to_string()).unwrap(), registers.get(&"c".to_string()).unwrap(), registers.get(&"d".to_string()).unwrap());
         let line = instructions[i as usize].clone();
         let (instr, args) = line.split_once(" ").unwrap();
         match instr {
