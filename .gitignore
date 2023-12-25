@@ -1,2 +1,3 @@
 /target
 /input/**/input.txt
+/input/**/input*.txt
