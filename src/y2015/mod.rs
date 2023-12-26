@@ -19,7 +19,7 @@ use crate::y2015::day12::day12;
 use crate::y2015::day13::day13;
 use crate::y2015::day14::day14;
 use crate::y2015::day15::day15;
-// use crate::y2015::day16::day16;
+use crate::y2015::day16::day16;
 // use crate::y2015::day17::day17;
 // use crate::y2015::day18::day18;
 // use crate::y2015::day19::day19;
@@ -45,7 +45,7 @@ mod day12;
 mod day13;
 mod day14;
 mod day15;
-// mod day16;
+mod day16;
 // mod day17;
 // mod day18;
 // mod day19;
@@ -138,11 +138,11 @@ pub(crate) fn y2015() {
         measure!(day15());
     }
 
-    // if args.contains(&"all".to_string()) || args.contains(&"day16".to_string()) {
-    //     println!("{}", format!("--- day16:").underline().green());
-    //     measure!(day16());
-    // }
-    //
+    if args.contains(&"all".to_string()) || args.contains(&"day16".to_string()) {
+        println!("{}", format!("--- day16:").underline().green());
+        measure!(day16());
+    }
+
     // if args.contains(&"all".to_string()) || args.contains(&"day17".to_string()) {
     //     println!("{}", format!("--- day17:").underline().green());
     //     measure!(day17());
