@@ -56,6 +56,11 @@ pub(crate) fn parse_i32(g: Option<Match>) -> i32 {
 }
 
 #[allow(dead_code)]
+pub(crate) fn parse_i64(g: Option<Match>) -> i64 {
+    return g.map_or(0, |m| m.as_str().parse().unwrap());
+}
+
+#[allow(dead_code)]
 pub(crate) fn parse_char(g: Option<Match>) -> char {
     return g.map_or('_', |m| m.as_str().chars().nth(0).unwrap());
 }
