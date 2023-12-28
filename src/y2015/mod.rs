@@ -4,7 +4,7 @@ extern crate regex;
 use colored::Colorize;
 use std::env;
 use crate::measure;
-// use crate::y2015::day07::day01;
+use crate::y2015::day01::day01;
 // use crate::y2015::day02::day02;
 // use crate::y2015::day03::day03;
 // use crate::y2015::day04::day04;
@@ -30,7 +30,7 @@ use crate::y2015::day23::day23;
 use crate::y2015::day24::day24;
 use crate::y2015::day25::day25;
 
-// mod day01;
+mod day01;
 // mod day02;
 // mod day03;
 // mod day04;
@@ -63,11 +63,11 @@ pub(crate) fn y2015() {
     println!("{}", format!("        //2015").red());
     println!();
 
-    // if args.contains(&"all".to_string()) || args.contains(&"day01".to_string()) {
-    //     println!("{}", format!("--- day01:").underline().green());
-    //     measure!(day01());
-    // }
-    //
+    if args.contains(&"all".to_string()) || args.contains(&"day01".to_string()) {
+        println!("{}", format!("--- day01:").underline().green());
+        measure!(day01());
+    }
+
     // if args.contains(&"all".to_string()) || args.contains(&"day02".to_string()) {
     //     println!("{}", format!("--- day02:").underline().green());
     //     measure!(day02());
