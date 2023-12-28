@@ -10,8 +10,7 @@ fn part_a(input: String) -> usize {
     let items: Vec<usize> = input.lines().map(|line| { line.parse::<usize>().unwrap() }).collect();
 
     for group_a_size in 1..items.len() {
-        let mut min = usize::MAX;
-        items.iter().combinations(group_a_size).for_each(|group_a| {
+        for group_a in items.iter().combinations(group_a_size) {
             let remaining: Vec<usize> = items.iter()
                 .filter(|n| !group_a.contains(n))
                 .map(|n| *n)
@@ -19,15 +18,14 @@ fn part_a(input: String) -> usize {
             let sum = group_a.iter().map(|n| **n).sum();
 
             if sum != remaining.iter().sum::<usize>() / 2 {
-                return
+                continue
             }
 
             if two_subsets_sum(remaining, sum) {
-                min = min.min(group_a.iter().map(|n| **n).product())
+                // combinations are returned in order of the original vec, so the first split we found is already min
+                return group_a.iter().map(|n| **n).product()
             }
-        });
-
-        if min < usize::MAX { return min; }
+        }
     }
     panic!("no item config found")
 }
@@ -36,8 +34,7 @@ fn part_b(input: String) -> usize {
     let items: Vec<usize> = input.lines().map(|line| { line.parse::<usize>().unwrap() }).collect();
 
     for group_a_size in 1..items.len() {
-        let mut min = usize::MAX;
-        items.iter().combinations(group_a_size).for_each(|group_a| {
+        for group_a in items.iter().combinations(group_a_size) {
             let remaining: Vec<usize> = items.iter()
                 .filter(|n| !group_a.contains(n))
                 .map(|n| *n)
@@ -45,15 +42,14 @@ fn part_b(input: String) -> usize {
             let sum = group_a.iter().map(|n| **n).sum();
 
             if sum != remaining.iter().sum::<usize>() / 3 {
-                return
+                continue
             }
 
             if three_subsets_sum(remaining, sum) {
-                min = min.min(group_a.iter().map(|n| **n).product())
+                // combinations are returned in order of the original vec, so the first split we found is already min
+                return group_a.iter().map(|n| **n).product()
             }
-        });
-
-        if min < usize::MAX { return min; }
+        }
     }
     panic!("no item config found")
 }
