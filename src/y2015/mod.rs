@@ -7,7 +7,7 @@ use crate::measure;
 use crate::y2015::day01::day01;
 use crate::y2015::day02::day02;
 use crate::y2015::day03::day03;
-// use crate::y2015::day04::day04;
+use crate::y2015::day04::day04;
 // use crate::y2015::day05::day05;
 // use crate::y2015::day06::day06;
 use crate::y2015::day07::day07;
@@ -33,7 +33,7 @@ use crate::y2015::day25::day25;
 mod day01;
 mod day02;
 mod day03;
-// mod day04;
+mod day04;
 // mod day05;
 // mod day06;
 mod day07;
@@ -78,11 +78,11 @@ pub(crate) fn y2015() {
         measure!(day03());
     }
 
-    // if args.contains(&"all".to_string()) || args.contains(&"day04".to_string()) {
-    //     println!("{}", format!("--- day04:").underline().green());
-    //     measure!(day04());
-    // }
-    //
+    if args.contains(&"all".to_string()) || args.contains(&"day04".to_string()) {
+        println!("{}", format!("--- day04:").underline().green());
+        measure!(day04());
+    }
+
     // if args.contains(&"all".to_string()) || args.contains(&"day05".to_string()) {
     //     println!("{}", format!("--- day05:").underline().green());
     //     measure!(day05());
