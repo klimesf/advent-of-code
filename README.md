@@ -11,6 +11,7 @@ the repo and try to run it, you won't succeed. But you can copy your own inputs 
 
 ## Nav
 
+- [Year 2015](/src/y2015) (solved 28.12.2023)
 - [Year 2016](/src/y2016) (solved 24.12.2023)
 - [Year 2017](/src/y2017) (solved 30.12.2022)
 - [Year 2019](/src/y2019) (solved 16.01.2022)
