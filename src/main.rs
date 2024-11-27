@@ -6,6 +6,7 @@ use crate::y2018::y2018;
 use crate::y2019::y2019;
 use crate::y2022::y2022;
 use crate::y2023::y2023;
+use crate::y2024::y2024;
 
 mod y2015;
 mod y2016;
@@ -14,6 +15,7 @@ mod y2018;
 mod y2019;
 mod y2022;
 mod y2023;
+mod y2024;
 
 mod utils { pub mod toolbox; }
 
@@ -39,5 +41,8 @@ fn main() {
     }
     if args.contains(&"2023".to_string()) {
         y2023();
+    }
+    if args.contains(&"2024".to_string()) {
+        y2024();
     }
 }
