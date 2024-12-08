@@ -1,5 +1,9 @@
 use std::collections::HashSet;
 use std::fs;
+use rayon::iter::{IntoParallelRefIterator};
+use rayon::iter::ParallelIterator;
+
+const DIRS: [(i32, i32); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
 
 pub(crate) fn day06() {
     let (part_a, part_b) = solve(fs::read_to_string("input/2024/day06/input.txt").unwrap());
@@ -8,9 +12,9 @@ pub(crate) fn day06() {
 }
 
 fn solve(input: String) -> (usize, usize) {
-    let mut map = input.lines().map(|line| {
-        line.chars().collect()
-    }).collect::<Vec<Vec<char>>>();
+    let map = input.lines()
+        .map(|line| line.chars().collect())
+        .collect::<Vec<Vec<char>>>();
 
     let mut starting_pos: (i32, i32) = (0, 0);
     for i in 0..map[0].len() {
@@ -23,69 +27,57 @@ fn solve(input: String) -> (usize, usize) {
     }
 
     let mut pos = starting_pos.clone();
-    let mut dir = (-1, 0);
+    let mut dir = 0;
     let mut visited: HashSet<(usize, usize)> = HashSet::new();
 
     loop {
         visited.insert((pos.0 as usize, pos.1 as usize));
-        let mut next_pos = (pos.0 + dir.0, pos.1 + dir.1);
+        let next_pos = (pos.0 + DIRS[dir].0, pos.1 + DIRS[dir].1);
         if next_pos.0 < 0 || next_pos.0 >= map.len() as i32
             || next_pos.1 < 0 || next_pos.1 >= map[0].len() as i32 {
             break;
         }
-        loop {
-            if map[next_pos.0 as usize][next_pos.1 as usize] == '#' {
-                dir = rotate_right(&dir);
-                next_pos = (pos.0 + dir.0, pos.1 + dir.1);
-            } else { break }
+        if map[next_pos.0 as usize][next_pos.1 as usize] == '#' {
+            dir = (dir + 1) % 4;
+        } else {
+            pos = next_pos;
         }
-        pos = next_pos;
     }
     let ans_a = visited.len();
 
-    let mut ans_b = 0;
-    for (i, j) in visited {
-        if map[i][j] == '^' { continue; }
-        map[i][j] = '#';
+    // Parallelism speeds this up by a factor of ~3 on M1
+    let ans_b = visited.par_iter().map(|&(i, j)| {
+        if map[i][j] == '^' { return 0; }
 
+        let mut ans = 0;
         let mut pos = starting_pos.clone();
-        let mut dir = (-1, 0);
-        let mut visited_b: HashSet<(i32, i32, i32, i32)> = HashSet::new();
+        let mut dir = 0;
+        let mut visited_b: HashSet<(i32, i32, usize)> = HashSet::new();
 
-        loop {
-            if !visited_b.insert((pos.0, pos.1, dir.0, dir.1)) {
-                ans_b += 1;
-                break;
-            }
-            let mut next_pos = (pos.0 + dir.0, pos.1 + dir.1);
-            if next_pos.0 < 0 || next_pos.0 >= map.len() as i32
-                || next_pos.1 < 0 || next_pos.1 >= map[0].len() as i32 {
+        'outer: loop {
+            if !visited_b.insert((pos.0, pos.1, dir)) {
+                ans += 1;
                 break;
             }
             loop {
-                if map[next_pos.0 as usize][next_pos.1 as usize] == '#' {
-                    dir = rotate_right(&dir);
-                    next_pos = (pos.0 + dir.0, pos.1 + dir.1);
-                } else { break }
+                let next_pos = (pos.0 + DIRS[dir].0, pos.1 + DIRS[dir].1);
+                if next_pos.0 < 0 || next_pos.0 >= map.len() as i32
+                    || next_pos.1 < 0 || next_pos.1 >= map[0].len() as i32 {
+                    break 'outer;
+                }
+                if map[next_pos.0 as usize][next_pos.1 as usize] == '#'
+                    || (next_pos.0 as usize == i && next_pos.1 as usize == j) { // Replaced item
+                    pos = (next_pos.0 - DIRS[dir].0, next_pos.1 - DIRS[dir].1);
+                    dir = (dir + 1) % 4;
+                    continue 'outer;
+                }
+                pos = next_pos;
             }
-            pos = next_pos;
         }
-
-        // clean
-        map[i][j] = '.';
-    }
+        ans
+    }).sum();
 
     (ans_a, ans_b)
-}
-
-fn rotate_right(dir: &(i32, i32)) -> (i32, i32) {
-    match dir {
-        (-1, 0) => { (0, 1) }
-        (0, 1) => { (1, 0) }
-        (1, 0) => { (0, -1) }
-        (0, -1) => { (-1, 0) }
-        _ => panic!()
-    }
 }
 
 #[cfg(test)]
