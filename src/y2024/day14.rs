@@ -46,6 +46,8 @@ fn part_b(input: String, max_x: i32, max_y: i32) -> usize {
     }).collect();
 
     let mut ans = 0;
+    let mut avg_variance_x = 0;
+    let mut avg_variance_y = 0;
     loop {
         for i in 0..robots.len() {
             let (px, py, vx, vy) = robots[i];
@@ -54,8 +56,26 @@ fn part_b(input: String, max_x: i32, max_y: i32) -> usize {
             robots[i] = (new_px, new_py, vx, vy);
         }
         ans += 1;
-        // TODO: some fancy checking logic
-        if ans == 6243 { return ans }
+
+        let avg_x = robots.iter()
+            .map(|(x, _, _, _)| x)
+            .sum::<i32>() / robots.len() as i32;
+        let avg_y = robots.iter()
+            .map(|(_, y, _, _)| y)
+            .sum::<i32>() / robots.len() as i32;
+        let variance_x = robots.iter()
+            .map(|(x, _, _, _)| (x - avg_x).pow(2))
+            .sum::<i32>() / robots.len() as i32;
+        let variance_y = robots.iter()
+            .map(|(_, y, _, _)| (y - avg_y).pow(2))
+            .sum::<i32>() / robots.len() as i32;
+
+        if variance_x <= avg_variance_x / 2 && variance_y <= avg_variance_y / 2 {
+            return ans;
+        }
+
+        avg_variance_x = (avg_variance_x * (ans as i32 - 1) + variance_x) / ans as i32;
+        avg_variance_y = (avg_variance_y * (ans as i32 - 1) + variance_y) / ans as i32;
     }
 }
 
