@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs;
 use regex::Regex;
 use crate::utils::toolbox::parse_i32;
@@ -9,31 +10,28 @@ pub(crate) fn day14() {
 
 fn part_a(input: String, max_x: i32, max_y: i32) -> i32 {
     let re = Regex::new(r"p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)").unwrap();
-    let mut robots: Vec<(i32, i32, i32, i32)> = input.lines().map(|line| {
-        let caps = re.captures(line).unwrap();
-        let px = parse_i32(caps.get(1));
-        let py = parse_i32(caps.get(2));
-        let vx = parse_i32(caps.get(3));
-        let vy = parse_i32(caps.get(4));
-        (px, py, vx, vy)
-    }).collect();
-
-    for i in 0..robots.len() {
-        let (px, py, vx, vy) = robots[i];
-        let new_px = (px + 100 * vx).rem_euclid(max_x);
-        let new_py = (py + 100 * vy).rem_euclid(max_y);
-        robots[i] = (new_px, new_py, vx, vy);
-    }
-
-    let mut quadrants = vec![vec![0; 3]; 3];
-
-    for (px, py, _, _) in &robots {
-        let xs = (max_x / 2 - px).signum();
-        let ys = (max_y / 2 - py).signum();
-        quadrants[(xs + 1) as usize][(ys + 1) as usize] += 1;
-    }
-
-    quadrants[0][0] * quadrants[2][0] * quadrants[0][2] * quadrants[2][2]
+    let quadrants = input
+        .lines()
+        .map(|line| re.captures(line).unwrap() )
+        .map(|caps| (
+            parse_i32(caps.get(1)),
+            parse_i32(caps.get(2)),
+            parse_i32(caps.get(3)),
+            parse_i32(caps.get(4))
+        ))
+        .map(|(px, py, vx, vy)| (
+            (px + 100 * vx).rem_euclid(max_x),
+            (py + 100 * vy).rem_euclid(max_y)
+        ))
+        .map(|(x, y)| (
+            (max_x / 2 - x).signum(),
+            (max_y / 2 - y).signum()
+        ))
+        .fold(HashMap::new(), |mut acc, (sx, sy)| {
+            *acc.entry((sx, sy)).or_insert(0) += 1;
+            acc
+        });
+    quadrants[&(-1, -1)] * quadrants[&(-1, 1)] * quadrants[&(1, -1)] * quadrants[&(1, 1)]
 }
 
 fn part_b(input: String, max_x: i32, max_y: i32) -> usize {
