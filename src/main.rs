@@ -17,7 +17,10 @@ mod y2022;
 mod y2023;
 mod y2024;
 
-mod utils { pub mod toolbox; }
+mod utils {
+    pub mod grid;
+    pub mod toolbox;
+}
 
 fn main() {
     let args: Vec<String> = env::args().collect();

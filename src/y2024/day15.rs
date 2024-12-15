@@ -1,329 +1,162 @@
+use std::collections::HashSet;
 use std::fs;
+use crate::utils::grid::{Grid, DOWN, LEFT, P, RIGHT, UP};
 
 pub(crate) fn day15() {
     println!("{}", part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
     println!("{}", part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
 }
 
-fn part_a(input: String) -> usize {
+fn part_a(input: String) -> i32 {
     let (sm, sd) = input.split_once("\n\n").unwrap();
-    let mut map: Vec<Vec<char>> = sm.lines().map(|line| line.chars().collect()).collect();
-    let instructions: Vec<char> = sd.lines().map(|line| line.chars().collect::<Vec<char>>()).flatten().collect();
-    let mut start = (0, 0);
-    'outer: for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == '@' {
-                start = (i, j);
-                break 'outer;
-            }
+    let mut map = Grid::parse(sm);
+    let mut robot = map.find_first('@').unwrap();
+    let instructions: Vec<char> = sd.lines()
+        .map(|line| line.chars().collect::<Vec<char>>())
+        .flatten().collect();
+
+    for inst in instructions {
+        let dir = match inst {
+            '^' => UP,
+            '>' => RIGHT,
+            'v' => DOWN,
+            '<' => LEFT,
+            _ => panic!(),
+        };
+        if push(map[robot], robot + dir, dir, &mut map) {
+            map[robot] = '.';
+            robot = robot + dir;
         }
     }
 
-    let mut robot_pos = start;
-    'outer: for c in instructions {
-        match c {
-            '^' => {
-                if map[robot_pos.0 - 1][robot_pos.1] == '#' { continue; }
-                if map[robot_pos.0 - 1][robot_pos.1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0 - 1][robot_pos.1] = '@';
-                    robot_pos = (robot_pos.0 - 1, robot_pos.1);
-                    continue;
-                }
-
-                let mut x = robot_pos.0 - 1;
-                let y = robot_pos.1;
-                while x > 0 && map[x][y] == 'O' {
-                    x -= 1;
-                    if map[x][y] == '#' { continue 'outer; }
-                }
-
-                map[robot_pos.0][y] = '.';
-                map[robot_pos.0 - 1][y] = '@';
-                map[x][y] = 'O';
-
-                robot_pos = (robot_pos.0 - 1, y);
-            },
-            '>' => {
-                if map[robot_pos.0][robot_pos.1 + 1] == '#' { continue; }
-                if map[robot_pos.0][robot_pos.1 + 1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0][robot_pos.1 + 1] = '@';
-                    robot_pos = (robot_pos.0, robot_pos.1 + 1);
-                    continue;
-                }
-
-                let x = robot_pos.0;
-                let mut y = robot_pos.1 + 1;
-                while y < map[0].len() - 1 && map[x][y] == 'O' {
-                    y += 1;
-                    if map[x][y] == '#' { continue 'outer; }
-                }
-
-                map[x][robot_pos.1] = '.';
-                map[x][robot_pos.1 + 1] = '@';
-                map[x][y] = 'O';
-
-                robot_pos = (x, robot_pos.1 + 1);
-            },
-            'v' => {
-                if map[robot_pos.0 + 1][robot_pos.1] == '#' { continue; }
-                if map[robot_pos.0 + 1][robot_pos.1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0 + 1][robot_pos.1] = '@';
-                    robot_pos = (robot_pos.0 + 1, robot_pos.1);
-                    continue;
-                }
-
-                let mut x = robot_pos.0 + 1;
-                let y = robot_pos.1;
-                while x < map.len() - 1 && map[x][y] == 'O' {
-                    x += 1;
-                    if map[x][y] == '#' { continue 'outer; }
-                }
-
-                map[robot_pos.0][y] = '.';
-                map[robot_pos.0 + 1][y] = '@';
-                map[x][y] = 'O';
-
-                robot_pos = (robot_pos.0 + 1, y);
-            },
-            '<' => {
-                if map[robot_pos.0][robot_pos.1 - 1] == '#' { continue; }
-                if map[robot_pos.0][robot_pos.1 - 1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0][robot_pos.1 - 1] = '@';
-                    robot_pos = (robot_pos.0, robot_pos.1 - 1);
-                    continue;
-                }
-
-                let x = robot_pos.0;
-                let mut y = robot_pos.1 - 1;
-                while y > 0 && map[x][y] == 'O' {
-                    y -= 1;
-                    if map[x][y] == '#' { continue 'outer; }
-                }
-
-                map[x][robot_pos.1] = '.';
-                map[x][robot_pos.1 - 1] = '@';
-                map[x][y] = 'O';
-
-                robot_pos = (x, robot_pos.1 - 1);
-            },
-            _ => panic!("{}", c)
-        }
-    }
-
-    let mut ans = 0;
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == 'O' {
-                ans += 100 * i + j;
-            }
-        }
-    }
-    ans
+    map.into_iter()
+        .filter(|(_, _, c)| *c == 'O')
+        .map(|(x, y, _)| 100 * x + y)
+        .sum()
 }
 
-fn part_b(input: String) -> usize {
+fn push(c: char, p: P, dir: P, map: &mut Grid<char>) -> bool {
+    match map[p] {
+        '#' => false,
+        '.' => {
+            map[p] = c;
+            true
+        }
+        _ => {
+            if push(map[p], p + dir, dir, map) {
+                map[p] = c;
+                true
+            } else { false }
+        }
+    }
+}
+
+fn part_b(input: String) -> i32 {
     let (sm, sd) = input.split_once("\n\n").unwrap();
-    let initial_map: Vec<Vec<char>> = sm.lines().map(|line| line.chars().collect()).collect();
-    let instructions: Vec<char> = sd.lines().map(|line| line.chars().collect::<Vec<char>>()).flatten().collect();
+    let initial_map = Grid::parse(sm);
+    let instructions: Vec<char> = sd.lines()
+        .map(|line| line.chars().collect::<Vec<char>>())
+        .flatten().collect();
 
-
-    let mut map = vec![vec!['.'; initial_map[0].len() * 2]; initial_map.len()];
-    for i in 0..initial_map.len() {
-        for j in 0..initial_map[i].len() {
-            match initial_map[i][j] {
+    let mut map = Grid::new(initial_map.x_len, initial_map.y_len * 2, '.');
+    for x in 0..initial_map.x_len {
+        for y in 0..initial_map.y_len {
+            match initial_map[(x, y)] {
                 '#' => {
-                    map[i][2 * j] = '#';
-                    map[i][2 * j + 1] = '#';
+                    map[(x, 2 * y)] = '#';
+                    map[(x, 2 * y + 1)] = '#';
                 }
                 'O' => {
-                    map[i][2 * j] = '[';
-                    map[i][2 * j + 1] = ']';
+                    map[(x, 2 * y)] = '[';
+                    map[(x, 2 * y + 1)] = ']';
                 }
                 '.' => {
-                    map[i][2 * j] = '.';
-                    map[i][2 * j + 1] = '.';
+                    map[(x, 2 * y)] = '.';
+                    map[(x, 2 * y + 1)] = '.';
                 }
                 '@' => {
-                    map[i][2 * j] = '@';
-                    map[i][2 * j + 1] = '.';
+                    map[(x, 2 * y)] = '@';
+                    map[(x, 2 * y + 1)] = '.';
                 }
                 _ => panic!()
             }
         }
     }
 
+    let mut robot = map.find_first('@').unwrap();
+    for inst in instructions {
+        let dir = match inst {
+            '^' => UP,
+            '>' => RIGHT,
+            'v' => DOWN,
+            '<' => LEFT,
+            _ => panic!(),
+        };
 
-    let mut start = (0, 0);
-    'outer: for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == '@' {
-                start = (i, j);
-                break 'outer;
-            }
+        let mut visited = HashSet::new();
+        let object = find_obj(robot, dir, &map, &mut visited);
+        if check_move(&object, dir, &map) {
+            push_object(&object, dir, &mut map);
+            robot = robot + dir;
         }
     }
 
+    map.into_iter()
+        .filter(|(_, _, c)| *c == '[')
+        .map(|(x, y, _)| 100 * x + y)
+        .sum()
+}
 
-    let mut robot_pos = start;
-    'outer: for c in instructions {
-        match c {
-            '^' => {
-                if map[robot_pos.0 - 1][robot_pos.1] == '#' { continue; }
-                if map[robot_pos.0 - 1][robot_pos.1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0 - 1][robot_pos.1] = '@';
-                    robot_pos = (robot_pos.0 - 1, robot_pos.1);
-                    continue;
-                }
-
-                let mut ranges = vec![(usize::MAX, 0); map.len()];
-                if map[robot_pos.0 - 1][robot_pos.1] == ']' {
-                    ranges[robot_pos.0 - 1] = (robot_pos.1 - 1, robot_pos.1);
-                } else if map[robot_pos.0 - 1][robot_pos.1] == '[' {
-                    ranges[robot_pos.0 - 1] = (robot_pos.1, robot_pos.1 + 1);
-                }
-
-                let mut x = robot_pos.0 - 1;
-                loop {
-                    if ranges[x] == (usize::MAX, 0) {
-                        for y in ranges[x + 1].0..=ranges[x + 1].1 {
-                            if map[x][y] == '#' { continue 'outer; }
-                        }
-                        break;
-                    }
-                    for y in ranges[x].0..=ranges[x].1 {
-                        if map[x][y] == '#' { continue 'outer; }
-                        if map[x - 1][y] == '[' {
-                            ranges[x - 1] = (ranges[x - 1].0.min(y), ranges[x].1.max(y + 1));
-                        }
-                        if map[x - 1][y] == ']' {
-                            ranges[x - 1] = (ranges[x - 1].0.min(y - 1), ranges[x].1.max(y));
-                        }
-                    }
-                    x -= 1;
-                }
-
-                ranges[robot_pos.0] = (robot_pos.1, robot_pos.1);
-                for dx in x..=robot_pos.0 - 1 {
-                    for dy in ranges[dx + 1].0..=ranges[dx + 1].1 {
-                        map[dx][dy] = map[dx + 1][dy];
-                        map[dx + 1][dy] = '.';
-                    }
-                }
-
-                robot_pos = (robot_pos.0 - 1, robot_pos.1);
-            },
-            '>' => {
-                if map[robot_pos.0][robot_pos.1 + 1] == '#' { continue; }
-                if map[robot_pos.0][robot_pos.1 + 1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0][robot_pos.1 + 1] = '@';
-                    robot_pos = (robot_pos.0, robot_pos.1 + 1);
-                    continue;
-                }
-
-                let x = robot_pos.0;
-                let mut y = robot_pos.1 + 1;
-                while y < map[0].len() - 1 && (map[x][y] == '[' || map[x][y] == ']') {
-                    y += 1;
-                    if map[x][y] == '#' { continue 'outer; }
-                }
-
-                for dy in (robot_pos.1..=y).rev() {
-                    map[x][dy] = map[x][dy - 1];
-                }
-                map[x][robot_pos.1] = '.';
-                map[x][robot_pos.1 + 1] = '@';
-
-                robot_pos = (x, robot_pos.1 + 1);
-            },
-            'v' => {
-                if map[robot_pos.0 + 1][robot_pos.1] == '#' { continue; }
-                if map[robot_pos.0 + 1][robot_pos.1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0 + 1][robot_pos.1] = '@';
-                    robot_pos = (robot_pos.0 + 1, robot_pos.1);
-                    continue;
-                }
-
-                let mut ranges = vec![(usize::MAX, 0); map.len()];
-                if map[robot_pos.0 + 1][robot_pos.1] == ']' {
-                    ranges[robot_pos.0 + 1] = (robot_pos.1 - 1, robot_pos.1);
-                } else if map[robot_pos.0 + 1][robot_pos.1] == '[' {
-                    ranges[robot_pos.0 + 1] = (robot_pos.1, robot_pos.1 + 1);
-                }
-
-                let mut x = robot_pos.0 + 1;
-                while x < map.len() {
-                    if ranges[x] == (usize::MAX, 0) {
-                        for y in ranges[x - 1].0..=ranges[x - 1].1 {
-                            if map[x][y] == '#' { continue 'outer; }
-                        }
-                        break;
-                    }
-                    for y in ranges[x].0..=ranges[x].1 {
-                        if map[x][y] == '#' { continue 'outer; }
-                        if map[x + 1][y] == '[' {
-                            ranges[x + 1] = (ranges[x + 1].0.min(y), ranges[x].1.max(y + 1));
-                        }
-                        if map[x + 1][y] == ']' {
-                            ranges[x + 1] = (ranges[x + 1].0.min(y - 1), ranges[x].1.max(y));
-                        }
-                    }
-                    x += 1;
-                }
-
-                ranges[robot_pos.0] = (robot_pos.1, robot_pos.1);
-                for dx in (robot_pos.0 + 1..=x).rev() {
-                    for dy in ranges[dx - 1].0..=ranges[dx - 1].1 {
-                        map[dx][dy] = map[dx - 1][dy];
-                        map[dx - 1][dy] = '.';
-                    }
-                }
-
-                robot_pos = (robot_pos.0 + 1, robot_pos.1);
-            },
-            '<' => {
-                if map[robot_pos.0][robot_pos.1 - 1] == '#' { continue; }
-                if map[robot_pos.0][robot_pos.1 - 1] == '.' {
-                    map[robot_pos.0][robot_pos.1] = '.';
-                    map[robot_pos.0][robot_pos.1 - 1] = '@';
-                    robot_pos = (robot_pos.0, robot_pos.1 - 1);
-                    continue;
-                }
-
-                let x = robot_pos.0;
-                let mut y = robot_pos.1 - 1;
-                while y > 0 && (map[x][y] == '[' || map[x][y] == ']') {
-                    y -= 1;
-                    if map[x][y] == '#' { continue 'outer; }
-                }
-
-                for dy in y..=robot_pos.1 - 1 {
-                    map[x][dy] = map[x][dy + 1];
-                }
-                map[x][robot_pos.1] = '.';
-                map[x][robot_pos.1 - 1] = '@';
-
-                robot_pos = (x, robot_pos.1 - 1);
-            },
-            _ => panic!("{}", c)
+fn find_obj(p: P, dir: P, map: &Grid<char>, visited: &mut HashSet<P>) -> Vec<(P, char)> {
+    if !visited.insert(p) { return vec!(); } // Prevent visiting same nodes twice
+    let mut ans = vec!();
+    match map[p] {
+        '@' => {
+            ans.push((p, map[p]));
+            ans.extend(find_obj(p + dir, dir, map, visited));
         }
-    }
-
-    let mut ans = 0;
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == '[' {
-                ans += 100 * i + j;
+        '.' => { }
+        '#' => { }
+        '[' => {
+            ans.push((p, map[p]));
+            if dir == LEFT || dir == RIGHT {
+                ans.extend(find_obj(p + dir, dir, map, visited));
+            } else {
+                ans.extend(find_obj(p + dir, dir, map, visited));
+                ans.extend(find_obj(p + RIGHT, dir, map, visited));
             }
         }
+        ']' => {
+            ans.push((p, map[p]));
+            if dir == LEFT || dir == RIGHT {
+                ans.extend(find_obj(p + dir, dir, map, visited));
+            } else {
+                ans.extend(find_obj(p + dir, dir, map, visited));
+                ans.extend(find_obj(p + LEFT, dir, map, visited));
+            }
+        }
+        _ => panic!()
     }
     ans
+}
+
+fn check_move(obj: &Vec<(P, char)>, dir: P, map: &Grid<char>) -> bool {
+    obj.iter().all(|(p, _)| map[*p + dir] != '#')
+}
+
+fn push_object(obj: &Vec<(P, char)>, dir: P, map: &mut Grid<char>) {
+    // Push to new positions
+    obj.iter().rev().for_each(|(p, c)| {
+        map[*p + dir] = *c;
+    });
+
+    // Cleanup
+    let new_positions = obj.iter()
+        .map(|(p, _)| *p + dir)
+        .collect::<HashSet<P>>();
+    obj.iter()
+        .filter(|(p, _)| !new_positions.contains(p))
+        .for_each(|(p, _)| map[*p] = '.');
 }
 
 #[cfg(test)]
