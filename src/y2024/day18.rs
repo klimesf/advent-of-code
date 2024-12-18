@@ -1,5 +1,5 @@
 use std::cmp::Ordering;
-use std::collections::{BinaryHeap, HashSet};
+use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 use crate::utils::toolbox::manhattan_dist;
 
@@ -47,51 +47,45 @@ fn part_b(input: String, dim: usize) -> (usize, usize) {
         (x, y)
     }).collect();
 
-    let mut fallen = HashSet::new();
-    let mut on_path = HashSet::new();
-    for i in 0..bytes.len() {
-        fallen.insert(bytes[i]);
+    // Add all bytes first and do union-find for each vertex in the dim x dim matrix
+    let mut fallen: HashSet<(usize, usize)> = HashSet::new();
+    bytes.iter().for_each(|byte| { fallen.insert(*byte); });
 
-        // No need to run A* again if the current fallen byte does not block the current shortest path
-        if !on_path.is_empty() && !on_path.contains(&bytes[i]) { continue; }
-
-        let mut stack = BinaryHeap::new();
-        let mut distances = vec![vec![usize::MAX; dim + 1]; dim + 1];
-        stack.push(Pos { x: 0, y: 0, dist: 0, a_star: manhattan_dist((0, 0), (dim, dim)) });
-        let mut found = false;
-
-        while let Some(pos) = stack.pop() {
-            if fallen.contains(&pos.coords()) { continue; }
-            if distances[pos.x][pos.y] > pos.dist {
-                distances[pos.x][pos.y] = pos.dist;
-            } else { continue; }
-            if pos.x == dim && pos.y == dim { found = true; break; }
-
-            if pos.x > 0 { stack.push(Pos { x: pos.x - 1, y: pos.y, dist: pos.dist + 1, a_star: manhattan_dist((pos.x - 1, pos.y), (dim, dim)) }); }
-            if pos.x < dim { stack.push(Pos { x: pos.x + 1, y: pos.y, dist: pos.dist + 1, a_star: manhattan_dist((pos.x + 1, pos.y), (dim, dim)) }); }
-            if pos.y > 0 { stack.push(Pos { x: pos.x, y: pos.y - 1, dist: pos.dist + 1, a_star: manhattan_dist((pos.x, pos.y - 1), (dim, dim)) }); }
-            if pos.y < dim { stack.push(Pos { x: pos.x, y: pos.y + 1, dist: pos.dist + 1, a_star: manhattan_dist((pos.x, pos.y + 1), (dim, dim)) }); }
-        }
-
-        if !found { return (bytes[i].0, bytes[i].1) }
-
-        // Build visited path by back tracking from end
-        on_path = HashSet::new();
-        let mut stack = vec!();
-        stack.push((dim, dim, distances[dim][dim]));
-
-        while let Some((x, y, dist)) = stack.pop() {
-            on_path.insert((x, y));
-            if x == 0 && y == 0 { break }
-
-            if x > 0 && distances[x - 1][y] == dist - 1 { stack.push((x - 1, y, dist - 1)) }
-            if x < dim && distances[x + 1][y] == dist - 1 { stack.push((x + 1, y, dist - 1)) }
-            if y > 0 && distances[x][y - 1] == dist - 1 { stack.push((x, y - 1, dist - 1)) }
-            if y < dim && distances[x][y + 1] == dist - 1 { stack.push((x, y + 1, dist - 1)) }
+    let mut parents: HashMap<(usize, usize), (usize, usize)> = HashMap::new();
+    for x in 0..=dim {
+        for y in 0..=dim {
+            parents.insert((x, y), (x, y)); // First each vertex is the representative of itself
         }
     }
 
-    panic!("No byte blocked the path from start to end")
+    // Build unions by adding an edge for each vertex's neighbors, if there is no byte blocking them
+    for x in 0..=dim {
+        for y in 0..=dim {
+            if fallen.contains(&(x, y)) { continue; }
+            if x > 0 && !fallen.contains(&(x - 1, y)) { union((x, y), (x - 1, y), &mut parents); }
+            if x < dim && !fallen.contains(&(x + 1, y)) { union((x, y), (x + 1, y), &mut parents); }
+            if y > 0 && !fallen.contains(&(x, y - 1)) { union((x, y), (x, y - 1), &mut parents); }
+            if y < dim && !fallen.contains(&(x, y + 1)) { union((x, y), (x, y + 1), &mut parents); }
+        }
+    }
+
+    // Remove bytes one by one until S and E are in the same group
+    for i in (0..bytes.len()).rev() {
+        let byte = bytes[i];
+        fallen.remove(&byte);
+        let (x, y) = byte;
+
+        if x > 0 && !fallen.contains(&(x - 1, y)) { union((x, y), (x - 1, y), &mut parents); }
+        if x < dim && !fallen.contains(&(x + 1, y)) { union((x, y), (x + 1, y), &mut parents); }
+        if y > 0 && !fallen.contains(&(x, y - 1)) { union((x, y), (x, y - 1), &mut parents); }
+        if y < dim && !fallen.contains(&(x, y + 1)) { union((x, y), (x, y + 1), &mut parents); }
+
+        if find((0, 0), &parents) == find((dim, dim), &parents) {
+            return byte
+        }
+    }
+
+    panic!("There is no path from start to end even without all bytes removed")
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -118,6 +112,21 @@ impl Ord for Pos {
 impl PartialOrd for Pos {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
+    }
+}
+
+fn union(a: (usize, usize), b: (usize, usize), parents: &mut HashMap<(usize, usize), (usize, usize)>) {
+    let parent_a = find(a, parents);
+    let parent_b = find(b, parents);
+    parents.insert(parent_a, parent_b);
+}
+
+fn find(a: (usize, usize), parents: &HashMap<(usize, usize), (usize, usize)>) -> (usize, usize) {
+    let parent = *parents.get(&a).unwrap();
+    if parent == a {
+        a
+    } else {
+        find(parent, parents)
     }
 }
 
