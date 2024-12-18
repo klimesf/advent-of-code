@@ -86,6 +86,12 @@ pub(crate) fn prime_factors(mut n: u32) -> Vec<u32> {
     ans
 }
 
+pub(crate) fn manhattan_dist(pos: (usize, usize), dest: (usize, usize)) -> usize {
+    let (pos_y, pos_x) = pos;
+    let (dest_y, dest_x) = dest;
+    dest_y.max(pos_y) - dest_y.min(pos_y) + dest_x.max(pos_x) - dest_x.min(pos_x)
+}
+
 #[macro_export]
 macro_rules! hashmap {
     ($( $key: expr => $val: expr ),*) => {{
@@ -106,7 +112,7 @@ macro_rules! measure {
 
 #[cfg(test)]
 mod toolbox_tests {
-    use crate::utils::toolbox::prime_factors;
+    use crate::utils::toolbox::{prime_factors, manhattan_dist};
 
     #[test]
     fn prime_factors_works() {
@@ -119,5 +125,14 @@ mod toolbox_tests {
         assert_eq!(vec! {2, 2, 2}, prime_factors(8));
         assert_eq!(vec! {3, 3}, prime_factors(9));
         assert_eq!(vec! {2, 2, 7}, prime_factors(28));
+    }
+
+    #[test]
+    fn manhattan_dist_works() {
+        assert_eq!(0, manhattan_dist((0, 0), (0, 0)));
+        assert_eq!(2, manhattan_dist((1, 1), (0, 0)));
+        assert_eq!(2, manhattan_dist((0, 0), (1, 1)));
+        assert_eq!(4, manhattan_dist((1, 1), (3, 3)));
+        assert_eq!(4, manhattan_dist((1, 3), (3, 1)));
     }
 }
