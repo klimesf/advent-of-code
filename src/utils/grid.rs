@@ -16,6 +16,11 @@ impl P {
     pub const fn new(x: i32, y: i32) -> Self {
         P { x, y }
     }
+
+    #[inline]
+    pub fn manhattan_distance(&self, other: &P) -> i32 {
+        self.x.max(other.x) - self.x.min(other.x) + self.y.max(other.y) - self.y.min(other.y)
+    }
 }
 
 impl Add for P {
@@ -76,6 +81,13 @@ pub struct Grid<T> {
     pub items: Vec<T>,
 }
 
+impl Grid<usize> {
+    #[inline]
+    pub fn new_usize(x_len: i32, y_len: i32, val: usize) -> Self {
+        Grid { x_len, y_len, items: vec![val; (x_len * y_len) as usize] }
+    }
+}
+
 impl Grid<char> {
     #[inline]
     pub fn parse(input: &str) -> Self {
@@ -112,6 +124,13 @@ impl Grid<char> {
             println!();
         }
         println!();
+    }
+}
+
+impl <T> Grid<T> {
+    #[inline]
+    pub fn contains(&self, p: &P) -> bool {
+        p.x >= 0 && p.x < self.x_len && p.y >= 0 && p.y < self.y_len
     }
 }
 
