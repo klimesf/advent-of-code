@@ -1,4 +1,6 @@
 use std::fs;
+use rayon::iter::IntoParallelRefIterator;
+use rayon::iter::ParallelIterator;
 use crate::utils::grid::{Grid, DOWN, LEFT, P, RIGHT, UP};
 
 pub(crate) fn day20() {
@@ -33,16 +35,15 @@ fn solve(input: String, target_saving: usize) -> (usize, usize) {
         stack.push((pos + RIGHT, dist + 1));
     }
 
-    let mut ans_a = 0;
-    let mut ans_b = 0;
-
     // Go through each point in the path and try to find shortcuts within cheat distance
-    for x in -20..=20_i32 {
-        for y in -20..=20_i32 {
-            if x == 0 && y == 0 { continue; }
-            let cheat_len = x.abs() + y.abs();
-            if cheat_len > 20 { continue; }
-            for p in &path {
+    path.par_iter().map(|p| {
+        let mut ans_a = 0;
+        let mut ans_b = 0;
+        for x in -20..=20_i32 {
+            for y in -20..=20_i32 {
+                if x == 0 && y == 0 { continue; }
+                let cheat_len = x.abs() + y.abs();
+                if cheat_len > 20 { continue; }
                 if distances[*p] < target_saving { continue; } // No point in cheating if we are close to the E
                 let jump = P { x: p.x + x, y: p.y + y };
                 if !map.contains(&jump) { continue; }
@@ -54,9 +55,8 @@ fn solve(input: String, target_saving: usize) -> (usize, usize) {
                 }
             }
         }
-    }
-
-    (ans_a, ans_b)
+        (ans_a, ans_b)
+    }).reduce(|| (0, 0), |a, b| (a.0 + b.0, a.1 + b.1))
 }
 
 #[cfg(test)]
