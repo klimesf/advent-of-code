@@ -88,11 +88,11 @@ impl Grid<usize> {
     }
 }
 
-impl Grid<char> {
+impl Grid<u8> {
     #[inline]
     pub fn parse(input: &str) -> Self {
         let items = input.lines()
-            .map(|line| line.chars().collect::<Vec<char>>())
+            .map(|line| line.chars().map(|c| c as u8).collect::<Vec<u8>>())
             .flatten().collect();
         let x_len = input.lines().count() as i32;
         let y_len = if x_len > 0 { input.len() as i32 / x_len } else { 0 };
@@ -100,12 +100,12 @@ impl Grid<char> {
     }
 
     #[inline]
-    pub fn new(x_len: i32, y_len: i32, c: char) -> Self {
+    pub fn new(x_len: i32, y_len: i32, c: u8) -> Self {
         Grid { x_len, y_len, items: vec![c; (x_len * y_len) as usize] }
     }
 
     #[inline]
-    pub fn find_first(&self, c: char) -> Option<P> {
+    pub fn find_first(&self, c: u8) -> Option<P> {
         if let Some(pos) = self.items.iter().position(|item| item == &c) {
             let x = pos as i32 / self.y_len;
             let y = pos as i32 % self.y_len;
@@ -166,8 +166,8 @@ impl<T> IndexMut<(i32, i32)> for Grid<T> {
     }
 }
 
-impl IntoIterator for Grid<char> {
-    type Item = (i32, i32, char);
+impl IntoIterator for Grid<u8> {
+    type Item = (i32, i32, u8);
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -197,25 +197,25 @@ mod grid_tests {
     #[test]
     fn index_works() {
         let map = Grid::parse("#####\n# x #\n#   #\n#####");
-        assert_eq!('#', map[P::new(0, 0)]);
-        assert_eq!('#', map[P::new(0, 4)]);
-        assert_eq!('#', map[P::new(1, 0)]);
-        assert_eq!(' ', map[P::new(1, 1)]);
-        assert_eq!('x', map[P::new(1, 2)]);
-        assert_eq!('#', map[P::new(3, 4)]);
-        assert_eq!('#', map[(0, 0)]);
-        assert_eq!('#', map[(0, 4)]);
-        assert_eq!('#', map[(1, 0)]);
-        assert_eq!(' ', map[(1, 1)]);
-        assert_eq!('x', map[(1, 2)]);
-        assert_eq!('#', map[(3, 4)]);
+        assert_eq!(b'#', map[P::new(0, 0)]);
+        assert_eq!(b'#', map[P::new(0, 4)]);
+        assert_eq!(b'#', map[P::new(1, 0)]);
+        assert_eq!(b' ', map[P::new(1, 1)]);
+        assert_eq!(b'x', map[P::new(1, 2)]);
+        assert_eq!(b'#', map[P::new(3, 4)]);
+        assert_eq!(b'#', map[(0, 0)]);
+        assert_eq!(b'#', map[(0, 4)]);
+        assert_eq!(b'#', map[(1, 0)]);
+        assert_eq!(b' ', map[(1, 1)]);
+        assert_eq!(b'x', map[(1, 2)]);
+        assert_eq!(b'#', map[(3, 4)]);
     }
 
     #[test]
     fn find_first_works() {
         let map = Grid::parse("#####\n# x #\n# y #\n#####");
-        assert_eq!(Some(P::new(1, 2)), map.find_first('x'));
-        assert_eq!(Some(P::new(2, 2)), map.find_first('y'));
-        assert_eq!(None, map.find_first('X'));
+        assert_eq!(Some(P::new(1, 2)), map.find_first(b'x'));
+        assert_eq!(Some(P::new(2, 2)), map.find_first(b'y'));
+        assert_eq!(None, map.find_first(b'X'));
     }
 }

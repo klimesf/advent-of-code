@@ -10,17 +10,17 @@ pub(crate) fn day16() {
 
 fn part_a(input: String) -> usize {
     let map = Grid::parse(input.as_str().trim());
-    let starting_position = map.find_first('S').unwrap();
+    let starting_position = map.find_first(b'S').unwrap();
 
     let mut stack = BinaryHeap::new();
     let mut visited = HashSet::new();
     stack.push(Pos { x: starting_position.x, y: starting_position.y, dir: 1, dist: 0 });
 
     while let Some(pos) = stack.pop() {
-        if map[pos.coords()] == 'E' {
+        if map[pos.coords()] == b'E' {
             return pos.dist;
         }
-        if map[pos.coords()] == '#' { continue; }
+        if map[pos.coords()] == b'#' { continue; }
         if !visited.insert((pos.x, pos.y, pos.dir)) { continue; }
 
         match pos.dir {
@@ -52,8 +52,8 @@ fn part_a(input: String) -> usize {
 
 fn part_b(input: String) -> usize {
     let map = Grid::parse(input.as_str().trim());
-    let starting_position = map.find_first('S').unwrap();
-    let finish = map.find_first('E').unwrap();
+    let starting_position = map.find_first(b'S').unwrap();
+    let finish = map.find_first(b'E').unwrap();
 
     // Run modified dijkstra, where we remember the shortest distance to the point from each dir
     // This allows us to remember all the shortest paths
@@ -64,12 +64,12 @@ fn part_b(input: String) -> usize {
 
     while let Some(pos) = stack.pop() {
         if pos.dist > min_e { continue; }
-        if map[pos.coords()] == 'E' {
+        if map[pos.coords()] == b'E' {
             distances[pos.x as usize][pos.y as usize][pos.dir] = distances[pos.x as usize][pos.y as usize][pos.dir].min(pos.dist);
             min_e = distances[pos.x as usize][pos.y as usize][pos.dir];
             continue;
         }
-        if map[pos.coords()] == '#' { continue; }
+        if map[pos.coords()] == b'#' { continue; }
         if distances[pos.x as usize][pos.y as usize][pos.dir] < pos.dist { continue; }
         distances[pos.x as usize][pos.y as usize][pos.dir] = distances[pos.x as usize][pos.y as usize][pos.dir].min(pos.dist);
 
@@ -79,24 +79,24 @@ fn part_b(input: String) -> usize {
             // - Rotate counterclockwise if there is no obstacle ahead in the new dir
             // - Rotate clockwise if there is no obstacle ahead in the new dir
             0 => {
-                if map[(pos.x - 1, pos.y)] != '#' { stack.push(Pos { x: pos.x - 1, y: pos.y, dir: pos.dir, dist: pos.dist + 1 }) }
-                if map[(pos.x, pos.y + 1)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 1, dist: pos.dist + 1000 }) }
-                if map[(pos.x, pos.y - 1)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 3, dist: pos.dist + 1000 }) }
+                if map[(pos.x - 1, pos.y)] != b'#' { stack.push(Pos { x: pos.x - 1, y: pos.y, dir: pos.dir, dist: pos.dist + 1 }) }
+                if map[(pos.x, pos.y + 1)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 1, dist: pos.dist + 1000 }) }
+                if map[(pos.x, pos.y - 1)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 3, dist: pos.dist + 1000 }) }
             }
             1 => {
-                if map[(pos.x, pos.y + 1)] != '#' { stack.push(Pos { x: pos.x, y: pos.y + 1, dir: pos.dir, dist: pos.dist + 1 }) }
-                if map[(pos.x - 1, pos.y)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 0, dist: pos.dist + 1000 }) }
-                if map[(pos.x + 1, pos.y)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 2, dist: pos.dist + 1000 }) }
+                if map[(pos.x, pos.y + 1)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y + 1, dir: pos.dir, dist: pos.dist + 1 }) }
+                if map[(pos.x - 1, pos.y)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 0, dist: pos.dist + 1000 }) }
+                if map[(pos.x + 1, pos.y)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 2, dist: pos.dist + 1000 }) }
             }
             2 => {
-                if map[(pos.x + 1, pos.y)] != '#' { stack.push(Pos { x: pos.x + 1, y: pos.y, dir: pos.dir, dist: pos.dist + 1 }) }
-                if map[(pos.x, pos.y + 1)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 1, dist: pos.dist + 1000 }) }
-                if map[(pos.x, pos.y - 1)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 3, dist: pos.dist + 1000 }) }
+                if map[(pos.x + 1, pos.y)] != b'#' { stack.push(Pos { x: pos.x + 1, y: pos.y, dir: pos.dir, dist: pos.dist + 1 }) }
+                if map[(pos.x, pos.y + 1)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 1, dist: pos.dist + 1000 }) }
+                if map[(pos.x, pos.y - 1)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 3, dist: pos.dist + 1000 }) }
             }
             3 => {
-                if map[(pos.x, pos.y - 1)] != '#' { stack.push(Pos { x: pos.x, y: pos.y - 1, dir: pos.dir, dist: pos.dist + 1 }) }
-                if map[(pos.x - 1, pos.y)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 0, dist: pos.dist + 1000 }) }
-                if map[(pos.x + 1, pos.y)] != '#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 2, dist: pos.dist + 1000 }) }
+                if map[(pos.x, pos.y - 1)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y - 1, dir: pos.dir, dist: pos.dist + 1 }) }
+                if map[(pos.x - 1, pos.y)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 0, dist: pos.dist + 1000 }) }
+                if map[(pos.x + 1, pos.y)] != b'#' { stack.push(Pos { x: pos.x, y: pos.y, dir: 2, dist: pos.dist + 1000 }) }
             }
             _ => panic!()
         }
@@ -117,9 +117,9 @@ fn part_b(input: String) -> usize {
     }
 
     while let Some(pos) = stack.pop() {
-        if map[pos.coords()] == '#' { continue; }
+        if map[pos.coords()] == b'#' { continue; }
         if !visited.insert(pos.coords()) { continue; }
-        if map[pos.coords()] == 'S' { continue; }
+        if map[pos.coords()] == b'S' { continue; }
 
         for dir in 0..4 {
             let diff = if dir == pos.dir { 1 } else { 1001 };

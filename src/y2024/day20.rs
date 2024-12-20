@@ -12,7 +12,7 @@ pub(crate) fn day20() {
 fn solve(input: String, target_saving: usize) -> (usize, usize) {
     let map = Grid::parse(input.trim());
 
-    let start = map.find_first('E').unwrap();
+    let start = map.find_first(b'E').unwrap();
 
     // Run DFS to find the path from E -> S (there is only one).
     // Plus, mark the distance to E from each point
@@ -22,11 +22,11 @@ fn solve(input: String, target_saving: usize) -> (usize, usize) {
     stack.push((start, 0));
 
     while let Some((pos, dist)) = stack.pop() {
-        if map[pos] == '#' { continue; }
+        if map[pos] == b'#' { continue; }
         if distances[pos] < dist { continue; }
         path.push(pos);
         distances[pos] = dist;
-        if map[pos] == 'S' { break; }
+        if map[pos] == b'S' { break; }
 
         // No need to check boundaries, the map is bordered by #
         stack.push((pos + UP, dist + 1));

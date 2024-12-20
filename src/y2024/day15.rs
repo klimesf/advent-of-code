@@ -10,7 +10,7 @@ pub(crate) fn day15() {
 fn part_a(input: String) -> i32 {
     let (sm, sd) = input.split_once("\n\n").unwrap();
     let mut map = Grid::parse(sm);
-    let mut robot = map.find_first('@').unwrap();
+    let mut robot = map.find_first(b'@').unwrap();
     let instructions: Vec<char> = sd.lines()
         .map(|line| line.chars().collect::<Vec<char>>())
         .flatten().collect();
@@ -24,22 +24,22 @@ fn part_a(input: String) -> i32 {
             _ => panic!(),
         };
         if push(map[robot], robot + dir, dir, &mut map) {
-            map[robot] = '.';
+            map[robot] = b'.';
             robot = robot + dir;
         }
     }
 
     map.into_iter()
-        .filter(|(_, _, c)| *c == 'O')
+        .filter(|(_, _, c)| *c == b'O')
         .map(|(x, y, _)| 100 * x + y)
         .sum()
 }
 
-fn push(c: char, p: P, dir: P, map: &mut Grid<char>) -> bool {
+fn push(c: u8, p: P, dir: P, map: &mut Grid<u8>) -> bool {
     match map[p] {
-        '#' => false,
-        '.' => {
-            map[p] = c;
+        b'#' => false,
+        b'.' => {
+            map[p] = c as u8;
             true
         }
         _ => {
@@ -58,32 +58,32 @@ fn part_b(input: String) -> i32 {
         .map(|line| line.chars().collect::<Vec<char>>())
         .flatten().collect();
 
-    let mut map = Grid::new(initial_map.x_len, initial_map.y_len * 2, '.');
+    let mut map = Grid::new(initial_map.x_len, initial_map.y_len * 2, b'.');
     for x in 0..initial_map.x_len {
         for y in 0..initial_map.y_len {
             match initial_map[(x, y)] {
-                '#' => {
-                    map[(x, 2 * y)] = '#';
-                    map[(x, 2 * y + 1)] = '#';
+                b'#' => {
+                    map[(x, 2 * y)] = b'#';
+                    map[(x, 2 * y + 1)] = b'#';
                 }
-                'O' => {
-                    map[(x, 2 * y)] = '[';
-                    map[(x, 2 * y + 1)] = ']';
+                b'O' => {
+                    map[(x, 2 * y)] = b'[';
+                    map[(x, 2 * y + 1)] = b']';
                 }
-                '.' => {
-                    map[(x, 2 * y)] = '.';
-                    map[(x, 2 * y + 1)] = '.';
+                b'.' => {
+                    map[(x, 2 * y)] = b'.';
+                    map[(x, 2 * y + 1)] = b'.';
                 }
-                '@' => {
-                    map[(x, 2 * y)] = '@';
-                    map[(x, 2 * y + 1)] = '.';
+                b'@' => {
+                    map[(x, 2 * y)] = b'@';
+                    map[(x, 2 * y + 1)] = b'.';
                 }
                 _ => panic!()
             }
         }
     }
 
-    let mut robot = map.find_first('@').unwrap();
+    let mut robot = map.find_first(b'@').unwrap();
     for inst in instructions {
         let dir = match inst {
             '^' => UP,
@@ -102,22 +102,22 @@ fn part_b(input: String) -> i32 {
     }
 
     map.into_iter()
-        .filter(|(_, _, c)| *c == '[')
+        .filter(|(_, _, c)| *c == b'[')
         .map(|(x, y, _)| 100 * x + y)
         .sum()
 }
 
-fn find_obj(p: P, dir: P, map: &Grid<char>, visited: &mut HashSet<P>) -> Vec<(P, char)> {
+fn find_obj(p: P, dir: P, map: &Grid<u8>, visited: &mut HashSet<P>) -> Vec<(P, u8)> {
     if !visited.insert(p) { return vec!(); } // Prevent visiting same nodes twice
     let mut ans = vec!();
     match map[p] {
-        '@' => {
+        b'@' => {
             ans.push((p, map[p]));
             ans.extend(find_obj(p + dir, dir, map, visited));
         }
-        '.' => { }
-        '#' => { }
-        '[' => {
+        b'.' => { }
+        b'#' => { }
+        b'[' => {
             ans.push((p, map[p]));
             if dir == LEFT || dir == RIGHT {
                 ans.extend(find_obj(p + dir, dir, map, visited));
@@ -126,7 +126,7 @@ fn find_obj(p: P, dir: P, map: &Grid<char>, visited: &mut HashSet<P>) -> Vec<(P,
                 ans.extend(find_obj(p + RIGHT, dir, map, visited));
             }
         }
-        ']' => {
+        b']' => {
             ans.push((p, map[p]));
             if dir == LEFT || dir == RIGHT {
                 ans.extend(find_obj(p + dir, dir, map, visited));
@@ -140,11 +140,11 @@ fn find_obj(p: P, dir: P, map: &Grid<char>, visited: &mut HashSet<P>) -> Vec<(P,
     ans
 }
 
-fn check_move(obj: &Vec<(P, char)>, dir: P, map: &Grid<char>) -> bool {
-    obj.iter().all(|(p, _)| map[*p + dir] != '#')
+fn check_move(obj: &Vec<(P, u8)>, dir: P, map: &Grid<u8>) -> bool {
+    obj.iter().all(|(p, _)| map[*p + dir] != b'#')
 }
 
-fn push_object(obj: &Vec<(P, char)>, dir: P, map: &mut Grid<char>) {
+fn push_object(obj: &Vec<(P, u8)>, dir: P, map: &mut Grid<u8>) {
     // Push to new positions
     obj.iter().rev().for_each(|(p, c)| {
         map[*p + dir] = *c;
@@ -156,7 +156,7 @@ fn push_object(obj: &Vec<(P, char)>, dir: P, map: &mut Grid<char>) {
         .collect::<HashSet<P>>();
     obj.iter()
         .filter(|(p, _)| !new_positions.contains(p))
-        .for_each(|(p, _)| map[*p] = '.');
+        .for_each(|(p, _)| map[*p] = b'.');
 }
 
 #[cfg(test)]
