@@ -1,9 +1,9 @@
 use std::fs;
 use itertools::Itertools;
 
-pub(crate) fn day17() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
+pub fn day17(print: fn(String)) {
+    print(part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
+    print(format!("{}", part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())));
 }
 
 fn part_a(input: String) -> String {

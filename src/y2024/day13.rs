@@ -1,8 +1,8 @@
 use std::fs;
 
-pub(crate) fn day13() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
+pub fn day13(print: fn(i64)) {
+    print(part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i64 {

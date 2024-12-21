@@ -3,9 +3,9 @@ use std::collections::{BinaryHeap, HashSet};
 use std::fs;
 use crate::utils::grid::Grid;
 
-pub(crate) fn day16() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
+pub fn day16(print: fn(usize)) {
+    print(part_a(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {

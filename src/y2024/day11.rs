@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 use std::fs;
 
-pub(crate) fn day11() {
-    println!("{}", solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 25));
-    println!("{}", solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 75));
+pub fn day11(print: fn(usize)) {
+    print(solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 25));
+    print(solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 75));
 }
 
 fn solve(input: String, blinks: usize) -> usize {

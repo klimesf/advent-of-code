@@ -8,16 +8,16 @@ use crate::y2022::y2022;
 use crate::y2023::y2023;
 use crate::y2024::y2024;
 
-mod y2015;
-mod y2016;
-mod y2017;
-mod y2018;
-mod y2019;
-mod y2022;
-mod y2023;
-mod y2024;
+pub mod y2015;
+pub mod y2016;
+pub mod y2017;
+pub mod y2018;
+pub mod y2019;
+pub mod y2022;
+pub mod y2023;
+pub mod y2024;
 
-mod utils {
+pub mod utils {
     pub mod grid;
     pub mod toolbox;
 }

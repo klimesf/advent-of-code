@@ -3,9 +3,9 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 use crate::utils::toolbox::manhattan_dist;
 
-pub(crate) fn day18() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70, 1024));
-    println!("{:?}", part_b(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70));
+pub fn day18(print: fn(String)) {
+    print(format!("{}", part_a(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70, 1024)));
+    print(format!("{:?}", part_b(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70)));
 }
 
 fn part_a(input: String, dim: usize, sim: usize) -> usize {

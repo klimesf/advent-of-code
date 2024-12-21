@@ -2,9 +2,9 @@ use std::collections::HashSet;
 use std::fs;
 use crate::utils::grid::{Grid, DOWN, LEFT, P, RIGHT, UP};
 
-pub(crate) fn day15() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
+pub fn day15(print: fn(i32)) {
+    print(part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i32 {

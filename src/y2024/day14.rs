@@ -3,9 +3,9 @@ use std::fs;
 use regex::Regex;
 use crate::utils::toolbox::parse_i32;
 
-pub(crate) fn day14() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day14/input.txt").unwrap(), 101, 103));
-    println!("{}", part_b(fs::read_to_string("input/2024/day14/input.txt").unwrap(), 101, 103));
+pub fn day14(print: fn(usize)) {
+    print(part_a(fs::read_to_string("input/2024/day14/input.txt").unwrap(), 101, 103) as usize);
+    print(part_b(fs::read_to_string("input/2024/day14/input.txt").unwrap(), 101, 103));
 }
 
 fn part_a(input: String, max_x: i32, max_y: i32) -> i32 {

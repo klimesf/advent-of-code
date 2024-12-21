@@ -1,10 +1,10 @@
 use std::collections::HashSet;
 use std::fs;
 
-pub(crate) fn day10() {
+pub fn day10(print: fn(usize)) {
     let (part_a, part_b) = solve(fs::read_to_string("input/2024/day10/input.txt").unwrap());
-    println!("{}", part_a);
-    println!("{}", part_b);
+    print(part_a);
+    print(part_b);
 }
 
 fn solve(input: String) -> (usize, usize) {

@@ -3,10 +3,10 @@ use rayon::iter::IntoParallelRefIterator;
 use rayon::iter::ParallelIterator;
 use crate::utils::grid::{Grid, DOWN, LEFT, P, RIGHT, UP};
 
-pub(crate) fn day20() {
+pub fn day20(print: fn(usize)) {
     let (part_a, part_b) = solve(fs::read_to_string("input/2024/day20/input.txt").unwrap(), 100);
-    println!("{}", part_a);
-    println!("{}", part_b);
+    print(part_a);
+    print(part_b);
 }
 
 fn solve(input: String, target_saving: usize) -> (usize, usize) {

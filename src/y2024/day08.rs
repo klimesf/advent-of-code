@@ -3,9 +3,9 @@ use std::fs;
 use std::ops::{Add, Sub};
 use itertools::Itertools;
 
-pub(crate) fn day08() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
+pub fn day08(print: fn(usize)) {
+    print(part_a(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {

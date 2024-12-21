@@ -2,9 +2,9 @@ use std::fs;
 use regex::Regex;
 use crate::utils::toolbox::parse_usize;
 
-pub(crate) fn day03() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
+pub fn day03(print: fn(usize)) {
+    print(part_a(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {

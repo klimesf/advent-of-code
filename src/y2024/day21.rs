@@ -5,10 +5,10 @@ use itertools::Itertools;
 use rayon::iter::IntoParallelRefIterator;
 use rayon::iter::ParallelIterator;
 
-pub(crate) fn day21() {
+pub fn day21(print: fn(usize)) {
     let (part_a, part_b) = solve(fs::read_to_string("input/2024/day21/input.txt").unwrap());
-    println!("{}", part_a);
-    println!("{}", part_b);
+    print(part_a);
+    print(part_b);
 }
 
 fn solve(input: String) -> (usize, usize) {
