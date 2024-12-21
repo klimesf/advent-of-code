@@ -25,6 +25,7 @@ use crate::y2024::day18::day18;
 use crate::y2024::day19::day19;
 use crate::y2024::day20::day20;
 use crate::y2024::day21::day21;
+use crate::y2024::day22::day22;
 
 pub mod day01;
 pub mod day02;
@@ -47,6 +48,7 @@ pub mod day18;
 pub mod day19;
 pub mod day20;
 pub mod day21;
+pub mod day22;
 
 pub fn y2024() {
     let args: Vec<String> = env::args().collect();
@@ -158,5 +160,10 @@ pub fn y2024() {
     if args.contains(&"all".to_string()) || args.contains(&"day21".to_string()) {
         println!("{}", format!("--- day21:").underline().green());
         measure!(day21(|s| println!("{}", s)));
+    }
+
+    if args.contains(&"all".to_string()) || args.contains(&"day22".to_string()) {
+        println!("{}", format!("--- day22:").underline().green());
+        measure!(day22());
     }
 }
