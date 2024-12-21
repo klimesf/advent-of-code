@@ -142,14 +142,6 @@ fn dfs_b(pos: (usize, usize), end: (usize, usize), dist: usize,
     max
 }
 
-#[derive(Clone, Eq, PartialEq)]
-struct Pos {
-    r: usize,
-    c: usize,
-    dist: usize,
-    visited: HashSet<(usize, usize)>,
-}
-
 #[cfg(test)]
 mod day23_tests {
     use std::fs;

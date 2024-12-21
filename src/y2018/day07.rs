@@ -1,4 +1,4 @@
-use std::cmp::{Ordering, Reverse};
+use std::cmp::{Reverse};
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 
@@ -65,7 +65,6 @@ fn part_b(mut graph: HashMap<char, HashSet<char>>) {
     let mut final_time = 0;
     while !time.is_empty() {
         let current_time = time.pop().unwrap();
-        // println!("-- Current time is {}", current_time.0);
 
         if let Some(dones) = finished_at.get(&current_time.0) {
             for done in dones {
@@ -74,7 +73,6 @@ fn part_b(mut graph: HashMap<char, HashSet<char>>) {
                     deps.remove(done);
                     if deps.is_empty() && !finished.contains(c) {
                         available_at.entry(current_time.0).or_insert_with(|| BinaryHeap::new()).push(Reverse(*c));
-                        // println!("Adding {} to available tasks", *c);
                     }
                 }
             }
@@ -86,13 +84,11 @@ fn part_b(mut graph: HashMap<char, HashSet<char>>) {
             let deadline = current_time.0 + duration(todo);
             finished_at.entry(deadline).or_insert_with(|| Vec::new()).push(todo);
             time.push(Reverse(deadline));
-            // println!("Starting to work on {}, it will be finished at {}", todo, deadline);
             finished.insert(todo);
         }
 
         if available_workers == TOTAL_WORKERS && finished.len() == 26 {
             final_time = current_time.0;
-            // println!("All tasks are done!");
         }
     }
 
@@ -100,36 +96,5 @@ fn part_b(mut graph: HashMap<char, HashSet<char>>) {
 }
 
 fn duration(task: char) -> usize {
-    60 + (task as u8 - 64) as usize // TODO: change 0 to 60
-}
-
-#[derive(Hash, Clone, Copy)]
-struct Task {
-    name: char,
-    available_at: usize,
-}
-
-impl Eq for Task {}
-
-impl PartialEq<Self> for Task {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
-    }
-}
-
-impl PartialOrd<Self> for Task {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for Task {
-    fn cmp(&self, other: &Self) -> Ordering {
-        let cmp_time = self.available_at.cmp(&other.available_at);
-        if !cmp_time.is_eq() {
-            return self.name.cmp(&other.name);
-        } else {
-            return cmp_time;
-        }
-    }
+    60 + (task as u8 - 64) as usize
 }
