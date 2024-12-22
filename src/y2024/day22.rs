@@ -1,10 +1,8 @@
-use std::collections::{HashMap, HashSet};
 use std::fs;
-use std::hash::{Hash, Hasher};
 use rayon::iter::IntoParallelRefIterator;
 use rayon::iter::ParallelIterator;
 
-pub(crate) fn day22() {
+pub fn day22() {
     println!("{}", part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
     println!("{}", part_b(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
 }
@@ -33,26 +31,26 @@ fn part_a(input: String) -> usize {
     ans
 }
 
-fn part_b(input: String) -> i32 {
+fn part_b(input: String) -> i16 {
     let secrets = input.lines().map(|l| l.parse().unwrap()).collect::<Vec<i32>>();
 
-    let mut map: HashMap<BigBrain, i32> = HashMap::new();
-    let vals: Vec<(BigBrain, i32)> = secrets.par_iter().map(|s| {
+    let vals: Vec<(usize, i16)> = secrets.par_iter().map(|s| {
         let mut res = vec!();
         let mut num = *s;
         let mut prices = vec![0; 2001];
-        let mut visited = HashSet::new();
+        let mut visited = [false; 0b11111111111111111111];
 
         for j in 0..=2000 {
-            prices[j] = num % 10;
+            prices[j] = (num % 10) as i16;
             if j >= 4 {
                 let a = prices[j - 4] - prices[j - 3];
                 let b = prices[j - 3] - prices[j - 2];
                 let c = prices[j - 2] - prices[j - 1];
                 let d = prices[j - 1] - prices[j];
-                let key = BigBrain { a, b, c, d };
-                if visited.insert(key) {
+                let key = hash(a, b, c, d);
+                if !visited[key] {
                     res.push((key, prices[j]));
+                    visited[key] = true;
                 }
             }
 
@@ -71,33 +69,23 @@ fn part_b(input: String) -> i32 {
         res
     }).flatten().collect();
 
+    let mut map = [0; 0b11111111111111111111];
     vals.iter().map(|(key, value)| {
-        let e = map.entry(*key).or_insert(0);
-        *e += value;
-        *e
+        map[*key] += value;
+        map[*key]
     }).max().unwrap()
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
-struct BigBrain {
-    a: i32,
-    b: i32,
-    c: i32,
-    d: i32,
-}
-
-impl Hash for BigBrain {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        let mut ans = 0;
-        ans += self.a + 10; // -9..9 => 1..19
-        ans = ans << 5;
-        ans += self.b + 10;
-        ans += ans << 5;
-        ans += self.c + 10;
-        ans += ans << 5;
-        ans += self.d + 10;
-        state.write_i32(ans);
-    }
+fn hash(a: i16, b: i16, c: i16, d: i16) -> usize {
+    let mut ans = 0;
+    ans += (a + 10) as usize; // -9..9 => 1..19
+    ans = ans << 5;           // max 19 = 0b10011, i.e. shift left by 5
+    ans += (b + 10) as usize;
+    ans += ans << 5;
+    ans += (c + 10) as usize;
+    ans += ans << 5;
+    ans += (d + 10) as usize;
+    ans // total 20 bits
 }
 
 #[cfg(test)]
