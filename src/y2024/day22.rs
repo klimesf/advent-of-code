@@ -1,6 +1,8 @@
 use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::hash::{Hash, Hasher};
+use rayon::iter::IntoParallelRefIterator;
+use rayon::iter::ParallelIterator;
 
 pub(crate) fn day22() {
     println!("{}", part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
@@ -35,11 +37,12 @@ fn part_b(input: String) -> i32 {
     let secrets = input.lines().map(|l| l.parse().unwrap()).collect::<Vec<i32>>();
 
     let mut map: HashMap<BigBrain, i32> = HashMap::new();
-
-    for i in 0..secrets.len() {
+    let vals: Vec<(BigBrain, i32)> = secrets.par_iter().map(|s| {
+        let mut res = vec!();
+        let mut num = *s;
         let mut prices = vec![0; 2001];
         let mut visited = HashSet::new();
-        let mut num = secrets[i];
+
         for j in 0..=2000 {
             prices[j] = num % 10;
             if j >= 4 {
@@ -49,7 +52,7 @@ fn part_b(input: String) -> i32 {
                 let d = prices[j - 1] - prices[j];
                 let key = BigBrain { a, b, c, d };
                 if visited.insert(key) {
-                    *map.entry(key).or_insert(0) += prices[j];
+                    res.push((key, prices[j]));
                 }
             }
 
@@ -65,9 +68,14 @@ fn part_b(input: String) -> i32 {
             num = new_num ^ num;
             num = num & 0b111111111111111111111111;
         }
-    }
+        res
+    }).flatten().collect();
 
-    *map.values().max().unwrap()
+    vals.iter().map(|(key, value)| {
+        let e = map.entry(*key).or_insert(0);
+        *e += value;
+        *e
+    }).max().unwrap()
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
