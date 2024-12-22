@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::fs;
+use std::hash::{Hash, Hasher};
 use rayon::iter::ParallelBridge;
 use rayon::iter::ParallelIterator;
 
@@ -34,11 +35,11 @@ fn part_a(input: String) -> usize {
     ans
 }
 
-fn part_b(input: String) -> i64 {
-    let secrets = input.lines().map(|l| l.parse().unwrap()).collect::<Vec<i64>>();
+fn part_b(input: String) -> i32 {
+    let secrets = input.lines().map(|l| l.parse().unwrap()).collect::<Vec<i32>>();
 
-    let mut prices: Vec<Vec<i64>> = vec![vec![0; 2001]; secrets.len()];
-    let mut map: HashMap<(usize, i64, i64, i64, i64), i64> = HashMap::new();
+    let mut prices: Vec<Vec<i32>> = vec![vec![0; 2001]; secrets.len()];
+    let mut map: HashMap<BigBrain, i32> = HashMap::new();
 
     for i in 0..secrets.len() {
         let mut num = secrets[i];
@@ -49,8 +50,9 @@ fn part_b(input: String) -> i64 {
                 let change_3 = prices[i][j - 3] - prices[i][j - 2];
                 let change_2 = prices[i][j - 2] - prices[i][j - 1];
                 let change_1 = prices[i][j - 1] - prices[i][j];
-                if !map.contains_key(&(i, change_4, change_3, change_2, change_1)) {
-                    map.insert((i, change_4, change_3, change_2, change_1), prices[i][j]);
+                let key = BigBrain { i, a: change_4, b: change_3, c: change_2, d: change_1 };
+                if !map.contains_key(&key) {
+                    map.insert(key, prices[i][j]);
                 }
             }
 
@@ -76,15 +78,41 @@ fn part_b(input: String) -> i64 {
             (-9..=9).for_each(|c| {
                 (-9..=9).for_each(|d| {
                     let ans_sequence = (0..secrets.len()).map(|i| {
-                        if !map.contains_key(&(i, d, c, b, a)) { return 0 }
-                        map[&(i, d, c, b, a)]
-                    }).sum::<i64>();
+                        let key = BigBrain { i, a, b, c, d };
+                        if !map.contains_key(&key) { return 0 }
+                        map[&key]
+                    }).sum::<i32>();
                     ans = ans.max(ans_sequence);
                 });
             });
         });
         ans
     }).max().unwrap()
+}
+
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+struct BigBrain {
+    a: i32,
+    b: i32,
+    c: i32,
+    d: i32,
+    i: usize,
+}
+
+impl Hash for BigBrain {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        let mut ans = 0;
+        ans += self.a + 10; // -9..9 => 1..19
+        ans = ans << 5;
+        ans += self.b + 10;
+        ans += ans << 5;
+        ans += self.c + 10;
+        ans += ans << 5;
+        ans += self.d + 10;
+        ans += ans << 7;
+        ans += self.i as i32;
+        state.write_i32(ans);
+    }
 }
 
 #[cfg(test)]
