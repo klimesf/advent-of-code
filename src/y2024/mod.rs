@@ -65,126 +65,150 @@ pub fn y2024() {
 
     if args.contains(&"all".to_string()) || args.contains(&"day01".to_string()) {
         println!("{}", format!("--- day01:").underline().green());
-        measure!(day01(|s| println!("{}", s)));
+        measure!(day01(print_u32));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day02".to_string()) {
         println!("{}", format!("--- day02:").underline().green());
-        measure!(day02(|s| println!("{}", s)));
+        measure!(day02(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day03".to_string()) {
         println!("{}", format!("--- day03:").underline().green());
-        measure!(day03(|s| println!("{}", s)));
+        measure!(day03(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day04".to_string()) {
         println!("{}", format!("--- day04:").underline().green());
-        measure!(day04(|s| println!("{}", s)));
+        measure!(day04(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day05".to_string()) {
         println!("{}", format!("--- day05:").underline().green());
-        measure!(day05(|s| println!("{}", s)));
+        measure!(day05(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day06".to_string()) {
         println!("{}", format!("--- day06:").underline().green());
-        measure!(day06(|s| println!("{}", s)));
+        measure!(day06(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day07".to_string()) {
         println!("{}", format!("--- day07:").underline().green());
-        measure!(day07(|s| println!("{}", s)));
+        measure!(day07(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day08".to_string()) {
         println!("{}", format!("--- day08:").underline().green());
-        measure!(day08(|s| println!("{}", s)));
+        measure!(day08(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day09".to_string()) {
         println!("{}", format!("--- day09:").underline().green());
-        measure!(day09(|s| println!("{}", s)));
+        measure!(day09(print_i64));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day10".to_string()) {
         println!("{}", format!("--- day10:").underline().green());
-        measure!(day10(|s| println!("{}", s)));
+        measure!(day10(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day11".to_string()) {
         println!("{}", format!("--- day11:").underline().green());
-        measure!(day11(|s| println!("{}", s)));
+        measure!(day11(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day12".to_string()) {
         println!("{}", format!("--- day12:").underline().green());
-        measure!(day12(|s| println!("{}", s)));
+        measure!(day12(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day13".to_string()) {
         println!("{}", format!("--- day13:").underline().green());
-        measure!(day13(|s| println!("{}", s)));
+        measure!(day13(print_i64));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day14".to_string()) {
         println!("{}", format!("--- day14:").underline().green());
-        measure!(day14(|s| println!("{}", s)));
+        measure!(day14(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day15".to_string()) {
         println!("{}", format!("--- day15:").underline().green());
-        measure!(day15(|s| println!("{}", s)));
+        measure!(day15(print_i32));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day16".to_string()) {
         println!("{}", format!("--- day16:").underline().green());
-        measure!(day16(|s| println!("{}", s)));
+        measure!(day16(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day17".to_string()) {
         println!("{}", format!("--- day17:").underline().green());
-        measure!(day17(|s| println!("{}", s)));
+        measure!(day17(print_string));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day18".to_string()) {
         println!("{}", format!("--- day18:").underline().green());
-        measure!(day18(|s| println!("{}", s)));
+        measure!(day18(print_string));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day19".to_string()) {
         println!("{}", format!("--- day19:").underline().green());
-        measure!(day19(|s| println!("{}", s)));
+        measure!(day19(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day20".to_string()) {
         println!("{}", format!("--- day20:").underline().green());
-        measure!(day20(|s| println!("{}", s)));
+        measure!(day20(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day21".to_string()) {
         println!("{}", format!("--- day21:").underline().green());
-        measure!(day21(|s| println!("{}", s)));
+        measure!(day21(print_usize));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day22".to_string()) {
         println!("{}", format!("--- day22:").underline().green());
-        measure!(day22());
+        measure!(day22(print_usize, print_i16));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day23".to_string()) {
         println!("{}", format!("--- day23:").underline().green());
-        measure!(day23());
+        measure!(day23(print_usize, print_string));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day24".to_string()) {
         println!("{}", format!("--- day24:").underline().green());
-        measure!(day24());
+        measure!(day24(print_usize, print_string));
     }
 
     if args.contains(&"all".to_string()) || args.contains(&"day25".to_string()) {
         println!("{}", format!("--- day25:").underline().green());
-        measure!(day25());
+        measure!(day25(print_usize));
     }
+}
+
+fn print_usize(a: usize) {
+    println!("{}", a);
+}
+
+fn print_i16(a: i16) {
+    println!("{}", a);
+}
+
+fn print_i32(a: i32) {
+    println!("{}", a);
+}
+
+fn print_u32(a: u32) {
+    println!("{}", a);
+}
+
+fn print_i64(a: i64) {
+    println!("{}", a);
+}
+
+fn print_string(a: String) {
+    println!("{}", a);
 }

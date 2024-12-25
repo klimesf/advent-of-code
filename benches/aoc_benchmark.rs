@@ -20,6 +20,10 @@ use adventofcode::y2024::day18::day18;
 use adventofcode::y2024::day19::day19;
 use adventofcode::y2024::day20::day20;
 use adventofcode::y2024::day21::day21;
+use adventofcode::y2024::day22::day22;
+use adventofcode::y2024::day23::day23;
+use adventofcode::y2024::day24::day24;
+use adventofcode::y2024::day25::day25;
 
 fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("2024 day 01", |b| b.iter(|| day01(|_| {})));
@@ -43,6 +47,10 @@ fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("2024 day 19", |b| b.iter(|| day19(|_| {})));
     c.bench_function("2024 day 20", |b| b.iter(|| day20(|_| {})));
     c.bench_function("2024 day 21", |b| b.iter(|| day21(|_| {})));
+    c.bench_function("2024 day 22", |b| b.iter(|| day22(|_| {}, |_| {})));
+    c.bench_function("2024 day 23", |b| b.iter(|| day23(|_| {}, |_| {})));
+    c.bench_function("2024 day 24", |b| b.iter(|| day24(|_| {}, |_| {})));
+    c.bench_function("2024 day 25", |b| b.iter(|| day25(|_| {})));
 }
 
 criterion_group!(benches, criterion_benchmark);

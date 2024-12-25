@@ -2,9 +2,9 @@ use std::fs;
 use rayon::iter::IntoParallelRefIterator;
 use rayon::iter::ParallelIterator;
 
-pub fn day22() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
+pub fn day22(print_usize: fn(usize), print_i16: fn(i16)) {
+    print_usize(part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
+    print_i16(part_b(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {

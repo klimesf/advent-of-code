@@ -1,7 +1,7 @@
 use std::fs;
 
-pub(crate) fn day25() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap()));
+pub fn day25(print: fn(usize)) {
+    print(part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {

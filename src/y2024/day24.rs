@@ -2,9 +2,9 @@ use std::collections::{HashMap, VecDeque};
 use std::fs;
 use itertools::Itertools;
 
-pub(crate) fn day24() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
+pub fn day24(print_usize: fn(usize), print_string: fn(String)) {
+    print_usize(part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
+    print_string(part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {

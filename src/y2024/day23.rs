@@ -2,9 +2,9 @@ use std::collections::HashMap;
 use std::fs;
 use itertools::Itertools;
 
-pub(crate) fn day23() {
-    println!("{}", part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
+pub fn day23(print_usize: fn(usize), print_string: fn(String)) {
+    print_usize(part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
+    print_string(part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
