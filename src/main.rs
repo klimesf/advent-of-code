@@ -4,6 +4,7 @@ use crate::y2016::y2016;
 use crate::y2017::y2017;
 use crate::y2018::y2018;
 use crate::y2019::y2019;
+use crate::y2020::y2020;
 use crate::y2022::y2022;
 use crate::y2023::y2023;
 use crate::y2024::y2024;
@@ -13,6 +14,7 @@ pub mod y2016;
 pub mod y2017;
 pub mod y2018;
 pub mod y2019;
+pub mod y2020;
 pub mod y2022;
 pub mod y2023;
 pub mod y2024;
@@ -38,6 +40,9 @@ fn main() {
     }
     if args.contains(&"2019".to_string()) {
         y2019();
+    }
+    if args.contains(&"2020".to_string()) {
+        y2020();
     }
     if args.contains(&"2022".to_string()) {
         y2022();
