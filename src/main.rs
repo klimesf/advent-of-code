@@ -8,6 +8,7 @@ use crate::y2020::y2020;
 use crate::y2022::y2022;
 use crate::y2023::y2023;
 use crate::y2024::y2024;
+use crate::y2025::y2025;
 
 pub mod y2015;
 pub mod y2016;
@@ -18,6 +19,7 @@ pub mod y2020;
 pub mod y2022;
 pub mod y2023;
 pub mod y2024;
+pub mod y2025;
 
 pub mod utils {
     pub mod grid;
@@ -52,5 +54,8 @@ fn main() {
     }
     if args.contains(&"2024".to_string()) {
         y2024();
+    }
+    if args.contains(&"2025".to_string()) {
+        y2025();
     }
 }
