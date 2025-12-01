@@ -5,8 +5,10 @@ use colored::Colorize;
 use std::env;
 use crate::measure;
 use crate::y2025::day01::day01;
+use crate::y2025::day02::day02;
 
 pub mod day01;
+mod day02;
 
 pub fn y2025() {
     let args: Vec<String> = env::args().collect();
@@ -18,6 +20,11 @@ pub fn y2025() {
     if args.contains(&"all".to_string()) || args.contains(&"day01".to_string()) {
         println!("{}", format!("--- day01:").underline().green());
         measure!(day01(print_i32));
+    }
+
+    if args.contains(&"all".to_string()) || args.contains(&"day02".to_string()) {
+        println!("{}", format!("--- day02:").underline().green());
+        measure!(day02(print_usize));
     }
 }
 
