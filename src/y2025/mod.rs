@@ -6,9 +6,11 @@ use std::env;
 use crate::measure;
 use crate::y2025::day01::day01;
 use crate::y2025::day02::day02;
+use crate::y2025::day03::day03;
 
 pub mod day01;
 mod day02;
+mod day03;
 
 pub fn y2025() {
     let args: Vec<String> = env::args().collect();
@@ -25,6 +27,11 @@ pub fn y2025() {
     if args.contains(&"all".to_string()) || args.contains(&"day02".to_string()) {
         println!("{}", format!("--- day02:").underline().green());
         measure!(day02(print_usize));
+    }
+
+    if args.contains(&"all".to_string()) || args.contains(&"day03".to_string()) {
+        println!("{}", format!("--- day03:").underline().green());
+        measure!(day03(print_usize));
     }
 }
 
