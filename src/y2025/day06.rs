@@ -42,78 +42,35 @@ fn part_a(input: String) -> usize {
 
 fn part_b(input: String) -> usize {
     let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
-    let max_col = map.iter().map(|row| row.len()).max().unwrap();
-
-
-    let mut op = '.';
+    
+    let pow = map.len() - 1;
     let mut ans = 0;
     let mut nums: Vec<usize> = vec!();
-    for col in 0..max_col {
-        let mut whitespace_ct = 0;
+    for col in (0..map[0].len()).rev() {
         let mut num = String::new();
-        for row in 0..map.len() {
-            if col >= map[row].len() {
+        for row in 0..(map.len() - 1) {
+            let char = map[row][col];
+            if char.is_whitespace() {
                 continue;
             }
-            if map[row][col].is_whitespace() {
-                whitespace_ct += 1;
-            } else if map[row][col].is_alphanumeric() {
-                num.push(map[row][col]);
-            } else {
-                if op != '.' {
-                    panic!("two operators!");
-                } else {
-                    op = map[row][col];
-                }
-            }
+            num.push(char);
         }
-
-        if whitespace_ct == map.len() {
-            match op {
-                '*' => {
-                    let mut tot = 1;
-                    for i in 0..nums.len() {
-                        tot *= nums[i];
-                    }
-                    ans += tot;
-                },
-                '+' => {
-                    let mut tot = 0;
-                    for i in 0..nums.len() {
-                        tot += nums[i];
-                    }
-                    ans += tot;
-                }
-                _ => panic!("invalid op {}", op)
-            }
-            op = '.';
-            nums.clear();
-        } else {
-            nums.push(num.parse::<usize>().unwrap());
-            num.clear();
+        if !num.trim().is_empty() {
+            nums.push(num.parse().unwrap());
+        }
+        
+        match map[pow][col] {
+            '*' => {
+                ans += nums.iter().product::<usize>();
+                nums.clear();
+            },
+            '+' => {
+                ans += nums.iter().sum::<usize>();
+                nums.clear();
+            },
+            _ => { }
         }
     }
-
-    // Also one last line, last column is not all whitespace
-    match op {
-        '*' => {
-            let mut tot = 1;
-            for i in 0..nums.len() {
-                tot *= nums[i];
-            }
-            ans += tot;
-        },
-        '+' => {
-            let mut tot = 0;
-            for i in 0..nums.len() {
-                tot += nums[i];
-            }
-            ans += tot;
-        }
-        _ => panic!("invalid op {}", op)
-    }
-    nums.clear();
-
     ans
 }
 
