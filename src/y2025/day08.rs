@@ -13,38 +13,36 @@ fn part_a(input: String, iterations: usize) -> usize {
         let vec: Vec<i64> = line.split(',').map(|num| num.parse().unwrap()).collect();
         (vec[0], vec[1], vec[2])
     }).collect();
-    
+
     let mut parents: Vec<usize> = vec![0; nums.len()];
     for i in 0..nums.len() {
         parents[i] = i;
     }
     let mut heap = BinaryHeap::new();
     for i in 0..nums.len() {
-        for j in 0..nums.len() {
+        for j in i + 1..nums.len() {
             if i == j { continue; }
             let num_a = nums[i].clone();
             let num_b = nums[j].clone();
-            let distance = (((
+            let distance =
                 (num_a.0 - num_b.0).pow(2)
                     + (num_a.1 - num_b.1).pow(2)
-                    + (num_a.2 - num_b.2).pow(2)) as f64
-            ).sqrt() * 100000000000000_f64).round() as i64;
+                    + (num_a.2 - num_b.2).pow(2);
             heap.push(NodePair { i, j, distance })
         }
     }
 
-    for _ in 0..(iterations * 2) {
+    for _ in 0..iterations {
         let pair = heap.pop().unwrap();
         if parents[pair.i] == parents[pair.j] { continue; }
         union(pair.i, pair.j, &mut parents);
     }
 
-    let mut set = HashMap::new();
+    let mut circuit_sizes = HashMap::new();
     for i in 0..parents.len() {
-       *set.entry(parents[i]).or_insert(0) += 1;
+        *circuit_sizes.entry(parents[i]).or_insert(0) += 1;
     }
-    
-    set.values().sorted().rev().take(3).product()
+    circuit_sizes.values().sorted().rev().take(3).product()
 }
 
 fn part_b(input: String) -> usize {
@@ -59,48 +57,39 @@ fn part_b(input: String) -> usize {
     }
     let mut heap = BinaryHeap::new();
     for i in 0..nums.len() {
-        for j in 0..nums.len() {
+        for j in i + 1..nums.len() {
             if i == j { continue; }
             let num_a = nums[i].clone();
             let num_b = nums[j].clone();
-            let distance = (((
+            let distance =
                 (num_a.0 - num_b.0).pow(2)
                     + (num_a.1 - num_b.1).pow(2)
-                    + (num_a.2 - num_b.2).pow(2)) as f64
-            ).sqrt() * 100000000000000_f64).round() as i64;
+                    + (num_a.2 - num_b.2).pow(2);
             heap.push(NodePair { i, j, distance })
         }
     }
 
     let mut last = 0;
-    while heap.len() > 0 && parents.iter().unique().count() > 1 {
+    let mut circuit_count = nums.len();
+    while circuit_count > 1 {
         let pair = heap.pop().unwrap();
         if parents[pair.i] == parents[pair.j] { continue; }
         union(pair.i, pair.j, &mut parents);
+        circuit_count -= 1;
         last = (nums[pair.i].0 * nums[pair.j].0) as usize;
     }
     last
 }
 
 fn union(a: usize, b: usize, parents: &mut Vec<usize>) {
-    let parent_a = find(a, parents);
-    let parent_b = find(b, parents);
+    let parent_a = parents[a];
+    let parent_b = parents[b];
     for i in 0..parents.len() {
         if parents[i] == parent_a {
             parents[i] = parent_b;
         }
     }
     parents[parent_a] = parent_b;
-    
-}
-
-fn find(a: usize, parents: &Vec<usize>) -> usize {
-    let parent = parents[a];
-    if parent == a {
-        a
-    } else {
-        find(parent, parents)
-    }
 }
 
 #[derive(Copy, Clone, Eq, PartialEq)]
