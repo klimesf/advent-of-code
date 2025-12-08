@@ -1,4 +1,3 @@
-use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day07(print: fn(usize)) {
@@ -11,35 +10,24 @@ fn part_a(input: String) -> usize {
         line.chars().collect()
     }).collect();
     
-    let mut start = (0, 0);
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == 'S' {
-                start = (i, j);
-                break;
+    let mut collector = vec![0; map.len()];
+    let mut ans = 0;
+    for row in 0..map.len() {
+        for col in 0..map[row].len() {
+            match map[row][col] {
+                'S' => collector[col] += 1,
+                '^' => {
+                    if collector[col] == 0 { continue; }
+                    collector[col] = 0;
+                    collector[col - 1] = 1;
+                    collector[col + 1] = 1;
+                    ans += 1;
+                }
+                _ => { }
             }
         }
     }
-    
-    let mut stack = vec!();
-    stack.push(start);
-    
-    let mut ans = HashSet::new();
-    while let Some(pos) = stack.pop() {
-        let (i, j) = pos;
-        if ans.contains(&(i, j)) { continue; }
-        if i >= map.len() || j >= map[0].len() { continue; }
-
-        if map[i][j] == '^' {
-            stack.push((i, j + 1));
-            stack.push((i, j - 1));
-            ans.insert((i, j));
-        } else {
-            stack.push((i + 1, j));
-        }
-    }
-
-    ans.iter().len()
+    ans
 }
 
 fn part_b(input: String) -> usize {
@@ -47,36 +35,22 @@ fn part_b(input: String) -> usize {
         line.chars().collect()
     }).collect();
 
-    let mut start = (0, 0);
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == 'S' {
-                start = (i, j);
-                break;
+    let mut collector = vec![0; map.len()];
+    for row in 0..map.len() {
+        for col in 0..map[row].len() {
+            match map[row][col] {
+                'S' => collector[col] += 1,
+                '^' => {
+                    if collector[col] == 0 { continue; }
+                    collector[col - 1] += collector[col];
+                    collector[col + 1] += collector[col];
+                    collector[col] = 0;
+                }
+                _ => { }
             }
         }
     }
-
-    let mut cache = HashMap::new();
-    cached_rec(start.0, start.1, &map, &mut cache)
-}
-
-fn cached_rec(i: usize, j: usize, map: &Vec<Vec<char>>, cache: &mut HashMap<(usize, usize), usize>) -> usize {
-    if i >= map.len() && j < map[0].len() { return 1; }
-    if j >= map[0].len() { return 0; }
-    if cache.contains_key(&(i, j)) {
-        return *cache.get(&(i, j)).unwrap();
-    }
-
-    if map[i][j] == '^' {
-        let ans = cached_rec(i, j + 1, map, cache) + cached_rec(i, j - 1, map, cache);
-        cache.insert((i, j), ans);
-        ans
-    } else {
-        let ans = cached_rec(i + 1, j, map, cache);
-        cache.insert((i, j), ans);
-        ans
-    }
+    collector.iter().sum()
 }
 
 #[cfg(test)]
