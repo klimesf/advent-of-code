@@ -13,23 +13,15 @@ fn part_a(input: String) -> usize {
         let (l, r) = range.split_once('-').unwrap();
         let start = l.parse::<usize>().unwrap();
         let end = r.parse::<usize>().unwrap();
-        (start..=end).for_each(|num| {
-            let num_str = num.to_string();
 
-            if num_str.len() % 2 != 0 { return; }
-            let mut same = true;
-            let half = num_str.len() / 2;
-            for i in 0..half {
-                if num_str.chars().nth(i).unwrap() != num_str.chars().nth(i + half).unwrap() {
-                    same = false;
-                    break;
-                }
+        for n in start..=end {
+            let len = n.checked_ilog10().unwrap_or(0) + 1;
+            if len % 2 != 0 { continue; }
+            let div = 10_usize.pow(len / 2);
+            if n % div == n / div {
+                ans += n;
             }
-
-            if same {
-                ans += num;
-            }
-        });
+        }
     });
 
     ans
@@ -42,27 +34,29 @@ fn part_b(input: String) -> usize {
         let (l, r) = range.split_once('-').unwrap();
         let start = l.parse::<usize>().unwrap();
         let end = r.parse::<usize>().unwrap();
-        (start..=end).for_each(|num| {
-            let num_str = num.to_string();
-            let half = num_str.len() / 2;
-            for len in 1..=half {
-                if num_str.len() % len != 0 { continue; }
+
+        for n in start..=end {
+            let len = n.checked_ilog10().unwrap_or(0) + 1;
+            for parts in 2..=len {
+                if len % parts != 0 { continue }
+                
+                let div = 10_usize.pow(len / parts);
+                
+                let mut last = n % div;
+                let mut part: usize;
+                let mut rem = n / div;
                 let mut same = true;
-                for split in 0..((num_str.len() / len) - 1) {
-                    for i in (split * len)..((split + 1) * len) {
-                        if num_str.chars().nth(i).unwrap() != num_str.chars().nth(i + len).unwrap() {
-                            same = false;
-                            break;
-                        }
-                    }
-
+                while rem > 0 {
+                    part = rem % div;
+                    rem = rem / div;
+                    if part != last { same = false; break;}
+                    last = part;
                 }
-
                 if same {
-                    ans.insert(num);
+                    ans.insert(n);
                 }
             }
-        });
+        }
     });
 
     ans.iter().sum()
