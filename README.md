@@ -19,4 +19,5 @@ the repo and try to run it, you won't succeed. But you can copy your own inputs 
 - [Year 2022](/src/y2022) (solved 25.12.2022)
 - [Year 2023](/src/y2023) (solved 25.12.2023)
 - [Year 2024](/src/y2024) (solved 25.12.2024)
+- [Year 2025](/src/y2025) (solved 12.12.2025)
 - [Utils](/src/utils)

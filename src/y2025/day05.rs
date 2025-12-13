@@ -1,6 +1,6 @@
 use std::fs;
 
-pub(crate) fn day05(print: fn(usize)) {
+pub fn day05(print: fn(usize)) {
     print(part_a(
         fs::read_to_string("input/2025/day05/input.txt").unwrap(),
     ));

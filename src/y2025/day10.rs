@@ -4,7 +4,7 @@ use std::collections::VecDeque;
 use std::fs;
 use z3::{ast::Int, Optimize, SatResult};
 
-pub(crate) fn day10(print: fn(usize)) {
+pub fn day10(print: fn(usize)) {
     print(part_a(
         fs::read_to_string("input/2025/day10/input.txt").unwrap(),
     ));

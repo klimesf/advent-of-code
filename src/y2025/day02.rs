@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::fs;
 
-pub(crate) fn day02(print: fn(usize)) {
+pub fn day02(print: fn(usize)) {
     print(part_a(
         fs::read_to_string("input/2025/day02/input.txt").unwrap(),
     ));

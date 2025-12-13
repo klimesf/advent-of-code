@@ -3,7 +3,7 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 use std::fs;
 
-pub(crate) fn day08(print: fn(usize)) {
+pub fn day08(print: fn(usize)) {
     print(part_a(
         fs::read_to_string("input/2025/day08/input.txt").unwrap(),
         1000,
