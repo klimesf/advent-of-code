@@ -15,9 +15,18 @@ fn parse<'a>(input: &'a str) -> (HashMap<&'a str, Vec<&'a str>>, HashMap<&'a str
     input.lines().for_each(|line| {
         let (name_str, children_str) = if line.contains(" -> ") {
             line.split_once(" -> ").unwrap()
-        } else { (line, "") };
+        } else {
+            (line, "")
+        };
         let (name, weight_str) = name_str.split_once(" (").unwrap();
-        adjacency_list.insert(name, if children_str.len() > 0 { children_str.split(", ").collect() } else { vec!() });
+        adjacency_list.insert(
+            name,
+            if children_str.len() > 0 {
+                children_str.split(", ").collect()
+            } else {
+                vec![]
+            },
+        );
         let weight = weight_str[0..weight_str.len() - 1].parse().unwrap();
         weights.insert(&name, weight);
     });
@@ -26,14 +35,19 @@ fn parse<'a>(input: &'a str) -> (HashMap<&'a str, Vec<&'a str>>, HashMap<&'a str
 
 fn part_a<'a>(adjacency_list: &HashMap<&'a str, Vec<&'a str>>) -> Vec<&'a str> {
     let mut visited = HashSet::new();
-    let mut sort = vec!();
+    let mut sort = vec![];
     for name in adjacency_list.keys() {
         topological_sort_rec(*name, adjacency_list, &mut visited, &mut sort);
     }
     sort
 }
 
-fn topological_sort_rec<'a>(name: &'a str, adjacency_list: &HashMap<&'a str, Vec<&'a str>>, visited: &mut HashSet<&'a str>, sort: &mut Vec<&'a str>) {
+fn topological_sort_rec<'a>(
+    name: &'a str,
+    adjacency_list: &HashMap<&'a str, Vec<&'a str>>,
+    visited: &mut HashSet<&'a str>,
+    sort: &mut Vec<&'a str>,
+) {
     if !visited.insert(name) {
         return;
     }
@@ -50,21 +64,38 @@ fn topological_sort_rec<'a>(name: &'a str, adjacency_list: &HashMap<&'a str, Vec
     sort.push(name);
 }
 
-fn part_b(sort: Vec<&str>, adjacency_list: &HashMap<&str, Vec<&str>>, weights: &HashMap<&str, i32>) -> i32 {
+fn part_b(
+    sort: Vec<&str>,
+    adjacency_list: &HashMap<&str, Vec<&str>>,
+    weights: &HashMap<&str, i32>,
+) -> i32 {
     let mut balance: HashMap<&str, i32> = HashMap::new();
-    for name in sort { // If we go in the topological sort order, we are guaranteed not to get unwrap on None in the balance map
+    for name in sort {
+        // If we go in the topological sort order, we are guaranteed not to get unwrap on None in the balance map
         let mut weight_sum = 0;
         let mut weight_map = HashMap::new();
-        adjacency_list.get(name).unwrap().iter()
+        adjacency_list
+            .get(name)
+            .unwrap()
+            .iter()
             .for_each(|neighbor| {
                 let w = *balance.get(neighbor).unwrap();
-                weight_map.entry(w).or_insert(vec!()).push(*neighbor);
+                weight_map.entry(w).or_insert(vec![]).push(*neighbor);
                 weight_sum += w;
             });
 
         if weight_map.len() > 1 {
-            let (unbalanced_w_sum, unbalanced_n) = weight_map.iter().filter(|(_, c)| c.len() == 1).last().unwrap();
-            let balanced_w_sum = weight_map.iter().filter(|(_, c)| c.len() > 1).map(|(w, _)| w).last().unwrap();
+            let (unbalanced_w_sum, unbalanced_n) = weight_map
+                .iter()
+                .filter(|(_, c)| c.len() == 1)
+                .last()
+                .unwrap();
+            let balanced_w_sum = weight_map
+                .iter()
+                .filter(|(_, c)| c.len() > 1)
+                .map(|(w, _)| w)
+                .last()
+                .unwrap();
             let unbalanced_w = weights.get(unbalanced_n.last().unwrap()).unwrap();
             return unbalanced_w - (unbalanced_w_sum - balanced_w_sum);
         }
@@ -77,8 +108,8 @@ fn part_b(sort: Vec<&str>, adjacency_list: &HashMap<&str, Vec<&str>>, weights: &
 
 #[cfg(test)]
 mod day07_tests {
-    use std::fs;
     use crate::y2017::day07::{parse, part_a, part_b};
+    use std::fs;
 
     #[test]
     fn test_works() {

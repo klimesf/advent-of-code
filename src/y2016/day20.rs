@@ -1,15 +1,30 @@
 use std::fs;
 
 pub(crate) fn day20() {
-    println!("{}", part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2016/day20/input.txt").unwrap(), 4294967295));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(
+            fs::read_to_string("input/2016/day20/input.txt").unwrap(),
+            4294967295
+        )
+    );
 }
 
 fn part_a(input: String) -> usize {
-    let blacklist: Vec<(usize, usize)> = input.lines().map(|line| {
-        let (start, end) = line.split_once("-").unwrap();
-        (start.parse::<usize>().unwrap(), end.parse::<usize>().unwrap())
-    }).collect();
+    let blacklist: Vec<(usize, usize)> = input
+        .lines()
+        .map(|line| {
+            let (start, end) = line.split_once("-").unwrap();
+            (
+                start.parse::<usize>().unwrap(),
+                end.parse::<usize>().unwrap(),
+            )
+        })
+        .collect();
 
     let mut min = 0;
     let mut changes = 1;
@@ -28,15 +43,21 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String, range: usize) -> usize {
-    let mut allowlist = vec! { (0, range) };
+    let mut allowlist = vec![(0, range)];
 
-    let blacklist: Vec<(usize, usize)> = input.lines().map(|line| {
-        let (start, end) = line.split_once("-").unwrap();
-        (start.parse::<usize>().unwrap(), end.parse::<usize>().unwrap())
-    }).collect();
+    let blacklist: Vec<(usize, usize)> = input
+        .lines()
+        .map(|line| {
+            let (start, end) = line.split_once("-").unwrap();
+            (
+                start.parse::<usize>().unwrap(),
+                end.parse::<usize>().unwrap(),
+            )
+        })
+        .collect();
 
     for (bl_start, bl_end) in &blacklist {
-        let mut new_allowlist = vec!();
+        let mut new_allowlist = vec![];
 
         allowlist.iter().for_each(|(al_start, al_end)| {
             if al_start >= bl_start && al_start <= bl_end && al_end > bl_end {
@@ -65,13 +86,28 @@ mod day20_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(3, part_a(fs::read_to_string("input/2016/day20/test.txt").unwrap()));
-        assert_eq!(2, part_b(fs::read_to_string("input/2016/day20/test.txt").unwrap(), 9));
+        assert_eq!(
+            3,
+            part_a(fs::read_to_string("input/2016/day20/test.txt").unwrap())
+        );
+        assert_eq!(
+            2,
+            part_b(fs::read_to_string("input/2016/day20/test.txt").unwrap(), 9)
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(19449262, part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap()));
-        assert_eq!(119, part_b(fs::read_to_string("input/2016/day20/input.txt").unwrap(), 4294967295));
+        assert_eq!(
+            19449262,
+            part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap())
+        );
+        assert_eq!(
+            119,
+            part_b(
+                fs::read_to_string("input/2016/day20/input.txt").unwrap(),
+                4294967295
+            )
+        );
     }
 }

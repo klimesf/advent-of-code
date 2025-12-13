@@ -8,27 +8,37 @@ pub(crate) fn day21() {
 }
 
 fn parse(input: &str) -> Vec<(Vec<Vec<char>>, Vec<Vec<char>>)> {
-    input.lines().map(|line| {
-        let (pattern_str, result_str) = line.split_once(" => ").unwrap();
-        let pattern = pattern_str.split("/").map(|row| row.chars().collect()).collect::<Vec<Vec<char>>>();
-        let result = result_str.split("/").map(|row| row.chars().collect()).collect::<Vec<Vec<char>>>();
-        (pattern, result)
-    }).flat_map(|(pattern, result)| {
-        let mut res = vec!();
+    input
+        .lines()
+        .map(|line| {
+            let (pattern_str, result_str) = line.split_once(" => ").unwrap();
+            let pattern = pattern_str
+                .split("/")
+                .map(|row| row.chars().collect())
+                .collect::<Vec<Vec<char>>>();
+            let result = result_str
+                .split("/")
+                .map(|row| row.chars().collect())
+                .collect::<Vec<Vec<char>>>();
+            (pattern, result)
+        })
+        .flat_map(|(pattern, result)| {
+            let mut res = vec![];
 
-        let mut p = pattern;
-        res.push((p.clone(), result.clone()));
-        res.push((flip(&p), result.clone()));
-
-        // Rotate to 90, 180 and 270
-        for _ in 0..3 {
-            p = rotate(&p);
+            let mut p = pattern;
             res.push((p.clone(), result.clone()));
             res.push((flip(&p), result.clone()));
-        }
 
-        res
-    }).collect()
+            // Rotate to 90, 180 and 270
+            for _ in 0..3 {
+                p = rotate(&p);
+                res.push((p.clone(), result.clone()));
+                res.push((flip(&p), result.clone()));
+            }
+
+            res
+        })
+        .collect()
 }
 
 fn rotate(image: &Vec<Vec<char>>) -> Vec<Vec<char>> {
@@ -57,24 +67,31 @@ fn rotate(image: &Vec<Vec<char>>) -> Vec<Vec<char>> {
 }
 
 fn flip(image: &Vec<Vec<char>>) -> Vec<Vec<char>> {
-    image.iter().map(|row| {
-        let mut res = row.clone();
-        res.reverse();
-        res
-    }).collect()
+    image
+        .iter()
+        .map(|row| {
+            let mut res = row.clone();
+            res.reverse();
+            res
+        })
+        .collect()
 }
 
 fn enhance(iterations: i32, rules: &Vec<(Vec<Vec<char>>, Vec<Vec<char>>)>) -> usize {
-    let mut image = vec![vec!['.', '#', '.'], vec!['.', '.', '#'], vec!['#', '#', '#']];
+    let mut image = vec![
+        vec!['.', '#', '.'],
+        vec!['.', '.', '#'],
+        vec!['#', '#', '#'],
+    ];
 
     for _ in 0..iterations {
         let inc: usize = if image.len() % 2 == 0 { 2 } else { 3 };
-        let mut squares: Vec<Vec<Vec<char>>> = vec!();
+        let mut squares: Vec<Vec<Vec<char>>> = vec![];
         for dx in 0..(image.len() / inc) {
             for dy in 0..(image.len() / inc) {
-                let mut square = vec!();
+                let mut square = vec![];
                 for x in 0..inc {
-                    let mut row = vec!();
+                    let mut row = vec![];
                     for y in 0..inc {
                         row.push(image[x + inc * dx][y + inc * dy]);
                     }
@@ -84,7 +101,7 @@ fn enhance(iterations: i32, rules: &Vec<(Vec<Vec<char>>, Vec<Vec<char>>)>) -> us
             }
         }
 
-        let mut new_squares = vec!();
+        let mut new_squares = vec![];
         'outer: for square in squares {
             for (pattern, result) in rules {
                 if square == *pattern {
@@ -95,7 +112,7 @@ fn enhance(iterations: i32, rules: &Vec<(Vec<Vec<char>>, Vec<Vec<char>>)>) -> us
             panic!("No matching pattern");
         }
 
-        let mut new_image = vec!();
+        let mut new_image = vec![];
         for dx in 0..(image.len() / inc) {
             let mut new_rows = vec![vec!(); inc + 1];
             for dy in 0..(image.len() / inc) {
@@ -112,13 +129,16 @@ fn enhance(iterations: i32, rules: &Vec<(Vec<Vec<char>>, Vec<Vec<char>>)>) -> us
         image = new_image;
     }
 
-    image.iter().map(|row| row.iter().filter(|c| **c == '#').count()).sum()
+    image
+        .iter()
+        .map(|row| row.iter().filter(|c| **c == '#').count())
+        .sum()
 }
 
 #[cfg(test)]
 mod day21_tests {
-    use std::fs;
     use crate::y2017::day21::{enhance, flip, parse, rotate};
+    use std::fs;
 
     #[test]
     fn rotate_len2_works() {
@@ -135,10 +155,26 @@ mod day21_tests {
 
     #[test]
     fn rotate_len3_works() {
-        let original = vec![vec!['.', '#', '.'], vec!['.', '.', '#'], vec!['#', '#', '#']];
-        let rot_90 = vec![vec!['#', '.', '.'], vec!['#', '.', '#'], vec!['#', '#', '.']];
-        let rot_180 = vec![vec!['#', '#', '#'], vec!['#', '.', '.'], vec!['.', '#', '.']];
-        let rot_270 = vec![vec!['.', '#', '#'], vec!['#', '.', '#'], vec!['.', '.', '#']];
+        let original = vec![
+            vec!['.', '#', '.'],
+            vec!['.', '.', '#'],
+            vec!['#', '#', '#'],
+        ];
+        let rot_90 = vec![
+            vec!['#', '.', '.'],
+            vec!['#', '.', '#'],
+            vec!['#', '#', '.'],
+        ];
+        let rot_180 = vec![
+            vec!['#', '#', '#'],
+            vec!['#', '.', '.'],
+            vec!['.', '#', '.'],
+        ];
+        let rot_270 = vec![
+            vec!['.', '#', '#'],
+            vec!['#', '.', '#'],
+            vec!['.', '.', '#'],
+        ];
 
         assert_eq!(rot_90, rotate(&original));
         assert_eq!(rot_180, rotate(&rot_90));
@@ -155,8 +191,16 @@ mod day21_tests {
 
     #[test]
     fn flip_len3_works() {
-        let original = vec![vec!['.', '.', '#'], vec!['.', '#', '.'], vec!['#', '.', '.']];
-        let flipped = vec![vec!['#', '.', '.'], vec!['.', '#', '.'], vec!['.', '.', '#']];
+        let original = vec![
+            vec!['.', '.', '#'],
+            vec!['.', '#', '.'],
+            vec!['#', '.', '.'],
+        ];
+        let flipped = vec![
+            vec!['#', '.', '.'],
+            vec!['.', '#', '.'],
+            vec!['.', '.', '#'],
+        ];
         assert_eq!(flipped, flip(&original));
     }
 

@@ -1,12 +1,25 @@
+use itertools::Itertools;
 use std::collections::{HashMap, VecDeque};
 use std::fs;
-use itertools::Itertools;
 
 pub(crate) fn day25() {
     let input = fs::read_to_string("input/2019/day25/input.txt").unwrap();
-    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let code: Vec<i64> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
 
-    let items = ["dark matter", "hypercube", "coin", "klein bottle", "shell", "easter egg", "astrolabe", "tambourine"];
+    let items = [
+        "dark matter",
+        "hypercube",
+        "coin",
+        "klein bottle",
+        "shell",
+        "easter egg",
+        "astrolabe",
+        "tambourine",
+    ];
 
     for i in 0..256 {
         let mut intcode = intcode_instance(&code);
@@ -16,7 +29,9 @@ pub(crate) fn day25() {
         let str: Vec<char> = format!("{:08b}", i).chars().collect();
         for j in 0..8 {
             if str[j] == '1' {
-                format!("drop {}\n", items[j]).chars().for_each(|c| input.push_back(c as i64));
+                format!("drop {}\n", items[j])
+                    .chars()
+                    .for_each(|c| input.push_back(c as i64));
             }
         }
         "south\n".chars().for_each(|c| input.push_back(c as i64));
@@ -28,7 +43,10 @@ pub(crate) fn day25() {
             s.push(intcode.output[i]);
         }
         if !s.contains("Security Checkpoint") {
-            println!("{}", intcode.output.iter().map(|c| *c as u8 as char).join(""));
+            println!(
+                "{}",
+                intcode.output.iter().map(|c| *c as u8 as char).join("")
+            );
             break;
         }
     }
@@ -48,30 +66,44 @@ fn path_to_pressure_room(input: &mut VecDeque<i64>) {
     //                                                                       STABLES (hyperc)
 
     "north\n".chars().for_each(|c| input.push_back(c as i64));
-    "take tambourine\n".chars().for_each(|c| input.push_back(c as i64));
+    "take tambourine\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "east\n".chars().for_each(|c| input.push_back(c as i64));
-    "take astrolabe\n".chars().for_each(|c| input.push_back(c as i64));
+    "take astrolabe\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "east\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
-    "take klein bottle\n".chars().for_each(|c| input.push_back(c as i64));
+    "take klein bottle\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
-    "take easter egg\n".chars().for_each(|c| input.push_back(c as i64));
+    "take easter egg\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
-    "take shell\n".chars().for_each(|c| input.push_back(c as i64));
+    "take shell\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
-    "take hypercube\n".chars().for_each(|c| input.push_back(c as i64));
+    "take hypercube\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "inv\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
-    "take dark matter\n".chars().for_each(|c| input.push_back(c as i64));
+    "take dark matter\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     //"take giant electromagnet\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
@@ -83,7 +115,9 @@ fn path_to_pressure_room(input: &mut VecDeque<i64>) {
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
-    "take coin\n".chars().for_each(|c| input.push_back(c as i64));
+    "take coin\n"
+        .chars()
+        .for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "inv\n".chars().for_each(|c| input.push_back(c as i64));
 }
@@ -193,8 +227,12 @@ impl IntcodeProcessor {
                     self.relative_base += a_val;
                     self.instruction_ptr += 2;
                 }
-                99 => { break; }
-                _ => { panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr); }
+                99 => {
+                    break;
+                }
+                _ => {
+                    panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr);
+                }
             }
         }
     }
@@ -202,13 +240,17 @@ impl IntcodeProcessor {
     fn mem_read(&mut self, mode: i32, val: i64) -> i64 {
         match mode {
             0 => {
-                if val < 0 { panic!("Invalid memory address: {}", val) }
+                if val < 0 {
+                    panic!("Invalid memory address: {}", val)
+                }
                 *self.memory.entry(val).or_insert(0)
             }
             1 => val,
             2 => {
                 let addr = val + self.relative_base;
-                if addr < 0 { panic!("Invalid memory address: {}", addr) }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr)
+                }
                 *self.memory.entry(addr).or_insert(0)
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -218,13 +260,17 @@ impl IntcodeProcessor {
     fn mem_write(&mut self, mode: i32, addr: i64, val: i64) {
         match mode {
             0 => {
-                if addr < 0 { panic!("Invalid memory address: {}", addr); }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr);
+                }
                 self.memory.insert(addr, val);
             }
             1 => panic!("How to write in mode 1?"),
             2 => {
                 let i = addr + self.relative_base;
-                if i < 0 { panic!("Invalid memory address: {}", i) }
+                if i < 0 {
+                    panic!("Invalid memory address: {}", i)
+                }
                 self.memory.insert(i, val);
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -241,6 +287,6 @@ fn intcode_instance(code: &Vec<i64>) -> IntcodeProcessor {
         instruction_ptr: 0,
         memory,
         relative_base: 0,
-        output: vec!(),
+        output: vec![],
     }
 }

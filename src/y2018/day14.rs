@@ -20,7 +20,6 @@ fn part_a(input: usize) -> String {
         elf_2 = (elf_2 + recipes[elf_2] + 1) % recipes.len();
     }
 
-
     let mut res = String::new();
     for i in 0..10 {
         res.push(char::from_digit(recipes[input + i] as u32, 10).unwrap());
@@ -47,19 +46,23 @@ fn part_b(input: String) -> usize {
 }
 
 fn digits(mut new_recipe: usize) -> Vec<usize> {
-    let mut digits = vec!();
+    let mut digits = vec![];
     loop {
-        if new_recipe < 10 { break; }
+        if new_recipe < 10 {
+            break;
+        }
         digits.push(new_recipe % 10);
         new_recipe = new_recipe / 10;
     }
     digits.push(new_recipe);
     digits.reverse();
-    return digits
+    return digits;
 }
 
 fn contains_string(recipes: &Vec<usize>, input: &String) -> usize {
-    if recipes.len() < input.len() + 2 { return 0; }
+    if recipes.len() < input.len() + 2 {
+        return 0;
+    }
     let mut deque = VecDeque::new();
     let mut i = recipes.len();
     let mut found = false;
@@ -71,7 +74,9 @@ fn contains_string(recipes: &Vec<usize>, input: &String) -> usize {
         }
 
         let mut s = String::new();
-        deque.iter().for_each(|c| s.push(char::from_digit(*c as u32, 10).unwrap()));
+        deque
+            .iter()
+            .for_each(|c| s.push(char::from_digit(*c as u32, 10).unwrap()));
 
         if s == *input {
             found = true;
@@ -114,8 +119,17 @@ mod day14_tests {
 
     #[test]
     fn contains_string_works() {
-        assert_eq!(3, contains_string(&vec![0, 0, 0, 0, 0, 1, 0], &"001".to_string()));
-        assert_eq!(3, contains_string(&vec![0, 0, 0, 0, 0, 1], &"001".to_string()));
-        assert_eq!(0, contains_string(&vec![0, 0, 0, 0, 0, 0, 0], &"001".to_string()));
+        assert_eq!(
+            3,
+            contains_string(&vec![0, 0, 0, 0, 0, 1, 0], &"001".to_string())
+        );
+        assert_eq!(
+            3,
+            contains_string(&vec![0, 0, 0, 0, 0, 1], &"001".to_string())
+        );
+        assert_eq!(
+            0,
+            contains_string(&vec![0, 0, 0, 0, 0, 0, 0], &"001".to_string())
+        );
     }
 }

@@ -49,7 +49,7 @@ fn duet(instructions: &Vec<&str>) -> i64 {
                     continue;
                 }
             }
-            _ => panic!("Unknown instruction {}", name)
+            _ => panic!("Unknown instruction {}", name),
         }
         i += 1;
     }
@@ -75,8 +75,8 @@ fn dual_core_duet(instructions: &Vec<&str>) -> i64 {
             }
             "snd" => {
                 let num = match args.parse::<i64>() {
-                    Ok(num) => { num }
-                    Err(_) => { *register.get(args).unwrap_or(&default) }
+                    Ok(num) => num,
+                    Err(_) => *register.get(args).unwrap_or(&default),
                 };
                 // println!("prg {} sending {}", current_program, num);
                 queues[current_program].push_back(num);
@@ -105,7 +105,9 @@ fn dual_core_duet(instructions: &Vec<&str>) -> i64 {
                     current_program = (current_program + 1) % 2;
                     continue;
                 } else {
-                    if stuck_ctr[current_program] > 0 { stuck_ctr[current_program] = 0 };
+                    if stuck_ctr[current_program] > 0 {
+                        stuck_ctr[current_program] = 0
+                    };
                     let num = queue.pop_front().unwrap();
                     // println!("prg {} recieving {}", current_program, num);
                     register.insert(args, num);
@@ -114,15 +116,15 @@ fn dual_core_duet(instructions: &Vec<&str>) -> i64 {
             "jgz" => {
                 let (check, offset) = parse_args(args, &register, default);
                 let check_num = match check.parse::<i64>() {
-                    Ok(n) => { n }
-                    Err(_) => { *register.get(check).unwrap_or(&0) }
+                    Ok(n) => n,
+                    Err(_) => *register.get(check).unwrap_or(&0),
                 };
                 if check_num > 0 {
                     pos[current_program] += offset;
                     continue;
                 }
             }
-            _ => panic!("Unknown instruction {}", name)
+            _ => panic!("Unknown instruction {}", name),
         }
         pos[current_program] += 1;
     }
@@ -141,8 +143,8 @@ fn parse_args<'a>(args: &'a str, register: &HashMap<&'a str, i64>, default: i64)
 
 #[cfg(test)]
 mod day18_tests {
-    use std::fs;
     use crate::y2017::day18::{dual_core_duet, duet};
+    use std::fs;
 
     #[test]
     fn test_works() {

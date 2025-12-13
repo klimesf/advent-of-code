@@ -49,9 +49,9 @@ fn add_to_sum(sum: i32, cycle: i32, reg: i32) -> i32 {
     interested.insert(220);
 
     if interested.contains(&cycle) {
-        return sum + (cycle * reg)
+        return sum + (cycle * reg);
     } else {
-        return sum
+        return sum;
     }
 }
 

@@ -6,9 +6,14 @@ pub(crate) fn day12() {
     let (initial, raw_rules) = input.trim().split_once("\n\n").unwrap();
 
     let mut rules: HashMap<String, char> = HashMap::new();
-    raw_rules.trim().split("\n").into_iter()
+    raw_rules
+        .trim()
+        .split("\n")
+        .into_iter()
         .map(|c| c.split_once(" => ").unwrap())
-        .for_each(|(pattern, result)| { rules.insert(pattern.to_string(), result.chars().nth(0).unwrap()); });
+        .for_each(|(pattern, result)| {
+            rules.insert(pattern.to_string(), result.chars().nth(0).unwrap());
+        });
 
     let mut population: HashMap<i32, char> = HashMap::new();
     for i in 15..initial.len() {
@@ -21,7 +26,11 @@ pub(crate) fn day12() {
         generation += 1;
     }
 
-    println!("After {} generations, the indexes of the pots with flower sum up to {}", generation, sum_pop(&population));
+    println!(
+        "After {} generations, the indexes of the pots with flower sum up to {}",
+        generation,
+        sum_pop(&population)
+    );
 
     let mut visited: HashSet<String> = HashSet::new();
     let start;
@@ -30,7 +39,10 @@ pub(crate) fn day12() {
         generation += 1;
         cut_off(&mut population);
         if !visited.insert(pop_to_str(&population)) {
-            println!("The cycle starts to repeat after {} generations", generation);
+            println!(
+                "The cycle starts to repeat after {} generations",
+                generation
+            );
             start = sum_pop(&population);
             break;
         }
@@ -39,13 +51,22 @@ pub(crate) fn day12() {
     generation += 1;
 
     let inc = (end - start) as i64;
-    println!("Afterwards, each new generation adds {} to the pot flower sum", inc);
+    println!(
+        "Afterwards, each new generation adds {} to the pot flower sum",
+        inc
+    );
 
     let res = end as i64 + (50000000000 - generation) * inc;
-    println!("After 50000000000 generations, the indexes of the pots with flower sum up to {}", res);
+    println!(
+        "After 50000000000 generations, the indexes of the pots with flower sum up to {}",
+        res
+    );
 }
 
-fn calc_new_pop(population: &HashMap<i32, char>, rules: &HashMap<String, char>) -> HashMap<i32, char> {
+fn calc_new_pop(
+    population: &HashMap<i32, char>,
+    rules: &HashMap<String, char>,
+) -> HashMap<i32, char> {
     let mut new_pop = HashMap::new();
     let from = *population.keys().min().unwrap();
     let to = *population.keys().max().unwrap();
@@ -85,7 +106,10 @@ fn cut_off(population: &mut HashMap<i32, char>) {
 }
 
 fn sum_pop(population: &HashMap<i32, char>) -> i32 {
-    population.iter().map(|(i, c)| if *c == '#' { *i } else { 0 }).sum::<i32>()
+    population
+        .iter()
+        .map(|(i, c)| if *c == '#' { *i } else { 0 })
+        .sum::<i32>()
 }
 
 fn pop_to_str(population: &HashMap<i32, char>) -> String {

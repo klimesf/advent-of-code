@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 use itertools::Itertools;
-use rayon::iter::{IntoParallelRefIterator};
+use rayon::iter::IntoParallelRefIterator;
 use rayon::iter::ParallelIterator;
 
 pub(crate) fn day12() {
@@ -13,26 +13,36 @@ pub(crate) fn day12() {
 }
 
 fn parse(input: &str) -> HashMap<&str, Vec<&str>> {
-    input.lines().map(|line| {
-        let (from, to) = line.split_once(" <-> ").unwrap();
-        let neighbors: Vec<&str> = to.split(", ").into_iter().collect();
-        (from, neighbors)
-    }).collect()
+    input
+        .lines()
+        .map(|line| {
+            let (from, to) = line.split_once(" <-> ").unwrap();
+            let neighbors: Vec<&str> = to.split(", ").into_iter().collect();
+            (from, neighbors)
+        })
+        .collect()
 }
 
 fn discover_all(adjacency_list: &HashMap<&str, Vec<&str>>) -> usize {
-    let forest = adjacency_list.par_iter()
+    let forest = adjacency_list
+        .par_iter()
         .map(|(from, _)| discover(*from, adjacency_list))
         .collect::<Vec<Vec<&str>>>();
     forest.iter().unique().count()
 }
 
 fn discover<'a>(from: &'a str, adjacency_list: &HashMap<&'a str, Vec<&'a str>>) -> Vec<&'a str> {
-    let mut stack = vec!(from);
+    let mut stack = vec![from];
     let mut visited = HashSet::new();
     while let Some(next) = stack.pop() {
-        if !visited.insert(next) { continue; }
-        adjacency_list.get(next).unwrap().iter().for_each(|neighbor| stack.push(neighbor));
+        if !visited.insert(next) {
+            continue;
+        }
+        adjacency_list
+            .get(next)
+            .unwrap()
+            .iter()
+            .for_each(|neighbor| stack.push(neighbor));
     }
     visited.iter().map(|s| *s).sorted().collect()
 }

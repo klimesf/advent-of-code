@@ -1,19 +1,34 @@
 use std::fs;
 
 pub(crate) fn day16() {
-    println!("{}", part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
     let (input_a, _) = input.split_once("\n\n\n").unwrap();
-    let mut samples = vec!();
+    let mut samples = vec![];
     input_a.split("\n\n").for_each(|case| {
         let lines: Vec<&str> = case.splitn(3, "\n").collect();
 
-        let before: Vec<usize> = lines[0][9..19].split(", ").map(|s| s.parse::<usize>().unwrap()).collect();
-        let op: Vec<usize> = lines[1].split(" ").map(|s| s.parse::<usize>().unwrap()).collect();
-        let after: Vec<usize> = lines[2][9..19].split(", ").map(|s| s.parse::<usize>().unwrap()).collect();
+        let before: Vec<usize> = lines[0][9..19]
+            .split(", ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
+        let op: Vec<usize> = lines[1]
+            .split(" ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
+        let after: Vec<usize> = lines[2][9..19]
+            .split(", ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
 
         samples.push((before, op, after));
     });
@@ -22,24 +37,40 @@ fn part_a(input: String) -> usize {
     for (before, op, after) in samples {
         let mut matching = 0;
         let args = op[1..].iter().map(|n| *n).collect();
-        for instr in ["addr", "addi", "mulr", "muli", "banr", "bani", "borr", "bori", "setr", "seti", "gtir", "gtri", "gtrr", "eqir", "eqri", "eqrr"] {
+        for instr in [
+            "addr", "addi", "mulr", "muli", "banr", "bani", "borr", "bori", "setr", "seti", "gtir",
+            "gtri", "gtrr", "eqir", "eqri", "eqrr",
+        ] {
             let res = eval(instr, &args, &before);
-            if res == after { matching += 1 }
+            if res == after {
+                matching += 1
+            }
         }
-        if matching >= 3 { ans += 1 }
+        if matching >= 3 {
+            ans += 1
+        }
     }
     ans
 }
 
 fn part_b(input: String) -> usize {
     let (input_a, input_b) = input.split_once("\n\n\n\n").unwrap();
-    let mut samples = vec!();
+    let mut samples = vec![];
     input_a.split("\n\n").for_each(|case| {
         let lines: Vec<&str> = case.splitn(3, "\n").collect();
 
-        let before: Vec<usize> = lines[0][9..19].split(", ").map(|s| s.parse::<usize>().unwrap()).collect();
-        let op: Vec<usize> = lines[1].split(" ").map(|s| s.parse::<usize>().unwrap()).collect();
-        let after: Vec<usize> = lines[2][9..19].split(", ").map(|s| s.parse::<usize>().unwrap()).collect();
+        let before: Vec<usize> = lines[0][9..19]
+            .split(", ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
+        let op: Vec<usize> = lines[1]
+            .split(" ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
+        let after: Vec<usize> = lines[2][9..19]
+            .split(", ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
 
         samples.push((before, op, after));
     });
@@ -77,7 +108,7 @@ fn part_b(input: String) -> usize {
     // 14 [59, 59, 0, 0, 0, 0, 0, 0, 0, 59, 0, 0, 0, 0, 0, 0]
     // 15 [0, 0, 0, 0, 55, 55, 0, 0, 0, 55, 55, 55, 55, 55, 55, 55]
 
-    let op_to_instr = vec! {
+    let op_to_instr = vec![
         "eqir", // 0
         "borr", // 1
         "addr", // 2
@@ -94,12 +125,15 @@ fn part_b(input: String) -> usize {
         "gtrr", // 13
         "addi", // 14
         "seti", // 15
-    };
+    ];
 
     // Execute program
-    let mut regs = vec! {0; 4 };
+    let mut regs = vec![0; 4];
     input_b.lines().for_each(|line| {
-        let op: Vec<usize> = line.split(" ").map(|s| s.parse::<usize>().unwrap()).collect();
+        let op: Vec<usize> = line
+            .split(" ")
+            .map(|s| s.parse::<usize>().unwrap())
+            .collect();
         let args = op[1..].iter().map(|n| *n).collect();
         let instr = op_to_instr[op[0]];
         regs = eval(instr, &args, &regs);
@@ -110,55 +144,25 @@ fn part_b(input: String) -> usize {
 fn eval(instr: &str, args: &Vec<usize>, regs: &Vec<usize>) -> Vec<usize> {
     let mut ans = regs.clone();
     match instr {
-        "addr" => {
-            ans[args[2]] = regs[args[0]] + regs[args[1]]
+        "addr" => ans[args[2]] = regs[args[0]] + regs[args[1]],
+        "addi" => ans[args[2]] = regs[args[0]] + args[1],
+        "mulr" => ans[args[2]] = regs[args[0]] * regs[args[1]],
+        "muli" => ans[args[2]] = regs[args[0]] * args[1],
+        "banr" => ans[args[2]] = regs[args[0]] & regs[args[1]],
+        "bani" => ans[args[2]] = regs[args[0]] & args[1],
+        "borr" => ans[args[2]] = regs[args[0]] | regs[args[1]],
+        "bori" => ans[args[2]] = regs[args[0]] | args[1],
+        "setr" => ans[args[2]] = regs[args[0]],
+        "seti" => ans[args[2]] = args[0],
+        "gtir" => ans[args[2]] = if args[0] > regs[args[1]] { 1 } else { 0 },
+        "gtri" => ans[args[2]] = if regs[args[0]] > args[1] { 1 } else { 0 },
+        "gtrr" => ans[args[2]] = if regs[args[0]] > regs[args[1]] { 1 } else { 0 },
+        "eqir" => ans[args[2]] = if args[0] == regs[args[1]] { 1 } else { 0 },
+        "eqri" => ans[args[2]] = if regs[args[0]] == args[1] { 1 } else { 0 },
+        "eqrr" => ans[args[2]] = if regs[args[0]] == regs[args[1]] { 1 } else { 0 },
+        s => {
+            panic!("unknown instruction {}", s)
         }
-        "addi" => {
-            ans[args[2]] = regs[args[0]] + args[1]
-        }
-        "mulr" => {
-            ans[args[2]] = regs[args[0]] * regs[args[1]]
-        }
-        "muli" => {
-            ans[args[2]] = regs[args[0]] * args[1]
-        }
-        "banr" => {
-            ans[args[2]] = regs[args[0]] & regs[args[1]]
-        }
-        "bani" => {
-            ans[args[2]] = regs[args[0]] & args[1]
-        }
-        "borr" => {
-            ans[args[2]] = regs[args[0]] | regs[args[1]]
-        }
-        "bori" => {
-            ans[args[2]] = regs[args[0]] | args[1]
-        }
-        "setr" => {
-            ans[args[2]] = regs[args[0]]
-        }
-        "seti" => {
-            ans[args[2]] = args[0]
-        }
-        "gtir" => {
-            ans[args[2]] = if args[0] > regs[args[1]] { 1 } else { 0 }
-        }
-        "gtri" => {
-            ans[args[2]] = if regs[args[0]] > args[1] { 1 } else { 0 }
-        }
-        "gtrr" => {
-            ans[args[2]] = if regs[args[0]] > regs[args[1]] { 1 } else { 0 }
-        }
-        "eqir" => {
-            ans[args[2]] = if args[0] == regs[args[1]] { 1 } else { 0 }
-        }
-        "eqri" => {
-            ans[args[2]] = if regs[args[0]] == args[1] { 1 } else { 0 }
-        }
-        "eqrr" => {
-            ans[args[2]] = if regs[args[0]] == regs[args[1]] { 1 } else { 0 }
-        }
-        s => { panic!("unknown instruction {}", s) }
     }
     ans
 }
@@ -171,7 +175,13 @@ mod day16_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(614, part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
-        assert_eq!(656, part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
+        assert_eq!(
+            614,
+            part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap())
+        );
+        assert_eq!(
+            656,
+            part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap())
+        );
     }
 }

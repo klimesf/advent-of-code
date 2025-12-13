@@ -3,14 +3,18 @@ use std::fs;
 
 pub(crate) fn day23() {
     let input = fs::read_to_string("input/2019/day23/input.txt").unwrap();
-    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let code: Vec<i64> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
 
     part_a(&code);
     part_b(&code);
 }
 
 fn part_a(code: &Vec<i64>) {
-    let mut computers = vec!();
+    let mut computers = vec![];
     for _ in 0..50 {
         computers.push(intcode_instance(code));
     }
@@ -25,7 +29,7 @@ fn part_a(code: &Vec<i64>) {
 
     let mut outputs: HashMap<i64, Vec<i64>> = HashMap::new();
     for i in 0..50 {
-        outputs.insert(i, vec!());
+        outputs.insert(i, vec![]);
     }
 
     let input_callback = |from: i64, inputs: &mut HashMap<i64, VecDeque<i64>>| {
@@ -39,7 +43,10 @@ fn part_a(code: &Vec<i64>) {
         };
     };
 
-    let output_callback = |from: i64, outputs: &mut HashMap<i64, Vec<i64>>, inputs: &mut HashMap<i64, VecDeque<i64>>, value: i64| {
+    let output_callback = |from: i64,
+                           outputs: &mut HashMap<i64, Vec<i64>>,
+                           inputs: &mut HashMap<i64, VecDeque<i64>>,
+                           value: i64| {
         let output = outputs.get_mut(&from).unwrap();
         output.push(value);
 
@@ -58,14 +65,23 @@ fn part_a(code: &Vec<i64>) {
 
     while inputs.get(&255).unwrap().len() < 2 && !all_finished(&computers) {
         for i in 0..50 {
-            computers[i].step(i as i64, &mut inputs, &mut outputs, &input_callback, &output_callback);
+            computers[i].step(
+                i as i64,
+                &mut inputs,
+                &mut outputs,
+                &input_callback,
+                &output_callback,
+            );
         }
     }
-    println!("The first y packet sent to 255 is {:?}", inputs.get(&255).unwrap()[1]);
+    println!(
+        "The first y packet sent to 255 is {:?}",
+        inputs.get(&255).unwrap()[1]
+    );
 }
 
 fn part_b(code: &Vec<i64>) {
-    let mut computers = vec!();
+    let mut computers = vec![];
     for _ in 0..50 {
         computers.push(intcode_instance(code));
     }
@@ -80,7 +96,7 @@ fn part_b(code: &Vec<i64>) {
 
     let mut outputs: HashMap<i64, Vec<i64>> = HashMap::new();
     for i in 0..50 {
-        outputs.insert(i, vec!());
+        outputs.insert(i, vec![]);
     }
 
     let input_callback = |from: i64, inputs: &mut HashMap<i64, VecDeque<i64>>| {
@@ -94,7 +110,10 @@ fn part_b(code: &Vec<i64>) {
         };
     };
 
-    let output_callback = |from: i64, outputs: &mut HashMap<i64, Vec<i64>>, inputs: &mut HashMap<i64, VecDeque<i64>>, value: i64| {
+    let output_callback = |from: i64,
+                           outputs: &mut HashMap<i64, Vec<i64>>,
+                           inputs: &mut HashMap<i64, VecDeque<i64>>,
+                           value: i64| {
         let output = outputs.get_mut(&from).unwrap();
         output.push(value);
 
@@ -115,12 +134,19 @@ fn part_b(code: &Vec<i64>) {
     let mut sent_y_to_0 = HashSet::new();
     while !all_finished(&computers) {
         for i in 0..50 {
-            computers[i].step(i as i64, &mut inputs, &mut outputs, &input_callback, &output_callback);
+            computers[i].step(
+                i as i64,
+                &mut inputs,
+                &mut outputs,
+                &input_callback,
+                &output_callback,
+            );
         }
         if all_idling(&inputs, &outputs) {
             idle_ctr += 1;
 
-            if idle_ctr > 1500 { // Don't ask me why wait 1500 idle counts, it just works
+            if idle_ctr > 1500 {
+                // Don't ask me why wait 1500 idle counts, it just works
                 let input_255 = inputs.get_mut(&255).unwrap();
                 if input_255.is_empty() {
                     break;
@@ -135,7 +161,10 @@ fn part_b(code: &Vec<i64>) {
                 //println!("Sending packet ({}, {}) to 0 from NAT", last_x, last_y);
 
                 if !sent_y_to_0.insert(last_y) {
-                    println!("The first y packet to be sent twice from NAT to 0 is {:?}", last_y);
+                    println!(
+                        "The first y packet to be sent twice from NAT to 0 is {:?}",
+                        last_y
+                    );
                     return;
                 }
 
@@ -169,7 +198,9 @@ impl IntcodeProcessor {
         input: &dyn Fn(i64, &mut HashMap<i64, VecDeque<i64>>) -> i64,
         output: &dyn Fn(i64, &mut HashMap<i64, Vec<i64>>, &mut HashMap<i64, VecDeque<i64>>, i64),
     ) {
-        if self.finished { return; };
+        if self.finished {
+            return;
+        };
 
         let _instr = self.memory[&self.instruction_ptr];
         let opcode = self.memory[&self.instruction_ptr] % 100;
@@ -266,20 +297,26 @@ impl IntcodeProcessor {
                 self.finished = true;
                 return;
             }
-            _ => { panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr); }
+            _ => {
+                panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr);
+            }
         }
     }
 
     fn mem_read(&mut self, mode: i32, val: i64) -> i64 {
         match mode {
             0 => {
-                if val < 0 { panic!("Invalid memory address: {}", val) }
+                if val < 0 {
+                    panic!("Invalid memory address: {}", val)
+                }
                 *self.memory.entry(val).or_insert(0)
             }
             1 => val,
             2 => {
                 let addr = val + self.relative_base;
-                if addr < 0 { panic!("Invalid memory address: {}", addr) }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr)
+                }
                 *self.memory.entry(addr).or_insert(0)
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -289,13 +326,17 @@ impl IntcodeProcessor {
     fn mem_write(&mut self, mode: i32, addr: i64, val: i64) {
         match mode {
             0 => {
-                if addr < 0 { panic!("Invalid memory address: {}", addr); }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr);
+                }
                 self.memory.insert(addr, val);
             }
             1 => panic!("How to write in mode 1?"),
             2 => {
                 let i = addr + self.relative_base;
-                if i < 0 { panic!("Invalid memory address: {}", i) }
+                if i < 0 {
+                    panic!("Invalid memory address: {}", i)
+                }
                 self.memory.insert(i, val);
             }
             _ => panic!("Unknown mode: {}", mode),

@@ -12,7 +12,7 @@ pub(crate) fn day18() {
 #[allow(dead_code)]
 fn part_a() {
     let input = fs::read_to_string("input/2019/day18/input.txt").unwrap();
-    let mut map: Vec<Vec<char>> = vec!();
+    let mut map: Vec<Vec<char>> = vec![];
     for line in input.trim().split("\n") {
         map.push(line.chars().collect());
     }
@@ -37,7 +37,7 @@ fn part_a() {
         }
 
         let mut dist = HashMap::new();
-        let mut possible_moves = vec!();
+        let mut possible_moves = vec![];
         possible_moves.push((start, start_dist));
 
         if let Some(next_moves) = next_move_cache.get(&(start, keys)) {
@@ -76,9 +76,12 @@ fn part_a() {
     println!("It takes at least {} steps to collect all keys", min);
 }
 
-fn add_moves_to_queue(prio_queue: &mut PriorityQueue<(char, usize, usize), Reverse<usize>>,
-                      visited: &mut HashMap<(char, usize), usize>,
-                      keys: &usize, next_moves: &HashSet<(char, usize)>) {
+fn add_moves_to_queue(
+    prio_queue: &mut PriorityQueue<(char, usize, usize), Reverse<usize>>,
+    visited: &mut HashMap<(char, usize), usize>,
+    keys: &usize,
+    next_moves: &HashSet<(char, usize)>,
+) {
     for (from, from_dist) in next_moves {
         let new_keys = add_key(*keys, *from);
         let new_state = (*from, new_keys, *from_dist);
@@ -92,13 +95,16 @@ fn add_moves_to_queue(prio_queue: &mut PriorityQueue<(char, usize, usize), Rever
 #[allow(dead_code)]
 fn part_b() {
     let input = fs::read_to_string("input/2019/day18/input_b.txt").unwrap();
-    let mut map: Vec<Vec<char>> = vec!();
+    let mut map: Vec<Vec<char>> = vec![];
     for line in input.trim().split("\n") {
         map.push(line.chars().collect());
     }
 
     let (vertices, edges) = create_graph(&map);
-    let key_cnt = vertices.iter().filter(|(c, _, _)| *c >= 'a' && *c <= 'z').count();
+    let key_cnt = vertices
+        .iter()
+        .filter(|(c, _, _)| *c >= 'a' && *c <= 'z')
+        .count();
 
     let mut prio_queue = PriorityQueue::new();
     prio_queue.push((('1', '2', '3', '4'), 0, 0), Reverse(0));
@@ -125,8 +131,11 @@ fn part_b() {
         while !possible_moves.is_empty() {
             let ((from, from_dist), _) = possible_moves.pop().unwrap();
 
-            if !has_key(keys, from.0) || !has_key(keys, from.1)
-                || !has_key(keys, from.2) || !has_key(keys, from.3) {
+            if !has_key(keys, from.0)
+                || !has_key(keys, from.1)
+                || !has_key(keys, from.2)
+                || !has_key(keys, from.3)
+            {
                 next_moves.insert((from, from_dist));
                 continue;
             }
@@ -139,7 +148,7 @@ fn part_b() {
                 if robot_cache.contains_key(&(*robot, keys)) {
                     robot_moves = robot_cache.get(&(*robot, keys)).unwrap().clone();
                 } else {
-                    for (to, to_dist, to_keys) in edges.get(robot).or(Some(&vec!())).unwrap() {
+                    for (to, to_dist, to_keys) in edges.get(robot).or(Some(&vec![])).unwrap() {
                         if !extract_keys(*to_keys).iter().all(|rk| has_key(keys, *rk)) {
                             continue; // Cannot go there, don't have the keys
                         }
@@ -164,13 +173,17 @@ fn part_b() {
 
         add_moves_to_queue_b(&mut prio_queue, &mut visited, &keys, &next_moves);
     }
-    println!("It takes at least {} steps to collect all keys by 4 robots", min);
+    println!(
+        "It takes at least {} steps to collect all keys by 4 robots",
+        min
+    );
 }
 
 fn add_moves_to_queue_b(
     prio_queue: &mut PriorityQueue<((char, char, char, char), usize, usize), Reverse<usize>>,
     visited: &mut HashMap<((char, char, char, char), usize), usize>,
-    keys: &usize, next_moves: &HashSet<((char, char, char, char), usize)>,
+    keys: &usize,
+    next_moves: &HashSet<((char, char, char, char), usize)>,
 ) {
     for (from, from_dist) in next_moves {
         let mut new_keys = *keys;
@@ -188,9 +201,14 @@ fn add_moves_to_queue_b(
     }
 }
 
-fn create_graph(map: &Vec<Vec<char>>) -> (Vec<(char, usize, usize)>, HashMap<char, Vec<(char, usize, usize)>>) {
+fn create_graph(
+    map: &Vec<Vec<char>>,
+) -> (
+    Vec<(char, usize, usize)>,
+    HashMap<char, Vec<(char, usize, usize)>>,
+) {
     // Find vertices
-    let mut vertices = vec!();
+    let mut vertices = vec![];
     for y in 0..map.len() {
         for x in 0..map[y].len() {
             let c = map[y][x];
@@ -204,7 +222,7 @@ fn create_graph(map: &Vec<Vec<char>>) -> (Vec<(char, usize, usize)>, HashMap<cha
     // Run DFS from each vertex and find edges to neighbors
     let mut edges = HashMap::new();
     for (from, v_x, v_y) in vertices.clone() {
-        let mut to_visit = vec!();
+        let mut to_visit = vec![];
         to_visit.push((v_x, v_y, 0, 0));
 
         let mut dist: HashMap<(usize, usize), usize> = HashMap::new();
@@ -213,24 +231,36 @@ fn create_graph(map: &Vec<Vec<char>>) -> (Vec<(char, usize, usize)>, HashMap<cha
             *dist.entry((x, y)).or_insert(d) = d;
 
             let to = map[y][x];
-            if to != from && ((to >= 'a' && to <= 'z')) {
-                edges.entry(from).or_insert(vec!()).push((to, d, keys));
+            if to != from && (to >= 'a' && to <= 'z') {
+                edges.entry(from).or_insert(vec![]).push((to, d, keys));
                 continue;
             }
             if to >= 'A' && to <= 'Z' {
                 keys = add_key(keys, (to as u8 + 32) as char);
             }
 
-            if x > 0 && map[y][x - 1] != '#' && *dist.entry((x - 1, y)).or_insert(usize::MAX) > d + 1 {
+            if x > 0
+                && map[y][x - 1] != '#'
+                && *dist.entry((x - 1, y)).or_insert(usize::MAX) > d + 1
+            {
                 to_visit.push((x - 1, y, d + 1, keys));
             }
-            if x < map[y].len() - 1 && map[y][x + 1] != '#' && *dist.entry((x + 1, y)).or_insert(usize::MAX) > d + 1 {
+            if x < map[y].len() - 1
+                && map[y][x + 1] != '#'
+                && *dist.entry((x + 1, y)).or_insert(usize::MAX) > d + 1
+            {
                 to_visit.push((x + 1, y, d + 1, keys));
             }
-            if y > 0 && map[y - 1][x] != '#' && *dist.entry((x, y - 1)).or_insert(usize::MAX) > d + 1 {
+            if y > 0
+                && map[y - 1][x] != '#'
+                && *dist.entry((x, y - 1)).or_insert(usize::MAX) > d + 1
+            {
                 to_visit.push((x, y - 1, d + 1, keys));
             }
-            if y < map.len() - 1 && map[y + 1][x] != '#' && *dist.entry((x, y + 1)).or_insert(usize::MAX) > d + 1 {
+            if y < map.len() - 1
+                && map[y + 1][x] != '#'
+                && *dist.entry((x, y + 1)).or_insert(usize::MAX) > d + 1
+            {
                 to_visit.push((x, y + 1, d + 1, keys));
             }
         }
@@ -250,7 +280,9 @@ fn add_key(keys: usize, key: char) -> usize {
 }
 
 fn has_key(keys: usize, key: char) -> bool {
-    if key == '@' || (key >= '1' && key <= '4') { return true; }
+    if key == '@' || (key >= '1' && key <= '4') {
+        return true;
+    }
     let key_val = (key as u32) - 97;
     let dec = keys >> key_val;
     dec % 2 == 1

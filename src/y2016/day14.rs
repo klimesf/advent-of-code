@@ -8,8 +8,14 @@ pub(crate) fn day14() {
     // gen_hashes("input/2016/day14/input_b.txt", "ngcjuoqr", 2016);
     // println!("{}", solve(fs::read_to_string("input/2016/day14/test.txt").unwrap()));
     // println!("{}", solve(fs::read_to_string("input/2016/day14/test_b.txt").unwrap()));
-    println!("{}", solve(fs::read_to_string("input/2016/day14/input.txt").unwrap()));
-    println!("{}", solve(fs::read_to_string("input/2016/day14/input_b.txt").unwrap()));
+    println!(
+        "{}",
+        solve(fs::read_to_string("input/2016/day14/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        solve(fs::read_to_string("input/2016/day14/input_b.txt").unwrap())
+    );
 }
 
 #[allow(unused)]
@@ -85,24 +91,42 @@ fn find_quintet(hash: String) -> HashSet<char> {
 
 #[cfg(test)]
 mod day14_tests {
-    use std::fs;
     use crate::y2016::day14::{find_triplet, solve};
+    use std::fs;
 
     #[test]
     fn find_triplet_works() {
-        assert_eq!(Some('8'), find_triplet("0034e0923cc38887a57bd7b1d4f953df".to_string()));
-        assert_eq!(None, find_triplet("65b7d651740a924bef52e4eefa46fe76".to_string()));
+        assert_eq!(
+            Some('8'),
+            find_triplet("0034e0923cc38887a57bd7b1d4f953df".to_string())
+        );
+        assert_eq!(
+            None,
+            find_triplet("65b7d651740a924bef52e4eefa46fe76".to_string())
+        );
     }
 
     #[test]
     fn test_works() {
-        assert_eq!(22728, solve(fs::read_to_string("input/2016/day14/test.txt").unwrap()));
-        assert_eq!(22551, solve(fs::read_to_string("input/2016/day14/test_b.txt").unwrap()));
+        assert_eq!(
+            22728,
+            solve(fs::read_to_string("input/2016/day14/test.txt").unwrap())
+        );
+        assert_eq!(
+            22551,
+            solve(fs::read_to_string("input/2016/day14/test_b.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(18626, solve(fs::read_to_string("input/2016/day14/input.txt").unwrap()));
-        assert_eq!(20092, solve(fs::read_to_string("input/2016/day14/input_b.txt").unwrap()));
+        assert_eq!(
+            18626,
+            solve(fs::read_to_string("input/2016/day14/input.txt").unwrap())
+        );
+        assert_eq!(
+            20092,
+            solve(fs::read_to_string("input/2016/day14/input_b.txt").unwrap())
+        );
     }
 }

@@ -1,19 +1,25 @@
+use crate::utils::toolbox::parse_i32;
+use itertools::Itertools;
+use regex::Regex;
 use std::collections::HashSet;
 use std::fs;
-use itertools::Itertools;
-use regex::{Regex};
-use crate::utils::toolbox::parse_i32;
 
 pub(crate) fn day18() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
     let re = Regex::new(r"^(U|D|R|L) (\d+) \((.+)\)$").unwrap();
     let mut pos: (i32, i32) = (0, 0);
     let mut rect: HashSet<(i32, i32)> = HashSet::new();
-    let mut stack = vec!();
+    let mut stack = vec![];
     let mut prev_dir = "X";
 
     input.lines().for_each(|line| {
@@ -51,14 +57,16 @@ fn part_a(input: String) -> usize {
                 }
                 pos = (pos.0, pos.1 - num);
             }
-            _ => panic!("Unknown dir {}", dir)
+            _ => panic!("Unknown dir {}", dir),
         }
 
         prev_dir = dir;
     });
 
     while let Some(pos) = stack.pop() {
-        if !rect.insert(pos) { continue; }
+        if !rect.insert(pos) {
+            continue;
+        }
 
         stack.push((pos.0 - 1, pos.1));
         stack.push((pos.0 + 1, pos.1));
@@ -71,7 +79,7 @@ fn part_a(input: String) -> usize {
 
 fn part_b(input: String) -> i128 {
     let mut pos: (i128, i128) = (0, 0);
-    let mut rect: Vec<(i128, i128)> = vec! {pos};
+    let mut rect: Vec<(i128, i128)> = vec![pos];
 
     let mut sides = 0;
 
@@ -101,15 +109,17 @@ fn part_b(input: String) -> i128 {
                 pos = (pos.0, pos.1 - num);
                 rect.push(pos);
             }
-            dir => panic!("Unknown dir {}", dir)
+            dir => panic!("Unknown dir {}", dir),
         }
     });
 
     // https://www.mathopenref.com/coordpolygonarea.html
     let mut ans = 0;
-    rect.iter().tuple_windows().for_each(|((x1, y1), (x2, y2))| {
-        ans += (x1 * y2) - (y1 * x2);
-    });
+    rect.iter()
+        .tuple_windows()
+        .for_each(|((x1, y1), (x2, y2))| {
+            ans += (x1 * y2) - (y1 * x2);
+        });
     (-ans / 2) + (sides / 2) + 1 // Add (0,0)
 }
 
@@ -121,13 +131,25 @@ mod day18_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(62, part_a(fs::read_to_string("input/2023/day18/test.txt").unwrap()));
-        assert_eq!(952408144115, part_b(fs::read_to_string("input/2023/day18/test.txt").unwrap()));
+        assert_eq!(
+            62,
+            part_a(fs::read_to_string("input/2023/day18/test.txt").unwrap())
+        );
+        assert_eq!(
+            952408144115,
+            part_b(fs::read_to_string("input/2023/day18/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(33491, part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
-        assert_eq!(87716969654406, part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
+        assert_eq!(
+            33491,
+            part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap())
+        );
+        assert_eq!(
+            87716969654406,
+            part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap())
+        );
     }
 }

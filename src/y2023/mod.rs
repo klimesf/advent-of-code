@@ -1,8 +1,6 @@
 extern crate itertools;
 extern crate regex;
 
-use colored::Colorize;
-use std::env;
 use crate::measure;
 use crate::y2023::day01::day01;
 use crate::y2023::day02::day02;
@@ -29,6 +27,8 @@ use crate::y2023::day22::day22;
 use crate::y2023::day23::day23;
 use crate::y2023::day24::day24;
 use crate::y2023::day25::day25;
+use colored::Colorize;
+use std::env;
 
 mod day01;
 mod day02;

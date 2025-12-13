@@ -1,12 +1,21 @@
 use std::fs;
 
 pub(crate) fn day01() {
-    println!("{}", part_a(fs::read_to_string("input/2020/day01/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2020/day01/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2020/day01/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2020/day01/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
-    let nums = input.lines().map(|line| line.parse().unwrap()).collect::<Vec<usize>>();
+    let nums = input
+        .lines()
+        .map(|line| line.parse().unwrap())
+        .collect::<Vec<usize>>();
 
     for i in 0..nums.len() {
         for j in i + 1..nums.len() {
@@ -19,7 +28,10 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> usize {
-    let nums = input.lines().map(|line| line.parse().unwrap()).collect::<Vec<usize>>();
+    let nums = input
+        .lines()
+        .map(|line| line.parse().unwrap())
+        .collect::<Vec<usize>>();
 
     for i in 0..nums.len() {
         for j in i + 1..nums.len() {
@@ -41,13 +53,25 @@ mod day01_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(514579, part_a(fs::read_to_string("input/2020/day01/test.txt").unwrap()));
-        assert_eq!(241861950, part_b(fs::read_to_string("input/2020/day01/test.txt").unwrap()));
+        assert_eq!(
+            514579,
+            part_a(fs::read_to_string("input/2020/day01/test.txt").unwrap())
+        );
+        assert_eq!(
+            241861950,
+            part_b(fs::read_to_string("input/2020/day01/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1014624, part_a(fs::read_to_string("input/2020/day01/input.txt").unwrap()));
-        assert_eq!(80072256, part_b(fs::read_to_string("input/2020/day01/input.txt").unwrap()));
+        assert_eq!(
+            1014624,
+            part_a(fs::read_to_string("input/2020/day01/input.txt").unwrap())
+        );
+        assert_eq!(
+            80072256,
+            part_b(fs::read_to_string("input/2020/day01/input.txt").unwrap())
+        );
     }
 }

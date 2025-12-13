@@ -1,16 +1,24 @@
-use std::fs;
+use crate::utils::toolbox::parse_i32;
 use regex::Regex;
 use serde_json::Value;
-use crate::utils::toolbox::{parse_i32};
+use std::fs;
 
 pub(crate) fn day12() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> i32 {
     let re = Regex::new("(:|\\[|,)(-?[0-9]+)").unwrap();
-    re.captures_iter(input.as_str()).map(|x| { parse_i32(x.get(2)) }).sum()
+    re.captures_iter(input.as_str())
+        .map(|x| parse_i32(x.get(2)))
+        .sum()
 }
 
 fn part_b(input: String) -> i64 {
@@ -25,13 +33,17 @@ fn part_b(input: String) -> i64 {
 
 fn recursive_sum(v: &Value, total: &mut i64) {
     match v {
-        Value::Null => { }
-        Value::Bool(_) => { }
-        Value::Number(n) => { *total += n.as_i64().unwrap() }
-        Value::String(_) => { }
-        Value::Array(a) => { a.iter().for_each(|vv| { recursive_sum(vv, total); } ) }
+        Value::Null => {}
+        Value::Bool(_) => {}
+        Value::Number(n) => *total += n.as_i64().unwrap(),
+        Value::String(_) => {}
+        Value::Array(a) => a.iter().for_each(|vv| {
+            recursive_sum(vv, total);
+        }),
         Value::Object(o) => {
-            if o.values().any(|vv| *vv == Value::String("red".to_string())) { return }
+            if o.values().any(|vv| *vv == Value::String("red".to_string())) {
+                return;
+            }
             o.values().for_each(|vv| recursive_sum(vv, total))
         }
     }
@@ -56,13 +68,22 @@ mod day12_tests {
 
         assert_eq!(6, part_b("[1,2,3]".to_string()));
         assert_eq!(4, part_b("[1,{\"c\":\"red\",\"b\":2},3]".to_string()));
-        assert_eq!(0, part_b("{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}".to_string()));
+        assert_eq!(
+            0,
+            part_b("{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}".to_string())
+        );
         assert_eq!(6, part_b("[1,\"red\",5]".to_string()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(119433, part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
-        assert_eq!(68466, part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
+        assert_eq!(
+            119433,
+            part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap())
+        );
+        assert_eq!(
+            68466,
+            part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap())
+        );
     }
 }

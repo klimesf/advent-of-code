@@ -4,8 +4,14 @@ pub(crate) fn day02() {
     let input = fs::read_to_string("input/2018/day02/input.txt").unwrap();
     let words: Vec<&str> = input.trim().split("\n").collect();
 
-    let w2 = words.iter().filter(|w| contains_n_same_letters(**w, 2)).count();
-    let w3 = words.iter().filter(|w| contains_n_same_letters(**w, 3)).count();
+    let w2 = words
+        .iter()
+        .filter(|w| contains_n_same_letters(**w, 2))
+        .count();
+    let w3 = words
+        .iter()
+        .filter(|w| contains_n_same_letters(**w, 3))
+        .count();
     println!("Checksum: {} * {} = {}", w2, w3, w2 * w3);
 
     for i in 0..words.len() {

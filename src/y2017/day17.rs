@@ -1,7 +1,11 @@
 use std::fs;
 
 pub(crate) fn day17() {
-    let input = fs::read_to_string("input/2017/day17/input.txt").unwrap().trim().parse::<usize>().unwrap();
+    let input = fs::read_to_string("input/2017/day17/input.txt")
+        .unwrap()
+        .trim()
+        .parse::<usize>()
+        .unwrap();
     println!("{}", spinlock(input));
     println!("{}", spinlock_more(input));
 }
@@ -22,7 +26,9 @@ fn spinlock_more(moves: usize) -> usize {
     let mut pos = 0;
     for i in 1..=50000000 {
         pos = (pos + moves) % i;
-        if pos == 0 { ans = i }
+        if pos == 0 {
+            ans = i
+        }
         pos += 1;
     }
     ans
@@ -30,8 +36,8 @@ fn spinlock_more(moves: usize) -> usize {
 
 #[cfg(test)]
 mod day17_tests {
-    use std::fs;
     use crate::y2017::day17::{spinlock, spinlock_more};
+    use std::fs;
 
     #[test]
     fn test_works() {
@@ -40,7 +46,11 @@ mod day17_tests {
 
     #[test]
     fn input_works() {
-        let input = fs::read_to_string("input/2017/day17/input.txt").unwrap().trim().parse::<usize>().unwrap();
+        let input = fs::read_to_string("input/2017/day17/input.txt")
+            .unwrap()
+            .trim()
+            .parse::<usize>()
+            .unwrap();
         assert_eq!(204, spinlock(input));
         assert_eq!(28954211, spinlock_more(input));
     }

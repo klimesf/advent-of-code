@@ -3,9 +3,13 @@ use std::fs;
 
 pub(crate) fn day08() {
     let input = fs::read_to_string("input/2018/day08/input.txt").unwrap();
-    let tree: Vec<usize> = input.trim().split_whitespace().map(|x| x.parse().unwrap()).collect();
+    let tree: Vec<usize> = input
+        .trim()
+        .split_whitespace()
+        .map(|x| x.parse().unwrap())
+        .collect();
 
-    let mut license_number = vec!();
+    let mut license_number = vec![];
 
     get_license_number(&tree, &mut 0, &mut license_number);
     println!("{}", license_number.iter().sum::<usize>());

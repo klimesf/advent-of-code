@@ -9,23 +9,35 @@ pub(crate) fn day13() {
 }
 
 fn parse(input: String) -> HashMap<i32, i32> {
-    let layers: HashMap<i32, i32> = input.lines().map(|line| {
-        let (depth, range) = line.split_once(": ").unwrap();
-        (depth.parse().unwrap(), range.parse().unwrap())
-    }).collect();
+    let layers: HashMap<i32, i32> = input
+        .lines()
+        .map(|line| {
+            let (depth, range) = line.split_once(": ").unwrap();
+            (depth.parse().unwrap(), range.parse().unwrap())
+        })
+        .collect();
     layers
 }
 
 fn severity(delay: i32, layers: &HashMap<i32, i32>) -> i32 {
-    layers.iter().map(|(depth, range)| {
-        let scanner_pos = scanner_pos(delay + depth, *range);
-        if scanner_pos == 0 { depth * range } else { 0 }
-    }).sum()
+    layers
+        .iter()
+        .map(|(depth, range)| {
+            let scanner_pos = scanner_pos(delay + depth, *range);
+            if scanner_pos == 0 {
+                depth * range
+            } else {
+                0
+            }
+        })
+        .sum()
 }
 
 fn scanner_pos(picosecond: i32, range: i32) -> i32 {
     let mut pos = picosecond % ((range * 2) - 2);
-    if pos >= range { pos = 2 * range - pos - 2 };
+    if pos >= range {
+        pos = 2 * range - pos - 2
+    };
     pos
 }
 

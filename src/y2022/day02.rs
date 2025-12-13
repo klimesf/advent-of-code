@@ -18,21 +18,21 @@ fn part_a(input: String) {
                 "ROCK" => 3,
                 "PAPER" => 6,
                 "SCISSORS" => 0,
-                _ => panic!("Unknown shape {}", you)
+                _ => panic!("Unknown shape {}", you),
             },
             "PAPER" => match you {
                 "ROCK" => 0,
                 "PAPER" => 3,
                 "SCISSORS" => 6,
-                _ => panic!("Unknown shape {}", you)
+                _ => panic!("Unknown shape {}", you),
             },
             "SCISSORS" => match you {
                 "ROCK" => 6,
                 "PAPER" => 0,
                 "SCISSORS" => 3,
-                _ => panic!("Unknown shape {}", you)
+                _ => panic!("Unknown shape {}", you),
             },
-            _ => panic!("Unknown opponent shape {}", opponent)
+            _ => panic!("Unknown opponent shape {}", opponent),
         };
 
         total += points_for_round + points_for_shape(you);
@@ -59,19 +59,19 @@ fn part_b(input: String) {
                 0 => "SCISSORS",
                 3 => "ROCK",
                 6 => "PAPER",
-                _ => panic!("Unknown outcome {}", points_for_round)
+                _ => panic!("Unknown outcome {}", points_for_round),
             },
             "PAPER" => match points_for_round {
                 0 => "ROCK",
                 3 => "PAPER",
                 6 => "SCISSORS",
-                _ => panic!("Unknown outcome {}", points_for_round)
+                _ => panic!("Unknown outcome {}", points_for_round),
             },
             "SCISSORS" => match points_for_round {
                 0 => "PAPER",
                 3 => "SCISSORS",
                 6 => "ROCK",
-                _ => panic!("Unknown outcome {}", points_for_round)
+                _ => panic!("Unknown outcome {}", points_for_round),
             },
             _ => panic!("Unknown shape {}", opponent),
         };
@@ -88,7 +88,7 @@ fn map_shape(shape: &str) -> &str {
         "B" | "Y" => "PAPER",
         "C" | "Z" => "SCISSORS",
         _ => panic!("Unknown shape {}", shape),
-    }
+    };
 }
 
 fn points_for_shape(shape: &str) -> i32 {
@@ -97,7 +97,7 @@ fn points_for_shape(shape: &str) -> i32 {
         "PAPER" => 2,
         "SCISSORS" => 3,
         _ => panic!("Unknown shape {}", shape),
-    }
+    };
 }
 
 #[cfg(test)]

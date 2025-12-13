@@ -6,7 +6,7 @@ pub(crate) fn day20() {
 }
 
 fn part_a(target: usize) -> usize {
-    let mut houses = vec!{ 0; target / 10 };
+    let mut houses = vec![0; target / 10];
 
     for i in 1..(target / 10) {
         for j in (i..(target / 10)).step_by(i) {
@@ -15,30 +15,36 @@ fn part_a(target: usize) -> usize {
     }
 
     for i in 0..houses.len() {
-        if houses[i] >= target { return i }
+        if houses[i] >= target {
+            return i;
+        }
     }
     panic!();
 }
 
 fn part_b(target: usize) -> usize {
-    let mut houses = vec!{ 0; target / 10 };
+    let mut houses = vec![0; target / 10];
 
     for i in 1..(target / 10) {
         for j in (i..(target / 10)).step_by(i) {
-            if j / i > 50 { break }
+            if j / i > 50 {
+                break;
+            }
             houses[j] += i * 11;
         }
     }
 
     for i in 0..houses.len() {
-        if houses[i] >= target { return i }
+        if houses[i] >= target {
+            return i;
+        }
     }
     panic!();
 }
 
 #[allow(unused)]
 fn prime_factors(mut n: usize) -> Vec<usize> {
-    let mut ans = vec!();
+    let mut ans = vec![];
     while n % 2 == 0 {
         ans.push(2);
         n = n / 2;
@@ -46,7 +52,9 @@ fn prime_factors(mut n: usize) -> Vec<usize> {
 
     let mut i = 3;
     loop {
-        if i * i > n { break; }
+        if i * i > n {
+            break;
+        }
         while n % i == 0 {
             ans.push(i);
             n = n / i;
@@ -54,7 +62,9 @@ fn prime_factors(mut n: usize) -> Vec<usize> {
         i += 2;
     }
 
-    if n > 2 { ans.push(n); }
+    if n > 2 {
+        ans.push(n);
+    }
     ans
 }
 
@@ -74,7 +84,9 @@ fn house(n: usize) -> usize {
 
     for (factor, cnt) in factors_ctr {
         for i in 1..=cnt {
-            if factor.pow(i) == n && factor != n { continue; }
+            if factor.pow(i) == n && factor != n {
+                continue;
+            }
             ans += 10 * factor.pow(i);
         }
     }

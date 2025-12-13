@@ -1,6 +1,6 @@
+use itertools::Itertools;
 use std::cmp::{min, Ordering};
 use std::fs;
-use itertools::Itertools;
 
 pub(crate) fn day13() {
     let input = fs::read_to_string("input/2022/day13/input.txt").unwrap();
@@ -9,7 +9,9 @@ pub(crate) fn day13() {
 }
 
 fn part_a(input: &str) {
-    let ans: usize = input.split("\n\n").into_iter()
+    let ans: usize = input
+        .split("\n\n")
+        .into_iter()
         .map(|pair| pair.split_once("\n").unwrap())
         .enumerate()
         .filter(|(_, (first, second))| is_ordered(first, second))
@@ -19,9 +21,11 @@ fn part_a(input: &str) {
 }
 
 fn part_b(input: &str) {
-    let ans: usize = input.split("\n").into_iter()
+    let ans: usize = input
+        .split("\n")
+        .into_iter()
         .filter(|s| !s.is_empty())
-        .chain(vec!("[[2]]", "[[6]]"))
+        .chain(vec!["[[2]]", "[[6]]"])
         .map(|s| ListTree::new(s))
         .sorted()
         .enumerate()
@@ -45,15 +49,15 @@ enum ListTree {
 
 impl ListTree {
     fn new(s: &str) -> Self {
-        let mut stack: Vec<Vec<Self>> = vec!();
-        let mut children: Vec<Self> = vec!();
-        let mut buffer = vec!();
+        let mut stack: Vec<Vec<Self>> = vec![];
+        let mut children: Vec<Self> = vec![];
+        let mut buffer = vec![];
 
         for c in s.chars() {
             match c {
                 '[' => {
                     stack.push(children);
-                    children = vec!();
+                    children = vec![];
                 }
                 ']' => {
                     Self::append_leaf(&mut children, &mut buffer);
@@ -79,15 +83,19 @@ impl ListTree {
 
     fn append_leaf(children: &mut Vec<ListTree>, buffer: &mut Vec<char>) {
         if !buffer.is_empty() {
-            children.push(Self::Leaf(buffer.iter().collect::<String>().parse::<u32>().unwrap()));
+            children.push(Self::Leaf(
+                buffer.iter().collect::<String>().parse::<u32>().unwrap(),
+            ));
             buffer.clear();
         }
     }
 
     fn print(&self) -> String {
         match self {
-            Self::Leaf(v) => { v.to_string() }
-            Self::Node(children) => { format!("[{}]", children.into_iter().map(|c| c.print()).join(",")) }
+            Self::Leaf(v) => v.to_string(),
+            Self::Node(children) => {
+                format!("[{}]", children.into_iter().map(|c| c.print()).join(","))
+            }
         }
     }
 }
@@ -104,28 +112,32 @@ impl Ord for ListTree {
             Self::Leaf(left) => {
                 match other {
                     // If both values are integers
-                    Self::Leaf(right) => { left.cmp(right) }
+                    Self::Leaf(right) => left.cmp(right),
                     // If exactly one value is an integer
-                    Self::Node(_) => { Self::Node(vec!(Self::Leaf(*left))).cmp(other) }
+                    Self::Node(_) => Self::Node(vec![Self::Leaf(*left)]).cmp(other),
                 }
             }
             Self::Node(lchildren) => {
                 match other {
                     // If exactly one value is an integer
-                    Self::Leaf(right) => { self.cmp(&Self::Node(vec!(Self::Leaf(*right)))) }
+                    Self::Leaf(right) => self.cmp(&Self::Node(vec![Self::Leaf(*right)])),
                     // If both values are lists
                     Self::Node(rchildren) => {
                         for i in 0..min(lchildren.len(), rchildren.len()) {
                             let left = &lchildren[i];
                             let right = &rchildren[i];
-                            if left < right { return Ordering::Less }
-                            if left > right { return Ordering::Greater }
+                            if left < right {
+                                return Ordering::Less;
+                            }
+                            if left > right {
+                                return Ordering::Greater;
+                            }
                         }
-                        return lchildren.len().cmp(&rchildren.len())
+                        return lchildren.len().cmp(&rchildren.len());
                     }
                 }
             }
-        }
+        };
     }
 }
 
@@ -170,7 +182,10 @@ mod day13_tests {
 
     #[test]
     fn is_ordered_works_8() {
-        assert_eq!(false, is_ordered("[1,[2,[3,[4,[5,6,7]]]],8,9]", "[1,[2,[3,[4,[5,6,0]]]],8,9]"));
+        assert_eq!(
+            false,
+            is_ordered("[1,[2,[3,[4,[5,6,7]]]],8,9]", "[1,[2,[3,[4,[5,6,0]]]],8,9]")
+        );
     }
 
     #[test]

@@ -2,7 +2,10 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day25() {
-    println!("{}", part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> i64 {
@@ -19,13 +22,14 @@ fn part_a(input: String) -> i64 {
             }
         }
 
-        if got_it { return i }
+        if got_it {
+            return i;
+        }
         i += 1
     }
 }
 
 fn easter_bunny_processor(input: String, initial_a: i64) -> Vec<i64> {
-
     let mut registers: HashMap<&str, i64> = HashMap::new();
     registers.insert("a", initial_a);
     registers.insert("b", 0);
@@ -33,10 +37,12 @@ fn easter_bunny_processor(input: String, initial_a: i64) -> Vec<i64> {
     registers.insert("d", 0);
     let instructions: Vec<&str> = input.lines().collect();
 
-    let mut out = vec!();
+    let mut out = vec![];
     let mut i = 0;
     while i < instructions.len() as i64 {
-        if out.len() > 10 { return out }
+        if out.len() > 10 {
+            return out;
+        }
         let line = instructions[i as usize];
         let (instr, args) = line.split_once(" ").unwrap();
         match instr {
@@ -82,7 +88,9 @@ fn easter_bunny_processor(input: String, initial_a: i64) -> Vec<i64> {
                 out.push(val);
                 i += 1;
             }
-            _ => { panic!("unknown instruction {}", instr) }
+            _ => {
+                panic!("unknown instruction {}", instr)
+            }
         }
     }
 
@@ -93,10 +101,13 @@ fn easter_bunny_processor(input: String, initial_a: i64) -> Vec<i64> {
 mod day25_tests {
     use std::fs;
 
-    use crate::y2016::day25::{part_a};
+    use crate::y2016::day25::part_a;
 
     #[test]
     fn input_works() {
-        assert_eq!(0, part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap()));
+        assert_eq!(
+            0,
+            part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap())
+        );
     }
 }

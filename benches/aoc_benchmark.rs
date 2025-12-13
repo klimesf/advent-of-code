@@ -1,4 +1,3 @@
-use criterion::{criterion_group, criterion_main, Criterion};
 use adventofcode::y2024::day01::day01;
 use adventofcode::y2024::day02::day02;
 use adventofcode::y2024::day03::day03;
@@ -24,6 +23,7 @@ use adventofcode::y2024::day22::day22;
 use adventofcode::y2024::day23::day23;
 use adventofcode::y2024::day24::day24;
 use adventofcode::y2024::day25::day25;
+use criterion::{criterion_group, criterion_main, Criterion};
 
 fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("2024 day 01", |b| b.iter(|| day01(|_| {})));

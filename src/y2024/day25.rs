@@ -1,21 +1,24 @@
 use std::fs;
 
 pub fn day25(print: fn(usize)) {
-    print(part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2024/day25/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
-    let mut locks: Vec<Vec<usize>> = vec!();
-    let mut keys: Vec<Vec<usize>> = vec!();
+    let mut locks: Vec<Vec<usize>> = vec![];
+    let mut keys: Vec<Vec<usize>> = vec![];
 
     input.split("\n\n").for_each(|schema| {
         let lines = schema.lines().collect::<Vec<&str>>();
-        let matrix = lines.iter()
+        let matrix = lines
+            .iter()
             .map(|line| line.chars().collect())
             .collect::<Vec<Vec<char>>>();
 
         if lines[0] == "#####" {
-            let mut lock = vec!();
+            let mut lock = vec![];
             for j in 0..5 {
                 let mut height = 0;
                 for i in 1..7 {
@@ -27,7 +30,7 @@ fn part_a(input: String) -> usize {
             }
             locks.push(lock);
         } else if lines[6] == "#####" {
-            let mut key = vec!();
+            let mut key = vec![];
             for j in 0..5 {
                 let mut height = 0;
                 for i in (0..6).rev() {
@@ -72,11 +75,17 @@ mod day25_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(3, part_a(fs::read_to_string("input/2024/day25/test.txt").unwrap()));
+        assert_eq!(
+            3,
+            part_a(fs::read_to_string("input/2024/day25/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(3690, part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap()));
+        assert_eq!(
+            3690,
+            part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap())
+        );
     }
 }

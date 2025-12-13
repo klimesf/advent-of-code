@@ -3,7 +3,11 @@ use std::fs;
 
 pub(crate) fn day17() {
     let input = fs::read_to_string("input/2019/day17/input.txt").unwrap();
-    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let code: Vec<i64> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
 
     part_a(code.clone());
     part_b(code.clone());
@@ -11,49 +15,69 @@ pub(crate) fn day17() {
 
 fn part_a(code: Vec<i64>) {
     let mut intcode = intcode_instance(&code);
-    intcode.run(&mut vec!());
+    intcode.run(&mut vec![]);
     let map = screen_to_2d_map(&intcode.output);
 
     // Part A -> count intersections
     let intersections = get_intersections(&map);
     print_screen(&map, &intersections);
     println!("{:?}", intersections);
-    println!("Total intersection score is: {}", intersections.iter().map(|(y, x)| y * x).sum::<usize>());
+    println!(
+        "Total intersection score is: {}",
+        intersections.iter().map(|(y, x)| y * x).sum::<usize>()
+    );
 }
 
 fn part_b(mut code: Vec<i64>) {
     // Part B -> use handsolved solution and pass it to the intcode program
     code[0] = 2; // Activate part B
 
-    let mut input = vec!();
+    let mut input = vec![];
 
     // Add main movement routine A,C,A,C,A,B,C,B,A,B\n
-    ['A', ',', 'C', ',', 'A', ',', 'C', ',', 'A', ',', 'B', ',', 'C', ',', 'B', ',', 'A', ',', 'B', '\n'].iter()
-        .map(|c| *c as i64)
-        .for_each(|c| input.push(c));
+    [
+        'A', ',', 'C', ',', 'A', ',', 'C', ',', 'A', ',', 'B', ',', 'C', ',', 'B', ',', 'A', ',',
+        'B', '\n',
+    ]
+    .iter()
+    .map(|c| *c as i64)
+    .for_each(|c| input.push(c));
 
     // Add movement function A L10,L12,R6,\n
-    ['L', ',', '1', '0', ',', 'L', ',', '1', '2', ',', 'R', ',', '6', '\n'].iter()
-        .map(|c| *c as i64)
-        .for_each(|c| input.push(c));
+    [
+        'L', ',', '1', '0', ',', 'L', ',', '1', '2', ',', 'R', ',', '6', '\n',
+    ]
+    .iter()
+    .map(|c| *c as i64)
+    .for_each(|c| input.push(c));
 
     // Add movement function B L,10,R,10,R,6,L,4\n
-    ['L', ',', '1', '0', ',', 'R', ',', '1', '0', ',', 'R', ',', '6', ',', 'L', ',', '4', '\n'].iter()
-        .map(|c| *c as i64)
-        .for_each(|c| input.push(c));
+    [
+        'L', ',', '1', '0', ',', 'R', ',', '1', '0', ',', 'R', ',', '6', ',', 'L', ',', '4', '\n',
+    ]
+    .iter()
+    .map(|c| *c as i64)
+    .for_each(|c| input.push(c));
 
     // Add movement function C R,10,L,4,L,4,L,12\n
-    ['R', ',', '1', '0', ',', 'L', ',', '4', ',', 'L', ',', '4', ',', 'L', ',', '1', '2', '\n'].iter()
-        .map(|c| *c as i64)
-        .for_each(|c| input.push(c));
+    [
+        'R', ',', '1', '0', ',', 'L', ',', '4', ',', 'L', ',', '4', ',', 'L', ',', '1', '2', '\n',
+    ]
+    .iter()
+    .map(|c| *c as i64)
+    .for_each(|c| input.push(c));
 
     // Continuous stream
-    ['n', '\n'].iter()
+    ['n', '\n']
+        .iter()
         .map(|c| *c as i64)
         .for_each(|c| input.push(c));
 
     println!("Passing this sequence to intcode:");
-    input.iter().map(|i| *i as u8 as char).for_each(|c| print!("{}", c));
+    input
+        .iter()
+        .map(|i| *i as u8 as char)
+        .for_each(|c| print!("{}", c));
     println!();
     input.reverse();
 
@@ -62,13 +86,13 @@ fn part_b(mut code: Vec<i64>) {
 
     // Output
     let map = screen_to_2d_map(&intcode.output);
-    print_screen(&map, &vec!());
+    print_screen(&map, &vec![]);
 
     println!("The cleanup score is: {:?}", intcode.output.last().unwrap());
 }
 
 fn get_intersections(input: &Vec<Vec<char>>) -> Vec<(usize, usize)> {
-    let mut intersections = vec!();
+    let mut intersections = vec![];
     for y in 0..input.len() {
         for x in 0..input[y].len() {
             if input[y][x] != '#' {
@@ -98,14 +122,14 @@ fn get_intersections(input: &Vec<Vec<char>>) -> Vec<(usize, usize)> {
 }
 
 fn screen_to_2d_map(input: &Vec<i64>) -> Vec<Vec<char>> {
-    let mut map = vec!();
-    let mut row = vec!();
+    let mut map = vec![];
+    let mut row = vec![];
     for i in input {
         if *i == 10 {
             if !row.is_empty() {
                 map.push(row.clone());
             }
-            row = vec!();
+            row = vec![];
         } else {
             row.push(*i as u8 as char);
         }
@@ -226,8 +250,12 @@ impl IntcodeProcessor {
                     self.relative_base += a_val;
                     self.instruction_ptr += 2;
                 }
-                99 => { break; }
-                _ => { panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr); }
+                99 => {
+                    break;
+                }
+                _ => {
+                    panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr);
+                }
             }
         }
     }
@@ -235,13 +263,17 @@ impl IntcodeProcessor {
     fn mem_read(&mut self, mode: i32, val: i64) -> i64 {
         match mode {
             0 => {
-                if val < 0 { panic!("Invalid memory address: {}", val) }
+                if val < 0 {
+                    panic!("Invalid memory address: {}", val)
+                }
                 *self.memory.entry(val).or_insert(0)
             }
             1 => val,
             2 => {
                 let addr = val + self.relative_base;
-                if addr < 0 { panic!("Invalid memory address: {}", addr) }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr)
+                }
                 *self.memory.entry(addr).or_insert(0)
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -251,13 +283,17 @@ impl IntcodeProcessor {
     fn mem_write(&mut self, mode: i32, addr: i64, val: i64) {
         match mode {
             0 => {
-                if addr < 0 { panic!("Invalid memory address: {}", addr); }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr);
+                }
                 self.memory.insert(addr, val);
             }
             1 => panic!("How to write in mode 1?"),
             2 => {
                 let i = addr + self.relative_base;
-                if i < 0 { panic!("Invalid memory address: {}", i) }
+                if i < 0 {
+                    panic!("Invalid memory address: {}", i)
+                }
                 self.memory.insert(i, val);
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -273,7 +309,7 @@ fn intcode_instance(code: &Vec<i64>) -> IntcodeProcessor {
     IntcodeProcessor {
         instruction_ptr: 0,
         memory,
-        output: vec!(),
+        output: vec![],
         relative_base: 0,
     }
 }

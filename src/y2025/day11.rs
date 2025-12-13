@@ -2,8 +2,12 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day11(print: fn(usize)) {
-    print(part_a(fs::read_to_string("input/2025/day11/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2025/day11/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2025/day11/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2025/day11/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
@@ -13,12 +17,12 @@ fn part_a(input: String) -> usize {
         let edges: Vec<&str> = r.split_whitespace().collect();
         map.insert(l, edges);
     });
-    
+
     let mut count = 0;
-    let mut stack = vec!();
+    let mut stack = vec![];
     let start = "you";
     stack.push((start, HashSet::new()));
-    
+
     while let Some((pos, visited)) = stack.pop() {
         if pos == "out" {
             count += 1;
@@ -33,7 +37,7 @@ fn part_a(input: String) -> usize {
             stack.push((*to, new_visited.clone()));
         }
     }
-    
+
     count
 }
 
@@ -48,7 +52,7 @@ fn part_b(input: String) -> usize {
     // There is no path from dac to fft, making it much simpler for us
     let mut cache = HashMap::new();
     let svr_to_fft = search("svr".to_string(), "fft".to_string(), &map, &mut cache);
-    
+
     let mut cache = HashMap::new();
     let fft_to_dac = search("fft".to_string(), "dac".to_string(), &map, &mut cache);
 
@@ -58,7 +62,12 @@ fn part_b(input: String) -> usize {
     svr_to_fft * fft_to_dac * dac_to_out
 }
 
-fn search(pos: String, target: String, map: &HashMap<String, Vec<String>>, cache: &mut HashMap<String, usize>) -> usize {
+fn search(
+    pos: String,
+    target: String,
+    map: &HashMap<String, Vec<String>>,
+    cache: &mut HashMap<String, usize>,
+) -> usize {
     if pos == target {
         return 1;
     }
@@ -85,13 +94,25 @@ mod day11_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(5, part_a(fs::read_to_string("input/2025/day11/test.txt").unwrap()));
-        assert_eq!(2, part_b(fs::read_to_string("input/2025/day11/test_b.txt").unwrap()));
+        assert_eq!(
+            5,
+            part_a(fs::read_to_string("input/2025/day11/test.txt").unwrap())
+        );
+        assert_eq!(
+            2,
+            part_b(fs::read_to_string("input/2025/day11/test_b.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(571, part_a(fs::read_to_string("input/2025/day11/input.txt").unwrap()));
-        assert_eq!(511378159390560, part_b(fs::read_to_string("input/2025/day11/input.txt").unwrap()));
+        assert_eq!(
+            571,
+            part_a(fs::read_to_string("input/2025/day11/input.txt").unwrap())
+        );
+        assert_eq!(
+            511378159390560,
+            part_b(fs::read_to_string("input/2025/day11/input.txt").unwrap())
+        );
     }
 }

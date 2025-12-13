@@ -18,7 +18,7 @@ fn part_a(door_id: &str) -> String {
 }
 
 fn part_b(door_id: &str) -> String {
-    let mut password = vec! {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    let mut password = vec![' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
     let mut i = 0;
     while password.iter().filter(|c| **c == ' ').count() > 0 {
         let s = format!("{}{}", door_id, i);
@@ -33,8 +33,17 @@ fn part_b(door_id: &str) -> String {
         i += 1;
     }
 
-
-    format!("{}{}{}{}{}{}{}{}", password[0], password[1], password[2], password[3], password[4], password[5], password[6], password[7])
+    format!(
+        "{}{}{}{}{}{}{}{}",
+        password[0],
+        password[1],
+        password[2],
+        password[3],
+        password[4],
+        password[5],
+        password[6],
+        password[7]
+    )
 }
 
 #[cfg(test)]

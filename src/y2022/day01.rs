@@ -9,8 +9,10 @@ pub(crate) fn day01() {
 }
 
 fn parse(input: &str) -> BinaryHeap<i32> {
-    let elves: Vec<i32> = input.split("\n\n")
-        .map(|elfo| elfo.lines().map(|line| line.parse::<i32>().unwrap()).sum()).collect();
+    let elves: Vec<i32> = input
+        .split("\n\n")
+        .map(|elfo| elfo.lines().map(|line| line.parse::<i32>().unwrap()).sum())
+        .collect();
     BinaryHeap::from(elves)
 }
 
@@ -27,8 +29,8 @@ fn part_b(elves: &mut BinaryHeap<i32>) -> i32 {
 
 #[cfg(test)]
 mod day01_tests {
-    use std::fs;
     use crate::y2022::day01::{parse, part_a, part_b};
+    use std::fs;
 
     #[test]
     fn test_works() {

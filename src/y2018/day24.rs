@@ -1,23 +1,33 @@
+use crate::utils::toolbox::parse_usize;
+use itertools::Itertools;
+use regex::Regex;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fs;
-use itertools::Itertools;
-use regex::Regex;
-use crate::utils::toolbox::parse_usize;
 
 pub(crate) fn day24() {
-    println!("{}", part_a(fs::read_to_string("input/2018/day24/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2018/day24/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2018/day24/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2018/day24/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
     let (immune_input, infection_input) = input.split_once("\n\n").unwrap();
-    let mut immune_system: Vec<Group> = immune_input.lines().enumerate()
+    let mut immune_system: Vec<Group> = immune_input
+        .lines()
+        .enumerate()
         .filter(|(_, line)| !line.starts_with("Immune System:"))
         .map(|(i, line)| create_group(i, line))
         .collect();
 
-    let mut infection: Vec<Group> = infection_input.lines().enumerate()
+    let mut infection: Vec<Group> = infection_input
+        .lines()
+        .enumerate()
         .filter(|(_, line)| !line.starts_with("Infection:"))
         .map(|(i, line)| create_group(i, line))
         .collect();
@@ -29,25 +39,44 @@ fn part_a(input: String) -> usize {
         let immune_system_sum = immune_system.iter().map(|g| g.units).sum();
         let infection_sum = infection.iter().map(|g| g.units).sum();
 
-        if immune_system_sum == 0 { return infection_sum; }
-        if infection_sum == 0 { return immune_system_sum; }
+        if immune_system_sum == 0 {
+            return infection_sum;
+        }
+        if infection_sum == 0 {
+            return immune_system_sum;
+        }
 
         immune_system.sort_by(sort_groups_by_effective_power);
         infection.sort_by(sort_groups_by_effective_power);
 
         let mut infection_to_immune_system = HashMap::new();
         for attacker in &infection {
-            if attacker.units < 1 { continue; }
+            if attacker.units < 1 {
+                continue;
+            }
             let mut max = (0, 0, 0, 0);
             for defender in &immune_system {
-                if defender.units < 1 || defender.immunity.contains(&attacker.attack_type) || infection_to_immune_system.values().contains(&defender.id) {
+                if defender.units < 1
+                    || defender.immunity.contains(&attacker.attack_type)
+                    || infection_to_immune_system.values().contains(&defender.id)
+                {
                     continue;
                 }
                 let damage = attacker.calc_damage(defender);
                 // println!("Infection group {} would deal defending group {} {} damage", attacker.id, defender.id, damage);
 
-                if damage > max.0 || (damage == max.0 && defender.effective_power() > max.1) || (damage == max.0 && defender.effective_power() == max.1 && defender.initiative > max.1) {
-                    max = (damage, defender.effective_power(), defender.initiative, defender.id);
+                if damage > max.0
+                    || (damage == max.0 && defender.effective_power() > max.1)
+                    || (damage == max.0
+                        && defender.effective_power() == max.1
+                        && defender.initiative > max.1)
+                {
+                    max = (
+                        damage,
+                        defender.effective_power(),
+                        defender.initiative,
+                        defender.id,
+                    );
                 }
             }
 
@@ -60,17 +89,32 @@ fn part_a(input: String) -> usize {
 
         let mut immune_system_to_infection = HashMap::new();
         for attacker in &immune_system {
-            if attacker.units < 1 { continue; }
+            if attacker.units < 1 {
+                continue;
+            }
             let mut max = (0, 0, 0, 0);
             for defender in &infection {
-                if defender.units < 1 || defender.immunity.contains(&attacker.attack_type) || immune_system_to_infection.values().contains(&defender.id) {
+                if defender.units < 1
+                    || defender.immunity.contains(&attacker.attack_type)
+                    || immune_system_to_infection.values().contains(&defender.id)
+                {
                     continue;
                 }
                 let damage = attacker.calc_damage(defender);
                 // println!("Immune system group {} would deal defending group {} {} damage", attacker.id, defender.id, damage);
 
-                if damage > max.0 || (damage == max.0 && defender.effective_power() > max.1) || (damage == max.0 && defender.effective_power() == max.1 && defender.initiative > max.1) {
-                    max = (damage, defender.effective_power(), defender.initiative, defender.id);
+                if damage > max.0
+                    || (damage == max.0 && defender.effective_power() > max.1)
+                    || (damage == max.0
+                        && defender.effective_power() == max.1
+                        && defender.initiative > max.1)
+                {
+                    max = (
+                        damage,
+                        defender.effective_power(),
+                        defender.initiative,
+                        defender.id,
+                    );
                 }
 
                 if max != (0, 0, 0, 0) {
@@ -85,12 +129,17 @@ fn part_a(input: String) -> usize {
         let mut i = 0;
         let mut j = 0;
         loop {
-            if i >= immune_system.len() && j >= infection.len() { break; }
+            if i >= immune_system.len() && j >= infection.len() {
+                break;
+            }
             if i >= immune_system.len() {
                 // infection go
                 let attacker = &infection[j];
                 if let Some(defender_id) = infection_to_immune_system.get(&attacker.id) {
-                    let (defender_i, _) = immune_system.iter().find_position(|g| g.id == *defender_id).unwrap();
+                    let (defender_i, _) = immune_system
+                        .iter()
+                        .find_position(|g| g.id == *defender_id)
+                        .unwrap();
                     let defender = &mut immune_system[defender_i];
                     // print!("Infection group {} attacks defending group {}, ", attacker.id, defender.id);
                     attacker.apply_damage(defender);
@@ -100,7 +149,10 @@ fn part_a(input: String) -> usize {
                 // immune system go
                 let attacker = &immune_system[i];
                 if let Some(defender_id) = immune_system_to_infection.get(&attacker.id) {
-                    let (defender_i, _) = infection.iter().find_position(|g| g.id == *defender_id).unwrap();
+                    let (defender_i, _) = infection
+                        .iter()
+                        .find_position(|g| g.id == *defender_id)
+                        .unwrap();
                     let defender = &mut infection[defender_i];
                     // print!("Immune system group {} attacks defending group {}, ", attacker.id, defender.id);
                     attacker.apply_damage(defender);
@@ -112,7 +164,10 @@ fn part_a(input: String) -> usize {
                 if a.initiative > b.initiative {
                     let attacker = &immune_system[i];
                     if let Some(defender_id) = immune_system_to_infection.get(&attacker.id) {
-                        let (defender_i, _) = infection.iter().find_position(|g| g.id == *defender_id).unwrap();
+                        let (defender_i, _) = infection
+                            .iter()
+                            .find_position(|g| g.id == *defender_id)
+                            .unwrap();
                         let defender = &mut infection[defender_i];
                         // print!("Immune system group {} attacks defending group {}, ", attacker.id, defender.id);
                         attacker.apply_damage(defender);
@@ -121,7 +176,10 @@ fn part_a(input: String) -> usize {
                 } else {
                     let attacker = &infection[j];
                     if let Some(defender_id) = infection_to_immune_system.get(&attacker.id) {
-                        let (defender_i, _) = immune_system.iter().find_position(|g| g.id == *defender_id).unwrap();
+                        let (defender_i, _) = immune_system
+                            .iter()
+                            .find_position(|g| g.id == *defender_id)
+                            .unwrap();
                         let defender = &mut immune_system[defender_i];
                         // print!("Infection group {} attacks defending group {}, ", attacker.id, defender.id);
                         attacker.apply_damage(defender);
@@ -138,12 +196,16 @@ fn part_a(input: String) -> usize {
 
 fn part_b(input: String) -> usize {
     let (immune_input, infection_input) = input.split_once("\n\n").unwrap();
-    let immune_system_og: Vec<Group> = immune_input.lines().enumerate()
+    let immune_system_og: Vec<Group> = immune_input
+        .lines()
+        .enumerate()
         .filter(|(_, line)| !line.starts_with("Immune System:"))
         .map(|(i, line)| create_group(i, line))
         .collect();
 
-    let infection_og: Vec<Group> = infection_input.lines().enumerate()
+    let infection_og: Vec<Group> = infection_input
+        .lines()
+        .enumerate()
         .filter(|(_, line)| !line.starts_with("Infection:"))
         .map(|(i, line)| create_group(i, line))
         .collect();
@@ -151,38 +213,56 @@ fn part_b(input: String) -> usize {
     'outer: for boost in 55..10000 {
         // println!("{}", boost);
 
-        let mut immune_system = vec!();
-        immune_system_og.iter()
-            .for_each(|g| {
-                let mut ng = g.clone();
-                ng.attack += boost;
-                immune_system.push(ng);
-            });
+        let mut immune_system = vec![];
+        immune_system_og.iter().for_each(|g| {
+            let mut ng = g.clone();
+            ng.attack += boost;
+            immune_system.push(ng);
+        });
         let mut infection = infection_og.clone();
 
         loop {
             let immune_system_sum = immune_system.iter().map(|g| g.units).sum();
             let infection_sum: usize = infection.iter().map(|g| g.units).sum();
 
-            if immune_system_sum == 0 { continue 'outer }
-            if infection_sum == 0 { return immune_system_sum }
+            if immune_system_sum == 0 {
+                continue 'outer;
+            }
+            if infection_sum == 0 {
+                return immune_system_sum;
+            }
 
             immune_system.sort_by(sort_groups_by_effective_power);
             infection.sort_by(sort_groups_by_effective_power);
 
             let mut infection_to_immune_system = HashMap::new();
             for attacker in &infection {
-                if attacker.units < 1 { continue; }
+                if attacker.units < 1 {
+                    continue;
+                }
                 let mut max = (0, 0, 0, 0);
                 for defender in &immune_system {
-                    if defender.units < 1 || defender.immunity.contains(&attacker.attack_type) || infection_to_immune_system.values().contains(&defender.id) {
+                    if defender.units < 1
+                        || defender.immunity.contains(&attacker.attack_type)
+                        || infection_to_immune_system.values().contains(&defender.id)
+                    {
                         continue;
                     }
                     let damage = attacker.calc_damage(defender);
                     // println!("Infection group {} would deal defending group {} {} damage", attacker.id, defender.id, damage);
 
-                    if damage > max.0 || (damage == max.0 && defender.effective_power() > max.1) || (damage == max.0 && defender.effective_power() == max.1 && defender.initiative > max.1) {
-                        max = (damage, defender.effective_power(), defender.initiative, defender.id);
+                    if damage > max.0
+                        || (damage == max.0 && defender.effective_power() > max.1)
+                        || (damage == max.0
+                            && defender.effective_power() == max.1
+                            && defender.initiative > max.1)
+                    {
+                        max = (
+                            damage,
+                            defender.effective_power(),
+                            defender.initiative,
+                            defender.id,
+                        );
                     }
                 }
 
@@ -195,17 +275,32 @@ fn part_b(input: String) -> usize {
 
             let mut immune_system_to_infection = HashMap::new();
             for attacker in &immune_system {
-                if attacker.units < 1 { continue; }
+                if attacker.units < 1 {
+                    continue;
+                }
                 let mut max = (0, 0, 0, 0);
                 for defender in &infection {
-                    if defender.units < 1 || defender.immunity.contains(&attacker.attack_type) || immune_system_to_infection.values().contains(&defender.id) {
+                    if defender.units < 1
+                        || defender.immunity.contains(&attacker.attack_type)
+                        || immune_system_to_infection.values().contains(&defender.id)
+                    {
                         continue;
                     }
                     let damage = attacker.calc_damage(defender);
                     // println!("Immune system group {} would deal defending group {} {} damage", attacker.id, defender.id, damage);
 
-                    if damage > max.0 || (damage == max.0 && defender.effective_power() > max.1) || (damage == max.0 && defender.effective_power() == max.1 && defender.initiative > max.1) {
-                        max = (damage, defender.effective_power(), defender.initiative, defender.id);
+                    if damage > max.0
+                        || (damage == max.0 && defender.effective_power() > max.1)
+                        || (damage == max.0
+                            && defender.effective_power() == max.1
+                            && defender.initiative > max.1)
+                    {
+                        max = (
+                            damage,
+                            defender.effective_power(),
+                            defender.initiative,
+                            defender.id,
+                        );
                     }
 
                     if max != (0, 0, 0, 0) {
@@ -220,12 +315,17 @@ fn part_b(input: String) -> usize {
             let mut i = 0;
             let mut j = 0;
             loop {
-                if i >= immune_system.len() && j >= infection.len() { break; }
+                if i >= immune_system.len() && j >= infection.len() {
+                    break;
+                }
                 if i >= immune_system.len() {
                     // infection go
                     let attacker = &infection[j];
                     if let Some(defender_id) = infection_to_immune_system.get(&attacker.id) {
-                        let (defender_i, _) = immune_system.iter().find_position(|g| g.id == *defender_id).unwrap();
+                        let (defender_i, _) = immune_system
+                            .iter()
+                            .find_position(|g| g.id == *defender_id)
+                            .unwrap();
                         let defender = &mut immune_system[defender_i];
                         // print!("Infection group {} attacks defending group {}, ", attacker.id, defender.id);
                         attacker.apply_damage(defender);
@@ -235,7 +335,10 @@ fn part_b(input: String) -> usize {
                     // immune system go
                     let attacker = &immune_system[i];
                     if let Some(defender_id) = immune_system_to_infection.get(&attacker.id) {
-                        let (defender_i, _) = infection.iter().find_position(|g| g.id == *defender_id).unwrap();
+                        let (defender_i, _) = infection
+                            .iter()
+                            .find_position(|g| g.id == *defender_id)
+                            .unwrap();
                         let defender = &mut infection[defender_i];
                         // print!("Immune system group {} attacks defending group {}, ", attacker.id, defender.id);
                         attacker.apply_damage(defender);
@@ -247,7 +350,10 @@ fn part_b(input: String) -> usize {
                     if a.initiative > b.initiative {
                         let attacker = &immune_system[i];
                         if let Some(defender_id) = immune_system_to_infection.get(&attacker.id) {
-                            let (defender_i, _) = infection.iter().find_position(|g| g.id == *defender_id).unwrap();
+                            let (defender_i, _) = infection
+                                .iter()
+                                .find_position(|g| g.id == *defender_id)
+                                .unwrap();
                             let defender = &mut infection[defender_i];
                             // print!("Immune system group {} attacks defending group {}, ", attacker.id, defender.id);
                             attacker.apply_damage(defender);
@@ -256,7 +362,10 @@ fn part_b(input: String) -> usize {
                     } else {
                         let attacker = &infection[j];
                         if let Some(defender_id) = infection_to_immune_system.get(&attacker.id) {
-                            let (defender_i, _) = immune_system.iter().find_position(|g| g.id == *defender_id).unwrap();
+                            let (defender_i, _) = immune_system
+                                .iter()
+                                .find_position(|g| g.id == *defender_id)
+                                .unwrap();
                             let defender = &mut immune_system[defender_i];
                             // print!("Infection group {} attacks defending group {}, ", attacker.id, defender.id);
                             attacker.apply_damage(defender);
@@ -289,7 +398,9 @@ impl Group {
 
     fn calc_damage(&self, defender: &Group) -> usize {
         let mut damage = self.attack * self.units;
-        if defender.weakness.contains(&self.attack_type) { damage *= 2; }
+        if defender.weakness.contains(&self.attack_type) {
+            damage *= 2;
+        }
         damage
     }
 
@@ -325,7 +436,7 @@ fn create_group(i: usize, s: &str) -> Group {
     let (immunity, weakness) = if let Some(a) = caps.get(3) {
         get_immunity_and_weakness(a.as_str())
     } else {
-        (vec!(), vec!())
+        (vec![], vec![])
     };
 
     Group {
@@ -343,24 +454,30 @@ fn create_group(i: usize, s: &str) -> Group {
 fn get_immunity_and_weakness(s: &str) -> (Vec<String>, Vec<String>) {
     if s.contains(";") {
         let (immune_to, weak_to) = s.split_once("; ").unwrap();
-        let immunity: Vec<String> = immune_to[11..immune_to.len()].split(", ")
+        let immunity: Vec<String> = immune_to[11..immune_to.len()]
+            .split(", ")
             .map(|i| i.to_string())
             .collect();
-        let weakness: Vec<String> = weak_to[8..weak_to.len() - 2].split(", ")
+        let weakness: Vec<String> = weak_to[8..weak_to.len() - 2]
+            .split(", ")
             .map(|i| i.to_string())
             .collect();
         return (immunity, weakness);
     } else if s.starts_with("(weak to") {
-        let weakness: Vec<String> = s[9..s.len() - 2].split(", ")
+        let weakness: Vec<String> = s[9..s.len() - 2]
+            .split(", ")
             .map(|i| i.to_string())
             .collect();
-        return (vec!(), weakness);
+        return (vec![], weakness);
     } else if s.starts_with("(immune to") {
-        let immunity: Vec<String> = s[11..s.len() - 2].split(", ")
+        let immunity: Vec<String> = s[11..s.len() - 2]
+            .split(", ")
             .map(|i| i.to_string())
             .collect();
-        return (immunity, vec!());
-    } else { panic!("don't know how to parse: {}", s) }
+        return (immunity, vec![]);
+    } else {
+        panic!("don't know how to parse: {}", s)
+    }
 }
 
 #[cfg(test)]
@@ -380,20 +497,35 @@ mod day24_tests {
             get_immunity_and_weakness("(weak to cold, slashing) ")
         );
         assert_eq!(
-            (vec! {"fire".to_string(), "cold".to_string()}, vec! {"bludgeoning".to_string()}),
+            (
+                vec! {"fire".to_string(), "cold".to_string()},
+                vec! {"bludgeoning".to_string()}
+            ),
             get_immunity_and_weakness("(immune to fire, cold; weak to bludgeoning) ")
         );
     }
 
     #[test]
     fn test_works() {
-        assert_eq!(5216, part_a(fs::read_to_string("input/2018/day24/test.txt").unwrap()));
-        assert_eq!(51, part_b(fs::read_to_string("input/2018/day24/test.txt").unwrap()));
+        assert_eq!(
+            5216,
+            part_a(fs::read_to_string("input/2018/day24/test.txt").unwrap())
+        );
+        assert_eq!(
+            51,
+            part_b(fs::read_to_string("input/2018/day24/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(29865, part_a(fs::read_to_string("input/2018/day24/input.txt").unwrap()));
-        assert_eq!(2444, part_b(fs::read_to_string("input/2018/day24/input.txt").unwrap()));
+        assert_eq!(
+            29865,
+            part_a(fs::read_to_string("input/2018/day24/input.txt").unwrap())
+        );
+        assert_eq!(
+            2444,
+            part_b(fs::read_to_string("input/2018/day24/input.txt").unwrap())
+        );
     }
 }

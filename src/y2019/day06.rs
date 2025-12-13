@@ -3,7 +3,9 @@ use std::fs;
 
 pub(crate) fn day06() {
     let input = fs::read_to_string("input/2019/day06/input.txt").unwrap();
-    let paths: HashMap<_, _> = input.trim().split('\n')
+    let paths: HashMap<_, _> = input
+        .trim()
+        .split('\n')
         .map(|s| s.split_once(')').unwrap())
         .map(|(to, from)| (from, to))
         .collect();
@@ -24,7 +26,9 @@ fn part_a(paths: &HashMap<&str, &str>) {
                     from = to;
                     total += 1;
                 }
-                None => { break; }
+                None => {
+                    break;
+                }
             }
         }
     }
@@ -41,7 +45,9 @@ fn part_b(paths: &HashMap<&str, &str>) {
                 path_from_you.push_back(to);
                 from = to;
             }
-            None => { break; }
+            None => {
+                break;
+            }
         }
     }
 
@@ -53,7 +59,9 @@ fn part_b(paths: &HashMap<&str, &str>) {
                 path_from_san.push_back(to);
                 from = to;
             }
-            None => { break; }
+            None => {
+                break;
+            }
         }
     }
 

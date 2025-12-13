@@ -4,7 +4,7 @@ pub(crate) fn day19() {
 }
 
 fn part_a(elves_count: usize) -> usize {
-    let mut state = vec!();
+    let mut state = vec![];
     for _ in 0..elves_count {
         state.push(1);
     }
@@ -19,7 +19,9 @@ fn part_a(elves_count: usize) -> usize {
             j = (j + 1) % elves_count;
         }
 
-        if i == j { break }
+        if i == j {
+            break;
+        }
         state[i] = state[i] + state[j];
         state[j] = 0;
         i = j;
@@ -55,8 +57,10 @@ fn part_b(elves_count: usize) -> usize {
     // state[0]
 
     let mut i = 1;
-    while i * 3 < elves_count { i *= 3 }
-    return elves_count - i
+    while i * 3 < elves_count {
+        i *= 3
+    }
+    return elves_count - i;
 }
 
 #[cfg(test)]

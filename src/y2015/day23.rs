@@ -2,8 +2,22 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day23() {
-    println!("{}", computor(fs::read_to_string("input/2015/day23/input.txt").unwrap(), "b", 0));
-    println!("{}", computor(fs::read_to_string("input/2015/day23/input.txt").unwrap(), "b", 1));
+    println!(
+        "{}",
+        computor(
+            fs::read_to_string("input/2015/day23/input.txt").unwrap(),
+            "b",
+            0
+        )
+    );
+    println!(
+        "{}",
+        computor(
+            fs::read_to_string("input/2015/day23/input.txt").unwrap(),
+            "b",
+            1
+        )
+    );
 }
 
 fn computor(input: String, res_reg: &str, initial_a: usize) -> usize {
@@ -51,7 +65,9 @@ fn computor(input: String, res_reg: &str, initial_a: usize) -> usize {
                     i += 1;
                 }
             }
-            _ => { panic!("Unknown instruction {}", instr) }
+            _ => {
+                panic!("Unknown instruction {}", instr)
+            }
         }
     }
 
@@ -62,16 +78,37 @@ fn computor(input: String, res_reg: &str, initial_a: usize) -> usize {
 mod day23_tests {
     use std::fs;
 
-    use crate::y2015::day23::{computor};
+    use crate::y2015::day23::computor;
 
     #[test]
     fn test_works() {
-        assert_eq!(2, computor(fs::read_to_string("input/2015/day23/test.txt").unwrap(), "a", 0));
+        assert_eq!(
+            2,
+            computor(
+                fs::read_to_string("input/2015/day23/test.txt").unwrap(),
+                "a",
+                0
+            )
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(307, computor(fs::read_to_string("input/2015/day23/input.txt").unwrap(), "b", 0));
-        assert_eq!(160, computor(fs::read_to_string("input/2015/day23/input.txt").unwrap(), "b", 1));
+        assert_eq!(
+            307,
+            computor(
+                fs::read_to_string("input/2015/day23/input.txt").unwrap(),
+                "b",
+                0
+            )
+        );
+        assert_eq!(
+            160,
+            computor(
+                fs::read_to_string("input/2015/day23/input.txt").unwrap(),
+                "b",
+                1
+            )
+        );
     }
 }

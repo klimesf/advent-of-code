@@ -21,10 +21,22 @@ pub(crate) fn day12() {
 
     // Input
     let moons = vec![
-        Moon { pos: (-4, -9, -3), vel: (0, 0, 0) },
-        Moon { pos: (-13, -11, 0), vel: (0, 0, 0) },
-        Moon { pos: (-17, -7, 15), vel: (0, 0, 0) },
-        Moon { pos: (-16, 4, 2), vel: (0, 0, 0) },
+        Moon {
+            pos: (-4, -9, -3),
+            vel: (0, 0, 0),
+        },
+        Moon {
+            pos: (-13, -11, 0),
+            vel: (0, 0, 0),
+        },
+        Moon {
+            pos: (-17, -7, 15),
+            vel: (0, 0, 0),
+        },
+        Moon {
+            pos: (-16, 4, 2),
+            vel: (0, 0, 0),
+        },
     ];
 
     part_a(moons.clone());
@@ -36,7 +48,9 @@ fn part_a(mut moons: Vec<Moon>) {
         let old_moons = moons.clone();
         for moon_a in &mut moons {
             for moon_b in &old_moons {
-                if moon_a.pos == moon_b.pos { continue; }
+                if moon_a.pos == moon_b.pos {
+                    continue;
+                }
                 moon_a.update_vel(moon_b);
             }
         }
@@ -45,7 +59,10 @@ fn part_a(mut moons: Vec<Moon>) {
             moon.apply_vel();
         }
     }
-    println!("{}", moons.iter().map(|m| m.calculate_energy()).sum::<i32>())
+    println!(
+        "{}",
+        moons.iter().map(|m| m.calculate_energy()).sum::<i32>()
+    )
 }
 
 fn part_b(mut moons: Vec<Moon>) {
@@ -60,7 +77,9 @@ fn part_b(mut moons: Vec<Moon>) {
         let old_moons = moons.clone();
         for moon_a in &mut moons {
             for moon_b in &old_moons {
-                if moon_a.pos == moon_b.pos { continue; }
+                if moon_a.pos == moon_b.pos {
+                    continue;
+                }
                 moon_a.update_vel(moon_b);
             }
         }
@@ -69,19 +88,34 @@ fn part_b(mut moons: Vec<Moon>) {
         }
         i += 1;
 
-        if x_full_rotation == 0 && original.iter().zip(&moons)
-            .filter(|&(m1, m2)| m1.pos.0 == m2.pos.0 && m1.vel.0 == m2.vel.0)
-            .count() == 4 {
+        if x_full_rotation == 0
+            && original
+                .iter()
+                .zip(&moons)
+                .filter(|&(m1, m2)| m1.pos.0 == m2.pos.0 && m1.vel.0 == m2.vel.0)
+                .count()
+                == 4
+        {
             x_full_rotation = i;
         }
-        if y_full_rotation == 0 && original.iter().zip(&moons)
-            .filter(|&(m1, m2)| m1.pos.1 == m2.pos.1 && m1.vel.1 == m2.vel.1)
-            .count() == 4 {
+        if y_full_rotation == 0
+            && original
+                .iter()
+                .zip(&moons)
+                .filter(|&(m1, m2)| m1.pos.1 == m2.pos.1 && m1.vel.1 == m2.vel.1)
+                .count()
+                == 4
+        {
             y_full_rotation = i;
         }
-        if z_full_rotation == 0 && original.iter().zip(&moons)
-            .filter(|&(m1, m2)| m1.pos.2 == m2.pos.2 && m1.vel.2 == m2.vel.2)
-            .count() == 4{
+        if z_full_rotation == 0
+            && original
+                .iter()
+                .zip(&moons)
+                .filter(|&(m1, m2)| m1.pos.2 == m2.pos.2 && m1.vel.2 == m2.vel.2)
+                .count()
+                == 4
+        {
             z_full_rotation = i;
         }
 

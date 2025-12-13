@@ -3,7 +3,11 @@ use std::fs;
 
 pub(crate) fn day19() {
     let input = fs::read_to_string("input/2019/day19/input.txt").unwrap();
-    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let code: Vec<i64> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
 
     part_a(&code);
     part_b(&code);
@@ -21,7 +25,10 @@ fn part_a(code: &Vec<i64>) {
             map[y as usize][x as usize] = val;
         }
     }
-    println!("There are {} points affected by the beam in 50x50 area", total);
+    println!(
+        "There are {} points affected by the beam in 50x50 area",
+        total
+    );
     for y in 0..50 {
         for x in 0..50 {
             match map[y][x] {
@@ -59,7 +66,6 @@ fn part_b(code: &Vec<i64>) {
 
     // 1067 * 10000 + 1712
     // 10671712
-
 }
 
 struct IntcodeProcessor {
@@ -172,8 +178,12 @@ impl IntcodeProcessor {
                     //println!("{}: relative base += {}", self.instruction_ptr, a_val);
                     self.instruction_ptr += 2;
                 }
-                99 => { break; }
-                _ => { panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr); }
+                99 => {
+                    break;
+                }
+                _ => {
+                    panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr);
+                }
             }
         }
     }
@@ -181,13 +191,17 @@ impl IntcodeProcessor {
     fn mem_read(&mut self, mode: i32, val: i64) -> i64 {
         match mode {
             0 => {
-                if val < 0 { panic!("Invalid memory address: {}", val) }
+                if val < 0 {
+                    panic!("Invalid memory address: {}", val)
+                }
                 *self.memory.entry(val).or_insert(0)
             }
             1 => val,
             2 => {
                 let addr = val + self.relative_base;
-                if addr < 0 { panic!("Invalid memory address: {}", addr) }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr)
+                }
                 *self.memory.entry(addr).or_insert(0)
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -197,13 +211,17 @@ impl IntcodeProcessor {
     fn mem_write(&mut self, mode: i32, addr: i64, val: i64) {
         match mode {
             0 => {
-                if addr < 0 { panic!("Invalid memory address: {}", addr); }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr);
+                }
                 self.memory.insert(addr, val);
             }
             1 => panic!("How to write in mode 1?"),
             2 => {
                 let i = addr + self.relative_base;
-                if i < 0 { panic!("Invalid memory address: {}", i) }
+                if i < 0 {
+                    panic!("Invalid memory address: {}", i)
+                }
                 self.memory.insert(i, val);
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -219,7 +237,7 @@ fn intcode_instance(code: &Vec<i64>) -> IntcodeProcessor {
     IntcodeProcessor {
         instruction_ptr: 0,
         memory,
-        output: vec!(),
+        output: vec![],
         relative_base: 0,
     }
 }

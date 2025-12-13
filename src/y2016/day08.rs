@@ -1,11 +1,14 @@
 use std::fs;
 
 pub(crate) fn day08() {
-    println!("{}", solve(fs::read_to_string("input/2016/day08/input.txt").unwrap()));
+    println!(
+        "{}",
+        solve(fs::read_to_string("input/2016/day08/input.txt").unwrap())
+    );
 }
 
 fn solve(input: String) -> usize {
-    let mut screen = vec!{ vec!{'.'; 50}; 6};
+    let mut screen = vec![vec! {'.'; 50}; 6];
     input.lines().for_each(|line| {
         if line.starts_with("rect ") {
             let (l, r) = line[5..].split_once("x").unwrap();
@@ -52,19 +55,23 @@ fn solve(input: String) -> usize {
         println!();
     }
 
-    screen.iter().map(|row| {
-        (*row).iter().filter(|col| **col == '#').count()
-    }).sum()
+    screen
+        .iter()
+        .map(|row| (*row).iter().filter(|col| **col == '#').count())
+        .sum()
 }
 
 #[cfg(test)]
 mod day08_tests {
     use std::fs;
 
-    use crate::y2016::day08::{solve};
+    use crate::y2016::day08::solve;
 
     #[test]
     fn input_works() {
-        assert_eq!(116, solve(fs::read_to_string("input/2016/day08/input.txt").unwrap()));
+        assert_eq!(
+            116,
+            solve(fs::read_to_string("input/2016/day08/input.txt").unwrap())
+        );
     }
 }

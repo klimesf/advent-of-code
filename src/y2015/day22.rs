@@ -1,12 +1,18 @@
 use std::cmp::Ordering;
-use std::collections::{BinaryHeap};
+use std::collections::BinaryHeap;
 
 pub(crate) fn day22() {
     println!("{}", wizard_simulator_20xx(50, 500, 55, 8, false));
     println!("{}", wizard_simulator_20xx(50, 500, 55, 8, true));
 }
 
-fn wizard_simulator_20xx(player_hp: i32, player_mana: i32, boss_hp: i32, boss_dmg: i32, hard_difficulty: bool) -> usize {
+fn wizard_simulator_20xx(
+    player_hp: i32,
+    player_mana: i32,
+    boss_hp: i32,
+    boss_dmg: i32,
+    hard_difficulty: bool,
+) -> usize {
     let mut stack = BinaryHeap::new();
     stack.push(GameState {
         player_hp,
@@ -23,7 +29,9 @@ fn wizard_simulator_20xx(player_hp: i32, player_mana: i32, boss_hp: i32, boss_dm
     while let Some(mut state) = stack.pop() {
         if hard_difficulty && state.turn % 2 == 0 {
             state.player_hp -= 1;
-            if state.player_hp <= 0 { continue; }
+            if state.player_hp <= 0 {
+                continue;
+            }
         }
 
         let shield_effect = if state.shield_timer > 0 { 7 } else { 0 };
@@ -36,8 +44,13 @@ fn wizard_simulator_20xx(player_hp: i32, player_mana: i32, boss_hp: i32, boss_dm
         state.player_mana += recharge_effect;
         state.boss_hp -= poison_effect;
 
-        if state.player_hp <= 0 { continue; }
-        if state.boss_hp <= 0 { min = state.mana_spent.min(min); break; }
+        if state.player_hp <= 0 {
+            continue;
+        }
+        if state.boss_hp <= 0 {
+            min = state.mana_spent.min(min);
+            break;
+        }
 
         if state.turn % 2 == 0 {
             // Player move
@@ -106,7 +119,6 @@ fn wizard_simulator_20xx(player_hp: i32, player_mana: i32, boss_hp: i32, boss_dm
                     turn: state.turn + 1,
                 })
             }
-
         } else {
             stack.push(GameState {
                 player_hp: state.player_hp - 1.max(boss_dmg - shield_effect),
@@ -150,7 +162,7 @@ impl PartialOrd for GameState {
 
 #[cfg(test)]
 mod day22_tests {
-    use crate::y2015::day22::{wizard_simulator_20xx};
+    use crate::y2015::day22::wizard_simulator_20xx;
 
     #[test]
     fn test_works() {

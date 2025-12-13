@@ -1,20 +1,32 @@
+use crate::utils::toolbox::parse_usize;
+use regex::Regex;
 use std::collections::HashMap;
 use std::fs;
-use regex::{Regex};
-use crate::utils::toolbox::parse_usize;
 
 pub(crate) fn day10() {
-    println!("{}", part_a(fs::read_to_string("input/2016/day10/input.txt").unwrap(), 17, 61));
-    println!("{}", part_b(fs::read_to_string("input/2016/day10/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(
+            fs::read_to_string("input/2016/day10/input.txt").unwrap(),
+            17,
+            61
+        )
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2016/day10/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String, ilow: usize, ihigh: usize) -> usize {
     let mut vals: HashMap<usize, Vec<usize>> = HashMap::new();
     let mut configuration: HashMap<usize, (usize, &str, usize, &str)> = HashMap::new();
     let re_val = Regex::new(r"^value (\d+) goes to bot (\d+)$").unwrap();
-    let low_high_val = Regex::new(r"bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)$").unwrap();
+    let low_high_val =
+        Regex::new(r"bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)$")
+            .unwrap();
 
-    let mut goes_to = vec!();
+    let mut goes_to = vec![];
     input.lines().for_each(|line| {
         if let Some(caps) = re_val.captures(line) {
             let val = parse_usize(caps.get(1));
@@ -32,10 +44,17 @@ fn part_a(input: String, ilow: usize, ihigh: usize) -> usize {
     });
 
     for (bot, val) in goes_to {
-        let bot_vals = vals.entry(bot).or_insert(vec!());
+        let bot_vals = vals.entry(bot).or_insert(vec![]);
         bot_vals.push(val);
         if bot_vals.len() == 2 {
-            if let Some(ans) = process(bot, &configuration, bot_vals.clone(), &mut vals, ilow, ihigh) {
+            if let Some(ans) = process(
+                bot,
+                &configuration,
+                bot_vals.clone(),
+                &mut vals,
+                ilow,
+                ihigh,
+            ) {
                 return ans;
             }
         }
@@ -49,9 +68,11 @@ fn part_b(input: String) -> usize {
     let mut output: HashMap<usize, Vec<usize>> = HashMap::new();
     let mut configuration: HashMap<usize, (usize, &str, usize, &str)> = HashMap::new();
     let re_val = Regex::new(r"^value (\d+) goes to bot (\d+)$").unwrap();
-    let low_high_val = Regex::new(r"bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)$").unwrap();
+    let low_high_val =
+        Regex::new(r"bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)$")
+            .unwrap();
 
-    let mut goes_to = vec!();
+    let mut goes_to = vec![];
     input.lines().for_each(|line| {
         if let Some(caps) = re_val.captures(line) {
             let val = parse_usize(caps.get(1));
@@ -69,20 +90,30 @@ fn part_b(input: String) -> usize {
     });
 
     for (bot, val) in goes_to {
-        let bot_vals = vals.entry(bot).or_insert(vec!());
+        let bot_vals = vals.entry(bot).or_insert(vec![]);
         bot_vals.push(val);
         if bot_vals.len() == 2 {
-            process_b(bot, &configuration, bot_vals.clone(), &mut vals, &mut output);
+            process_b(
+                bot,
+                &configuration,
+                bot_vals.clone(),
+                &mut vals,
+                &mut output,
+            );
         }
     }
 
-    output.get(&0).unwrap()[0]
-        * output.get(&1).unwrap()[0]
-        * output.get(&2).unwrap()[0]
+    output.get(&0).unwrap()[0] * output.get(&1).unwrap()[0] * output.get(&2).unwrap()[0]
 }
 
-fn process(bot: usize, configuration: &HashMap<usize, (usize, &str, usize, &str)>, bvals: Vec<usize>,
-           mut vals: &mut HashMap<usize, Vec<usize>>, ilow: usize, ihigh: usize) -> Option<usize> {
+fn process(
+    bot: usize,
+    configuration: &HashMap<usize, (usize, &str, usize, &str)>,
+    bvals: Vec<usize>,
+    mut vals: &mut HashMap<usize, Vec<usize>>,
+    ilow: usize,
+    ihigh: usize,
+) -> Option<usize> {
     let (low, low_type, high, high_type) = configuration.get(&bot).unwrap();
 
     if (bvals[0] == ilow && bvals[1] == ihigh) || (bvals[0] == ihigh && bvals[1] == ilow) {
@@ -90,22 +121,36 @@ fn process(bot: usize, configuration: &HashMap<usize, (usize, &str, usize, &str)
     }
 
     if low_type == &"bot" {
-        let bot_vals = vals.entry(*low).or_insert(vec!());
+        let bot_vals = vals.entry(*low).or_insert(vec![]);
         let val = bvals[0].min(bvals[1]);
         bot_vals.push(val);
         if bot_vals.len() == 2 {
-            if let Some(ans) = process(*low, &configuration, bot_vals.clone(), &mut vals, ilow, ihigh) {
+            if let Some(ans) = process(
+                *low,
+                &configuration,
+                bot_vals.clone(),
+                &mut vals,
+                ilow,
+                ihigh,
+            ) {
                 return Some(ans);
             }
         }
     }
 
     if high_type == &"bot" {
-        let bot_vals = vals.entry(*high).or_insert(vec!());
+        let bot_vals = vals.entry(*high).or_insert(vec![]);
         let val = bvals[0].max(bvals[1]);
         bot_vals.push(val);
         if bot_vals.len() == 2 {
-            if let Some(ans) = process(*high, &configuration, bot_vals.clone(), &mut vals, ilow, ihigh) {
+            if let Some(ans) = process(
+                *high,
+                &configuration,
+                bot_vals.clone(),
+                &mut vals,
+                ilow,
+                ihigh,
+            ) {
                 return Some(ans);
             }
         }
@@ -113,12 +158,17 @@ fn process(bot: usize, configuration: &HashMap<usize, (usize, &str, usize, &str)
 
     None
 }
-fn process_b(bot: usize, configuration: &HashMap<usize, (usize, &str, usize, &str)>, bvals: Vec<usize>,
-           mut vals: &mut HashMap<usize, Vec<usize>>, output: &mut HashMap<usize, Vec<usize>>) {
+fn process_b(
+    bot: usize,
+    configuration: &HashMap<usize, (usize, &str, usize, &str)>,
+    bvals: Vec<usize>,
+    mut vals: &mut HashMap<usize, Vec<usize>>,
+    output: &mut HashMap<usize, Vec<usize>>,
+) {
     let (low, low_type, high, high_type) = configuration.get(&bot).unwrap();
 
     if low_type == &"bot" {
-        let bot_vals = vals.entry(*low).or_insert(vec!());
+        let bot_vals = vals.entry(*low).or_insert(vec![]);
         let val = bvals[0].min(bvals[1]);
         bot_vals.push(val);
         if bot_vals.len() == 2 {
@@ -126,11 +176,11 @@ fn process_b(bot: usize, configuration: &HashMap<usize, (usize, &str, usize, &st
         }
     } else {
         let val = bvals[0].min(bvals[1]);
-        output.entry(*low).or_insert(vec!()).push(val);
+        output.entry(*low).or_insert(vec![]).push(val);
     }
 
     if high_type == &"bot" {
-        let bot_vals = vals.entry(*high).or_insert(vec!());
+        let bot_vals = vals.entry(*high).or_insert(vec![]);
         let val = bvals[0].max(bvals[1]);
         bot_vals.push(val);
         if bot_vals.len() == 2 {
@@ -138,7 +188,7 @@ fn process_b(bot: usize, configuration: &HashMap<usize, (usize, &str, usize, &st
         }
     } else {
         let val = bvals[0].max(bvals[1]);
-        output.entry(*high).or_insert(vec!()).push(val);
+        output.entry(*high).or_insert(vec![]).push(val);
     }
 }
 
@@ -150,13 +200,33 @@ mod day10_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(2, part_a(fs::read_to_string("input/2016/day10/test.txt").unwrap(), 2, 5));
-        assert_eq!(30, part_b(fs::read_to_string("input/2016/day10/test.txt").unwrap()));
+        assert_eq!(
+            2,
+            part_a(
+                fs::read_to_string("input/2016/day10/test.txt").unwrap(),
+                2,
+                5
+            )
+        );
+        assert_eq!(
+            30,
+            part_b(fs::read_to_string("input/2016/day10/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(116, part_a(fs::read_to_string("input/2016/day10/input.txt").unwrap(), 17, 61));
-        assert_eq!(23903, part_b(fs::read_to_string("input/2016/day10/input.txt").unwrap()));
+        assert_eq!(
+            116,
+            part_a(
+                fs::read_to_string("input/2016/day10/input.txt").unwrap(),
+                17,
+                61
+            )
+        );
+        assert_eq!(
+            23903,
+            part_b(fs::read_to_string("input/2016/day10/input.txt").unwrap())
+        );
     }
 }

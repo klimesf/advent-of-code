@@ -1,8 +1,12 @@
 use std::fs;
 
 pub fn day01(print: fn(i32)) {
-    print(part_a(fs::read_to_string("input/2025/day01/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2025/day01/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2025/day01/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2025/day01/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> i32 {
@@ -67,18 +71,30 @@ fn part_b(input: String) -> i32 {
 #[cfg(test)]
 mod day01_tests {
     use std::fs;
-    
+
     use crate::y2025::day01::{part_a, part_b};
 
     #[test]
     fn test_works() {
-        assert_eq!(3, part_a(fs::read_to_string("input/2025/day01/test.txt").unwrap()));
-        assert_eq!(6, part_b(fs::read_to_string("input/2025/day01/test.txt").unwrap()));
+        assert_eq!(
+            3,
+            part_a(fs::read_to_string("input/2025/day01/test.txt").unwrap())
+        );
+        assert_eq!(
+            6,
+            part_b(fs::read_to_string("input/2025/day01/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1145, part_a(fs::read_to_string("input/2025/day01/input.txt").unwrap()));
-        assert_eq!(6561, part_b(fs::read_to_string("input/2025/day01/input.txt").unwrap()));
+        assert_eq!(
+            1145,
+            part_a(fs::read_to_string("input/2025/day01/input.txt").unwrap())
+        );
+        assert_eq!(
+            6561,
+            part_b(fs::read_to_string("input/2025/day01/input.txt").unwrap())
+        );
     }
 }

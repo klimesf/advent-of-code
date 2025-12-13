@@ -1,8 +1,12 @@
 use std::fs;
 
 pub(crate) fn day04(print: fn(usize)) {
-    print(part_a(fs::read_to_string("input/2025/day04/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2025/day04/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2025/day04/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2025/day04/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
@@ -41,16 +45,34 @@ fn count_removable(map: &Vec<Vec<char>>) -> usize {
 }
 
 fn is_removable(map: &Vec<Vec<char>>, i: usize, j: usize) -> bool {
-    if map[i][j] == '.' { return false; }
+    if map[i][j] == '.' {
+        return false;
+    }
     let mut adj = 0;
-    if i > 0 && map[i - 1][j] == '@' { adj += 1; }
-    if j > 0 && map[i][j - 1] == '@' { adj += 1; }
-    if i < map.len() - 1 && map[i + 1][j] == '@' { adj += 1; }
-    if j < map[0].len() - 1 && map[i][j + 1] == '@' { adj += 1; }
-    if i > 0 && j > 0 && map[i - 1][j - 1] == '@' { adj += 1; }
-    if i > 0 && j < map.len() - 1 && map[i - 1][j + 1] == '@' { adj += 1; }
-    if i < map.len() - 1 && j > 0 && map[i + 1][j - 1] == '@' { adj += 1; }
-    if i < map.len() - 1 && j < map[0].len() - 1 && map[i + 1][j + 1] == '@' { adj += 1; }
+    if i > 0 && map[i - 1][j] == '@' {
+        adj += 1;
+    }
+    if j > 0 && map[i][j - 1] == '@' {
+        adj += 1;
+    }
+    if i < map.len() - 1 && map[i + 1][j] == '@' {
+        adj += 1;
+    }
+    if j < map[0].len() - 1 && map[i][j + 1] == '@' {
+        adj += 1;
+    }
+    if i > 0 && j > 0 && map[i - 1][j - 1] == '@' {
+        adj += 1;
+    }
+    if i > 0 && j < map.len() - 1 && map[i - 1][j + 1] == '@' {
+        adj += 1;
+    }
+    if i < map.len() - 1 && j > 0 && map[i + 1][j - 1] == '@' {
+        adj += 1;
+    }
+    if i < map.len() - 1 && j < map[0].len() - 1 && map[i + 1][j + 1] == '@' {
+        adj += 1;
+    }
     adj < 4
 }
 
@@ -62,13 +84,25 @@ mod day04_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(13, part_a(fs::read_to_string("input/2025/day04/test.txt").unwrap()));
-        assert_eq!(43, part_b(fs::read_to_string("input/2025/day04/test.txt").unwrap()));
+        assert_eq!(
+            13,
+            part_a(fs::read_to_string("input/2025/day04/test.txt").unwrap())
+        );
+        assert_eq!(
+            43,
+            part_b(fs::read_to_string("input/2025/day04/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1435, part_a(fs::read_to_string("input/2025/day04/input.txt").unwrap()));
-        assert_eq!(8623, part_b(fs::read_to_string("input/2025/day04/input.txt").unwrap()));
+        assert_eq!(
+            1435,
+            part_a(fs::read_to_string("input/2025/day04/input.txt").unwrap())
+        );
+        assert_eq!(
+            8623,
+            part_b(fs::read_to_string("input/2025/day04/input.txt").unwrap())
+        );
     }
 }

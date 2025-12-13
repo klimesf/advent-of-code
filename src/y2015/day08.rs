@@ -1,16 +1,28 @@
 use std::fs;
 
 pub(crate) fn day08() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
-    input.lines().map(|line| { line.len() - in_memory_len(line) }).sum()
+    input
+        .lines()
+        .map(|line| line.len() - in_memory_len(line))
+        .sum()
 }
 
 fn part_b(input: String) -> usize {
-    input.lines().map(|line| { escaped_len(line) - line.len() }).sum()
+    input
+        .lines()
+        .map(|line| escaped_len(line) - line.len())
+        .sum()
 }
 
 fn in_memory_len(s: &str) -> usize {
@@ -26,11 +38,11 @@ fn in_memory_len(s: &str) -> usize {
 fn escaped_len(s: &str) -> usize {
     let mut ans = 0;
     for c in s.chars() {
-       match c {
-           '"' => { ans += 2 }
-           '\\' => { ans += 2 }
-           _ => { ans += 1 }
-       }
+        match c {
+            '"' => ans += 2,
+            '\\' => ans += 2,
+            _ => ans += 1,
+        }
     }
     ans + 2 // +2 escaping quotes
 }
@@ -49,28 +61,32 @@ impl State {
     fn next(&self, c: char, ctr: &mut usize) -> State {
         match self {
             State::Start => {
-                if c == '"' { State::Reading }
-                else { panic!("String doesn't start with escape quotes") }
+                if c == '"' {
+                    State::Reading
+                } else {
+                    panic!("String doesn't start with escape quotes")
+                }
             }
             State::Reading => {
-                if c == '\\' { State::Escaping }
-                else if c == '"' { State::Terminal }
-                else {
+                if c == '\\' {
+                    State::Escaping
+                } else if c == '"' {
+                    State::Terminal
+                } else {
                     *ctr += 1;
                     State::Reading
                 }
             }
             State::Escaping => {
                 *ctr += 1;
-                if c == 'x' { State::EscapingHex }
-                else { State::Reading }
+                if c == 'x' {
+                    State::EscapingHex
+                } else {
+                    State::Reading
+                }
             }
-            State::EscapingHex => {
-                State::EscapingHex2
-            }
-            State::EscapingHex2 => {
-                State::Reading
-            }
+            State::EscapingHex => State::EscapingHex2,
+            State::EscapingHex2 => State::Reading,
             State::Terminal => {
                 panic!("String doesn't end with escape quotes")
             }
@@ -86,13 +102,25 @@ mod day08_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(12, part_a(fs::read_to_string("input/2015/day08/test.txt").unwrap()));
-        assert_eq!(19, part_b(fs::read_to_string("input/2015/day08/test.txt").unwrap()));
+        assert_eq!(
+            12,
+            part_a(fs::read_to_string("input/2015/day08/test.txt").unwrap())
+        );
+        assert_eq!(
+            19,
+            part_b(fs::read_to_string("input/2015/day08/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1333, part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
-        assert_eq!(2046, part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
+        assert_eq!(
+            1333,
+            part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap())
+        );
+        assert_eq!(
+            2046,
+            part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap())
+        );
     }
 }

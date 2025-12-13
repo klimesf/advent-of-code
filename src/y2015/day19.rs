@@ -2,17 +2,23 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day19() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
-    let(repls, mut mols) = input.split_once("\n\n").unwrap();
+    let (repls, mut mols) = input.split_once("\n\n").unwrap();
     mols = mols.trim();
     let mut replacements = HashMap::new();
     repls.lines().for_each(|line| {
         let (from, to) = line.split_once(" => ").unwrap();
-        replacements.entry(from).or_insert(vec!()).push(to);
+        replacements.entry(from).or_insert(vec![]).push(to);
     });
 
     let mut ans = HashSet::new();
@@ -26,10 +32,15 @@ fn part_a(input: String) -> usize {
         for (key, vals) in &replacements {
             if buf.ends_with(key) {
                 for val in vals {
-                    ans.insert(format!("{}{}{}", mols[0..(ptr + 1 - key.len())].to_string(), val, mols[ptr + 1..].to_string()));
+                    ans.insert(format!(
+                        "{}{}{}",
+                        mols[0..(ptr + 1 - key.len())].to_string(),
+                        val,
+                        mols[ptr + 1..].to_string()
+                    ));
                 }
                 buf.clear();
-                break
+                break;
             }
         }
         ptr += 1;
@@ -39,17 +50,17 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> usize {
-    let(repls, mut orig) = input.split_once("\n\n").unwrap();
+    let (repls, mut orig) = input.split_once("\n\n").unwrap();
     orig = orig.trim();
     let mut replacements = HashMap::new();
     repls.lines().for_each(|line| {
         let (from, to) = line.split_once(" => ").unwrap();
-        replacements.entry(to).or_insert(vec!()).push(from);
+        replacements.entry(to).or_insert(vec![]).push(from);
     });
 
     let mut min = usize::MAX;
 
-    let mut stack = vec!();
+    let mut stack = vec![];
     stack.push((0, orig.to_string()));
 
     while let Some((steps, mols)) = stack.pop() {
@@ -67,7 +78,12 @@ fn part_b(input: String) -> usize {
             for (key, vals) in &replacements {
                 if buf.ends_with(key) {
                     for val in vals {
-                        let next = format!("{}{}{}", mols[0..(ptr + 1 - key.len())].to_string(), val, mols[ptr + 1..].to_string());
+                        let next = format!(
+                            "{}{}{}",
+                            mols[0..(ptr + 1 - key.len())].to_string(),
+                            val,
+                            mols[ptr + 1..].to_string()
+                        );
                         stack.push((steps + 1, next));
                     }
                 }
@@ -87,15 +103,33 @@ mod day19_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(4, part_a(fs::read_to_string("input/2015/day19/test.txt").unwrap()));
-        assert_eq!(7, part_a(fs::read_to_string("input/2015/day19/test_b.txt").unwrap()));
-        assert_eq!(3, part_b(fs::read_to_string("input/2015/day19/test.txt").unwrap()));
-        assert_eq!(6, part_b(fs::read_to_string("input/2015/day19/test_b.txt").unwrap()));
+        assert_eq!(
+            4,
+            part_a(fs::read_to_string("input/2015/day19/test.txt").unwrap())
+        );
+        assert_eq!(
+            7,
+            part_a(fs::read_to_string("input/2015/day19/test_b.txt").unwrap())
+        );
+        assert_eq!(
+            3,
+            part_b(fs::read_to_string("input/2015/day19/test.txt").unwrap())
+        );
+        assert_eq!(
+            6,
+            part_b(fs::read_to_string("input/2015/day19/test_b.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(518, part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
-        assert_eq!(200, part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap())); // TODO: dijkstra
+        assert_eq!(
+            518,
+            part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap())
+        );
+        assert_eq!(
+            200,
+            part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap())
+        ); // TODO: dijkstra
     }
 }

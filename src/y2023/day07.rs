@@ -3,18 +3,24 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day07() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day07/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2023/day07/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2023/day07/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2023/day07/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> i32 {
-    let mut high_card = vec!();
-    let mut one_pair = vec!();
-    let mut two_pair = vec!();
-    let mut three_of_a_kind = vec!();
-    let mut full_house = vec!();
-    let mut four_of_kind = vec!();
-    let mut five_of_kind = vec!();
+    let mut high_card = vec![];
+    let mut one_pair = vec![];
+    let mut two_pair = vec![];
+    let mut three_of_a_kind = vec![];
+    let mut full_house = vec![];
+    let mut four_of_kind = vec![];
+    let mut five_of_kind = vec![];
 
     input.lines().for_each(|line| {
         let (cards_s, bid_s) = line.split_once(" ").unwrap();
@@ -47,7 +53,15 @@ fn part_a(input: String) -> i32 {
     });
 
     count_total(
-        vec! {high_card, one_pair, two_pair, three_of_a_kind, full_house, four_of_kind, five_of_kind},
+        vec![
+            high_card,
+            one_pair,
+            two_pair,
+            three_of_a_kind,
+            full_house,
+            four_of_kind,
+            five_of_kind,
+        ],
         cmp_cards,
     )
 }
@@ -57,9 +71,7 @@ fn count_total(stacks: Vec<Vec<(&str, i32)>>, cmp_fn: fn(&str, &str) -> Ordering
     let mut rank = 1;
 
     for mut stack in stacks {
-        stack.sort_by(|(card_a, _), (card_b, _)| {
-            cmp_fn(card_a, card_b)
-        });
+        stack.sort_by(|(card_a, _), (card_b, _)| cmp_fn(card_a, card_b));
         for (_, bid) in stack {
             total += rank * bid;
             rank += 1;
@@ -70,13 +82,13 @@ fn count_total(stacks: Vec<Vec<(&str, i32)>>, cmp_fn: fn(&str, &str) -> Ordering
 }
 
 fn part_b(input: String) -> i32 {
-    let mut high_card = vec!();
-    let mut one_pair = vec!();
-    let mut two_pair = vec!();
-    let mut three_of_a_kind = vec!();
-    let mut full_house = vec!();
-    let mut four_of_kind = vec!();
-    let mut five_of_kind = vec!();
+    let mut high_card = vec![];
+    let mut one_pair = vec![];
+    let mut two_pair = vec![];
+    let mut three_of_a_kind = vec![];
+    let mut full_house = vec![];
+    let mut four_of_kind = vec![];
+    let mut five_of_kind = vec![];
 
     input.lines().for_each(|line| {
         let (cards_s, bid_s) = line.split_once(" ").unwrap();
@@ -99,7 +111,6 @@ fn part_b(input: String) -> i32 {
             } else {
                 one_pair.push((cards_s, bid));
             }
-
         } else if types.len() == 3 {
             if *types.values().max().unwrap() == 3 {
                 if cards_s.contains('J') {
@@ -116,10 +127,8 @@ fn part_b(input: String) -> i32 {
             } else {
                 two_pair.push((cards_s, bid));
             }
-
         } else if types.len() == 1 {
             five_of_kind.push((cards_s, bid));
-
         } else if types.len() == 2 {
             if cards_s.contains('J') {
                 five_of_kind.push((cards_s, bid));
@@ -132,7 +141,15 @@ fn part_b(input: String) -> i32 {
     });
 
     count_total(
-        vec! {high_card, one_pair, two_pair, three_of_a_kind, full_house, four_of_kind, five_of_kind},
+        vec![
+            high_card,
+            one_pair,
+            two_pair,
+            three_of_a_kind,
+            full_house,
+            four_of_kind,
+            five_of_kind,
+        ],
         cmp_cards_part_b,
     )
 }
@@ -141,7 +158,9 @@ fn cmp_cards(card_a: &str, card_b: &str) -> Ordering {
     for i in 0..card_a.len() {
         let ca = card_a.chars().nth(i).unwrap();
         let cb = card_b.chars().nth(i).unwrap();
-        if ca == cb { continue }
+        if ca == cb {
+            continue;
+        }
         return card_rank(ca).cmp(&card_rank(cb));
     }
     Ordering::Equal
@@ -162,7 +181,7 @@ fn card_rank(card: char) -> i32 {
         'Q' => 11,
         'K' => 12,
         'A' => 13,
-        _ => panic!("Unknown card {}", card)
+        _ => panic!("Unknown card {}", card),
     }
 }
 
@@ -170,7 +189,9 @@ fn cmp_cards_part_b(card_a: &str, card_b: &str) -> Ordering {
     for i in 0..card_a.len() {
         let ca = card_a.chars().nth(i).unwrap();
         let cb = card_b.chars().nth(i).unwrap();
-        if ca == cb { continue }
+        if ca == cb {
+            continue;
+        }
         return card_rank_part_b(ca).cmp(&card_rank_part_b(cb));
     }
     Ordering::Equal
@@ -191,7 +212,7 @@ fn card_rank_part_b(card: char) -> i32 {
         'Q' => 11,
         'K' => 12,
         'A' => 13,
-        _ => panic!("Unknown card {}", card)
+        _ => panic!("Unknown card {}", card),
     }
 }
 
@@ -210,13 +231,25 @@ mod day07_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(6440, part_a(fs::read_to_string("input/2023/day07/test.txt").unwrap()));
-        assert_eq!(5905, part_b(fs::read_to_string("input/2023/day07/test.txt").unwrap()));
+        assert_eq!(
+            6440,
+            part_a(fs::read_to_string("input/2023/day07/test.txt").unwrap())
+        );
+        assert_eq!(
+            5905,
+            part_b(fs::read_to_string("input/2023/day07/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(254024898, part_a(fs::read_to_string("input/2023/day07/input.txt").unwrap()));
-        assert_eq!(254115617, part_b(fs::read_to_string("input/2023/day07/input.txt").unwrap()));
+        assert_eq!(
+            254024898,
+            part_a(fs::read_to_string("input/2023/day07/input.txt").unwrap())
+        );
+        assert_eq!(
+            254115617,
+            part_b(fs::read_to_string("input/2023/day07/input.txt").unwrap())
+        );
     }
 }

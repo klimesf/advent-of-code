@@ -28,7 +28,17 @@ fn part_a() {
     let mut stack7 = VecDeque::from(['Q', 'S', 'D', 'J', 'R', 'T', 'G', 'H']);
     let mut stack8 = VecDeque::from(['V', 'F', 'P']);
     let mut stack9 = VecDeque::from(['J', 'T', 'S', 'R', 'D']);
-    let mut stacks = vec!(&mut stack1, &mut stack2, &mut stack3, &mut stack4, &mut stack5, &mut stack6, &mut stack7, &mut stack8, &mut stack9);
+    let mut stacks = vec![
+        &mut stack1,
+        &mut stack2,
+        &mut stack3,
+        &mut stack4,
+        &mut stack5,
+        &mut stack6,
+        &mut stack7,
+        &mut stack8,
+        &mut stack9,
+    ];
 
     let input = fs::read_to_string("input/2022/day05/input.txt").unwrap();
     let re = Regex::new(r"^move ([0-9]+) from ([0-9]+) to ([0-9]+)$").unwrap();
@@ -68,7 +78,17 @@ fn part_b() {
     let mut stack7 = VecDeque::from(['Q', 'S', 'D', 'J', 'R', 'T', 'G', 'H']);
     let mut stack8 = VecDeque::from(['V', 'F', 'P']);
     let mut stack9 = VecDeque::from(['J', 'T', 'S', 'R', 'D']);
-    let mut stacks = vec!(&mut stack1, &mut stack2, &mut stack3, &mut stack4, &mut stack5, &mut stack6, &mut stack7, &mut stack8, &mut stack9);
+    let mut stacks = vec![
+        &mut stack1,
+        &mut stack2,
+        &mut stack3,
+        &mut stack4,
+        &mut stack5,
+        &mut stack6,
+        &mut stack7,
+        &mut stack8,
+        &mut stack9,
+    ];
 
     let input = fs::read_to_string("input/2022/day05/input.txt").unwrap();
     let re = Regex::new(r"^move ([0-9]+) from ([0-9]+) to ([0-9]+)$").unwrap();

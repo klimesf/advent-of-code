@@ -3,8 +3,7 @@ pub(crate) fn day25() {
 }
 
 fn part_a(row: usize, col: usize) -> i64 {
-
-    let mut paper = vec!{ vec!{ 0; col.max(row) * 2 }; col.max(row) * 2};
+    let mut paper = vec![vec! { 0; col.max(row) * 2 }; col.max(row) * 2];
 
     let mut i: i64 = 20151125;
     for diagonal in 0..paper.len() {
@@ -12,7 +11,9 @@ fn part_a(row: usize, col: usize) -> i64 {
         loop {
             paper[pos.0][pos.1] = i;
             i = (i * 252533).rem_euclid(33554393);
-            if pos.0 == 0 { break }
+            if pos.0 == 0 {
+                break;
+            }
             pos = (pos.0 - 1, pos.1 + 1);
         }
     }
@@ -22,7 +23,7 @@ fn part_a(row: usize, col: usize) -> i64 {
 
 #[cfg(test)]
 mod day25_tests {
-    use crate::y2015::day25::{part_a};
+    use crate::y2015::day25::part_a;
 
     #[test]
     fn test_works() {

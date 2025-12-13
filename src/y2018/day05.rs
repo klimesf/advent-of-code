@@ -1,19 +1,28 @@
-use std::collections::{VecDeque};
+use std::collections::VecDeque;
 use std::fs;
 
 pub(crate) fn day05() {
     let input = fs::read_to_string("input/2018/day05/input.txt").unwrap();
 
     let len_after_reacting = react_polymer(input.clone());
-    println!("{} units remain after fully reacting the polymer", len_after_reacting);
+    println!(
+        "{} units remain after fully reacting the polymer",
+        len_after_reacting
+    );
 
-    let shortest = ('a'..'z').map(|c| {
-        let mut omitted = input.clone();
-        omitted = omitted.replace(c, "");
-        omitted = omitted.replace((c as u8 - 32) as char, "");
-        react_polymer(omitted)
-    }).min().unwrap();
-    println!("{} is the shortest polymer we can produce by omitting units", shortest);
+    let shortest = ('a'..'z')
+        .map(|c| {
+            let mut omitted = input.clone();
+            omitted = omitted.replace(c, "");
+            omitted = omitted.replace((c as u8 - 32) as char, "");
+            react_polymer(omitted)
+        })
+        .min()
+        .unwrap();
+    println!(
+        "{} is the shortest polymer we can produce by omitting units",
+        shortest
+    );
 }
 
 fn react_polymer(input: String) -> usize {
@@ -28,7 +37,9 @@ fn react_polymer(input: String) -> usize {
         let right = polymer.pop_front().unwrap();
 
         if is_opposite_polarity(left, right) {
-            if polymer.is_empty() { break; }
+            if polymer.is_empty() {
+                break;
+            }
             if new_polymer.is_empty() {
                 new_polymer.push_back(polymer.pop_front().unwrap());
             }

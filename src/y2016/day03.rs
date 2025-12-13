@@ -1,27 +1,40 @@
 use std::fs;
 
 pub(crate) fn day03() {
-    println!("{}", part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
-    input.lines().filter(|line| {
-        let mut triangle: Vec<i32> = line.trim().split_whitespace()
-            .map(|n| n.parse::<i32>().unwrap())
-            .collect();
+    input
+        .lines()
+        .filter(|line| {
+            let mut triangle: Vec<i32> = line
+                .trim()
+                .split_whitespace()
+                .map(|n| n.parse::<i32>().unwrap())
+                .collect();
 
-        triangle.sort();
-        triangle[0] + triangle[1] > triangle[2]
-    }).count()
+            triangle.sort();
+            triangle[0] + triangle[1] > triangle[2]
+        })
+        .count()
 }
 
 fn part_b(input: String) -> i32 {
-    let mut cols = vec! {vec!(), vec!(), vec!()};
+    let mut cols = vec![vec![], vec![], vec![]];
     let mut ans = 0;
 
     for line in input.lines() {
-        let nums: Vec<i32> = line.trim().split_whitespace()
+        let nums: Vec<i32> = line
+            .trim()
+            .split_whitespace()
             .map(|n| n.parse::<i32>().unwrap())
             .collect();
 
@@ -48,7 +61,13 @@ mod day03_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(917, part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
-        assert_eq!(1649, part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
+        assert_eq!(
+            917,
+            part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap())
+        );
+        assert_eq!(
+            1649,
+            part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap())
+        );
     }
 }

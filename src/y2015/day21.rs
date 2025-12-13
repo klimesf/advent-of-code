@@ -1,8 +1,14 @@
 use std::fs;
 
 pub(crate) fn day21() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day21/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2015/day21/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2015/day21/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2015/day21/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -16,7 +22,9 @@ fn part_a(input: String) -> usize {
 
         let player_dies_in = (player_hp + boss_dmg_to_player - 1) / boss_dmg_to_player;
         let boss_dies_in = (boss_hp + player_dmg_to_boss - 1) / player_dmg_to_boss;
-        if player_dies_in >= boss_dies_in { min = player.0.min(min) }
+        if player_dies_in >= boss_dies_in {
+            min = player.0.min(min)
+        }
     }
     min
 }
@@ -32,7 +40,9 @@ fn part_b(input: String) -> usize {
 
         let player_dies_in = (player_hp + boss_dmg_to_player - 1) / boss_dmg_to_player;
         let boss_dies_in = (boss_hp + player_dmg_to_boss - 1) / player_dmg_to_boss;
-        if player_dies_in < boss_dies_in { max = player.0.max(max) }
+        if player_dies_in < boss_dies_in {
+            max = player.0.max(max)
+        }
     }
     max
 }
@@ -46,24 +56,18 @@ fn create_combinations(input: String) -> (i32, i32, i32, Vec<(usize, i32, i32)>)
     let (_, right) = lines[2].split_once(": ").unwrap();
     let boss_armor = right.parse::<i32>().unwrap();
 
-    let weapons = vec! {
-        (8, 4, 0),
-        (10, 5, 0),
-        (25, 6, 0),
-        (40, 7, 0),
-        (74, 8, 0),
-    };
+    let weapons = vec![(8, 4, 0), (10, 5, 0), (25, 6, 0), (40, 7, 0), (74, 8, 0)];
 
-    let armors = vec! {
+    let armors = vec![
         (13, 0, 1),
         (31, 0, 2),
         (53, 0, 3),
         (75, 0, 4),
         (102, 0, 5),
         (0, 0, 0), // Dummy
-    };
+    ];
 
-    let rings = vec! {
+    let rings = vec![
         (25, 1, 0),
         (50, 2, 0),
         (100, 3, 0),
@@ -72,19 +76,21 @@ fn create_combinations(input: String) -> (i32, i32, i32, Vec<(usize, i32, i32)>)
         (80, 0, 3),
         (0, 0, 0), // Dummy
         (0, 0, 0), // Dummy
-    };
+    ];
 
-    let mut combinations = vec!();
+    let mut combinations = vec![];
     for wi in 0..weapons.len() {
         for ai in 0..armors.len() {
             for r1i in 0..rings.len() {
                 for r2i in 0..rings.len() {
-                    if r1i == r2i { continue }
+                    if r1i == r2i {
+                        continue;
+                    }
 
                     combinations.push((
                         weapons[wi].0 + armors[ai].0 + rings[r1i].0 + rings[r2i].0,
                         weapons[wi].1 + armors[ai].1 + rings[r1i].1 + rings[r2i].1,
-                        weapons[wi].2 + armors[ai].2 + rings[r1i].2 + rings[r2i].2
+                        weapons[wi].2 + armors[ai].2 + rings[r1i].2 + rings[r2i].2,
                     ));
                 }
             }
@@ -101,7 +107,13 @@ mod day21_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(121, part_a(fs::read_to_string("input/2015/day21/input.txt").unwrap()));
-        assert_eq!(201, part_b(fs::read_to_string("input/2015/day21/input.txt").unwrap()));
+        assert_eq!(
+            121,
+            part_a(fs::read_to_string("input/2015/day21/input.txt").unwrap())
+        );
+        assert_eq!(
+            201,
+            part_b(fs::read_to_string("input/2015/day21/input.txt").unwrap())
+        );
     }
 }

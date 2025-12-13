@@ -1,15 +1,25 @@
-use std::collections::{HashSet};
+use std::collections::HashSet;
 use std::fs;
 
 pub(crate) fn day21() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 64));
-    println!("{}", part_b(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 26501365));
+    println!(
+        "{}",
+        part_a(
+            fs::read_to_string("input/2023/day21/input.txt").unwrap(),
+            64
+        )
+    );
+    println!(
+        "{}",
+        part_b(
+            fs::read_to_string("input/2023/day21/input.txt").unwrap(),
+            26501365
+        )
+    );
 }
 
 fn part_a(input: String, max_steps: usize) -> usize {
-    let matrix: Vec<Vec<char>> = input.lines().map(|line| {
-        line.chars().collect()
-    }).collect();
+    let matrix: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
     let mut start: (usize, usize) = (0, 0);
     'outer: for r in 0..matrix.len() {
@@ -27,16 +37,29 @@ fn part_a(input: String, max_steps: usize) -> usize {
     for _ in 0..max_steps {
         let mut new_positions = HashSet::new();
         for pos in &positions {
-            if matrix[pos.0][pos.1] == '#' { continue; }
-            if pos.0 > 0 { new_positions.insert((pos.0 - 1, pos.1)); }
-            if pos.0 < matrix.len() - 1 { new_positions.insert((pos.0 + 1, pos.1)); }
-            if pos.1 > 0 { new_positions.insert((pos.0, pos.1 - 1)); }
-            if pos.1 < matrix[pos.0].len() - 1 { new_positions.insert((pos.0, pos.1 + 1)); }
+            if matrix[pos.0][pos.1] == '#' {
+                continue;
+            }
+            if pos.0 > 0 {
+                new_positions.insert((pos.0 - 1, pos.1));
+            }
+            if pos.0 < matrix.len() - 1 {
+                new_positions.insert((pos.0 + 1, pos.1));
+            }
+            if pos.1 > 0 {
+                new_positions.insert((pos.0, pos.1 - 1));
+            }
+            if pos.1 < matrix[pos.0].len() - 1 {
+                new_positions.insert((pos.0, pos.1 + 1));
+            }
         }
         positions = new_positions
     }
 
-    positions.iter().filter(|(r, c)| matrix[*r][*c] != '#').count()
+    positions
+        .iter()
+        .filter(|(r, c)| matrix[*r][*c] != '#')
+        .count()
 }
 
 fn part_b(_input: String, max_steps: usize) -> usize {
@@ -75,7 +98,6 @@ fn part_b(_input: String, max_steps: usize) -> usize {
     //     }
     // }
 
-
     // // This finds that the diff between diffs is 30188, so this is a quadratic polynomial
     // let mut nums: Vec<i32> = vec!(3835, 34125, 94603);
     // while nums.iter().any(|a| *a > 0) {
@@ -87,7 +109,7 @@ fn part_b(_input: String, max_steps: usize) -> usize {
     //     nums = new_nums;
     // }
 
-    let nums = vec!(3835, 34125, 94603);
+    let nums = vec![3835, 34125, 94603];
     let n = max_steps / 131;
 
     let n0 = nums[0];
@@ -114,7 +136,10 @@ mod day21_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(16, part_a(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 6));
+        assert_eq!(
+            16,
+            part_a(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 6)
+        );
         assert_eq!(4, wrap(-1, 5));
         // assert_eq!(1594, part_b(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 50));
         // assert_eq!(6536, part_b(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 100));
@@ -122,7 +147,19 @@ mod day21_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(3733, part_a(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 64));
-        assert_eq!(617729401414635, part_b(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 26501365));
+        assert_eq!(
+            3733,
+            part_a(
+                fs::read_to_string("input/2023/day21/input.txt").unwrap(),
+                64
+            )
+        );
+        assert_eq!(
+            617729401414635,
+            part_b(
+                fs::read_to_string("input/2023/day21/input.txt").unwrap(),
+                26501365
+            )
+        );
     }
 }

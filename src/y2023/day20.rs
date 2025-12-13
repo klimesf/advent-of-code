@@ -1,10 +1,16 @@
+use crate::utils::toolbox::lcm_64;
 use std::collections::{HashMap, VecDeque};
 use std::fs;
-use crate::utils::toolbox::lcm_64;
 
 pub(crate) fn day20() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -18,7 +24,7 @@ fn part_a(input: String) -> usize {
             '%' => Type::FlipFlop,
             '&' => Type::Conjunction,
             'b' => Type::Broadcaster,
-            c => panic!("unknown type {}", c)
+            c => panic!("unknown type {}", c),
         };
 
         let name_fr = &name[1..name.len()];
@@ -33,7 +39,10 @@ fn part_a(input: String) -> usize {
         dests.iter().for_each(|dest| {
             if let Some(tp) = modules.get(dest) {
                 if *tp == Type::Conjunction {
-                    conjunction_states.entry(dest).or_insert(HashMap::new()).insert(from, false);
+                    conjunction_states
+                        .entry(dest)
+                        .or_insert(HashMap::new())
+                        .insert(from, false);
                 }
             }
         })
@@ -44,13 +53,21 @@ fn part_a(input: String) -> usize {
         let mut stack = VecDeque::new();
         stack.push_back((false, "roadcaster", "button"));
         while let Some((high, key, from)) = stack.pop_front() {
-            if high { ans = (ans.0 + 1, ans.1) } else { ans = (ans.0, ans.1 + 1) }
+            if high {
+                ans = (ans.0 + 1, ans.1)
+            } else {
+                ans = (ans.0, ans.1 + 1)
+            }
 
-            if !modules.contains_key(key) { continue }
+            if !modules.contains_key(key) {
+                continue;
+            }
             let send_high: bool;
             match *modules.get(key).unwrap() {
                 Type::FlipFlop => {
-                    if high { continue; }
+                    if high {
+                        continue;
+                    }
                     let state = *flip_flop_states.entry(key).or_insert(false);
                     flip_flop_states.insert(key, !state);
                     send_high = !state;
@@ -58,9 +75,13 @@ fn part_a(input: String) -> usize {
                 Type::Conjunction => {
                     let state = conjunction_states.entry(key).or_insert(HashMap::new());
                     state.insert(from, high);
-                    if state.values().all(|v| *v) { send_high = false } else { send_high = true }
+                    if state.values().all(|v| *v) {
+                        send_high = false
+                    } else {
+                        send_high = true
+                    }
                 }
-                Type::Broadcaster => { send_high = high }
+                Type::Broadcaster => send_high = high,
             }
             for dest in destinations.get(key).unwrap() {
                 stack.push_back((send_high, dest, key));
@@ -81,7 +102,7 @@ fn part_b(input: String) -> i64 {
             '%' => Type::FlipFlop,
             '&' => Type::Conjunction,
             'b' => Type::Broadcaster,
-            c => panic!("unknown type {}", c)
+            c => panic!("unknown type {}", c),
         };
 
         let name_fr = &name[1..name.len()];
@@ -96,7 +117,10 @@ fn part_b(input: String) -> i64 {
         dests.iter().for_each(|dest| {
             if let Some(tp) = modules.get(dest) {
                 if *tp == Type::Conjunction {
-                    conjunction_states.entry(dest).or_insert(HashMap::new()).insert(from, false);
+                    conjunction_states
+                        .entry(dest)
+                        .or_insert(HashMap::new())
+                        .insert(from, false);
                 }
             }
         })
@@ -125,7 +149,11 @@ fn part_b(input: String) -> i64 {
             if key == "kk" && !high {
                 lcms.insert("kk", ans);
             }
-            if lcms.contains_key("vt") && lcms.contains_key("sk") && lcms.contains_key("xc") && lcms.contains_key("kk") {
+            if lcms.contains_key("vt")
+                && lcms.contains_key("sk")
+                && lcms.contains_key("xc")
+                && lcms.contains_key("kk")
+            {
                 let vt = *lcms.get("vt").unwrap();
                 let sk = *lcms.get("sk").unwrap();
                 let xc = *lcms.get("xc").unwrap();
@@ -137,11 +165,15 @@ fn part_b(input: String) -> i64 {
                 return ans;
             }
 
-            if !modules.contains_key(key) { continue }
+            if !modules.contains_key(key) {
+                continue;
+            }
             let send_high: bool;
             match *modules.get(key).unwrap() {
                 Type::FlipFlop => {
-                    if high { continue; }
+                    if high {
+                        continue;
+                    }
                     let state = *flip_flop_states.entry(key).or_insert(false);
                     flip_flop_states.insert(key, !state);
                     send_high = !state;
@@ -149,9 +181,13 @@ fn part_b(input: String) -> i64 {
                 Type::Conjunction => {
                     let state = conjunction_states.entry(key).or_insert(HashMap::new());
                     state.insert(from, high);
-                    if state.values().all(|v| *v) { send_high = false } else { send_high = true }
+                    if state.values().all(|v| *v) {
+                        send_high = false
+                    } else {
+                        send_high = true
+                    }
                 }
-                Type::Broadcaster => { send_high = high }
+                Type::Broadcaster => send_high = high,
             }
             for dest in destinations.get(key).unwrap() {
                 stack.push_back((send_high, dest, key));
@@ -175,13 +211,25 @@ mod day20_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(32000000, part_a(fs::read_to_string("input/2023/day20/test.txt").unwrap()));
-        assert_eq!(11687500, part_a(fs::read_to_string("input/2023/day20/test_2.txt").unwrap()));
+        assert_eq!(
+            32000000,
+            part_a(fs::read_to_string("input/2023/day20/test.txt").unwrap())
+        );
+        assert_eq!(
+            11687500,
+            part_a(fs::read_to_string("input/2023/day20/test_2.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(818649769, part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
-        assert_eq!(246313604784977, part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
+        assert_eq!(
+            818649769,
+            part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap())
+        );
+        assert_eq!(
+            246313604784977,
+            part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap())
+        );
     }
 }

@@ -14,25 +14,28 @@ pub(crate) fn day22() {
 fn part_a(instructions: Vec<(i128, i128)>) {
     let len = 10007;
 
-    let shuffle_fn: (i128, i128) = instructions.iter().copied()
+    let shuffle_fn: (i128, i128) = instructions
+        .iter()
+        .copied()
         // g(f(x)) = acx + bc + d mod m
-        .reduce(|(a, b), (c, d)| {
-            ((a * c) % len, (((b * c) % len) + d) % len)
-        })
+        .reduce(|(a, b), (c, d)| ((a * c) % len, (((b * c) % len) + d) % len))
         .unwrap();
 
-    println!("Position of card 2019 is {}", (2019 * shuffle_fn.0 + shuffle_fn.1) % len);
+    println!(
+        "Position of card 2019 is {}",
+        (2019 * shuffle_fn.0 + shuffle_fn.1) % len
+    );
 }
 
 fn part_b(instructions: Vec<(i128, i128)>) {
     let m = 119315717514047;
     let k = 101741582076661;
 
-    let shuffle_fn: (i128, i128) = instructions.iter().copied()
+    let shuffle_fn: (i128, i128) = instructions
+        .iter()
+        .copied()
         // g(f(x)) = acx + bc + d mod m
-        .reduce(|(a, b), (c, d)| {
-            ((a * c) % m, (((b * c) % m) + d) % m)
-        })
+        .reduce(|(a, b), (c, d)| ((a * c) % m, (((b * c) % m) + d) % m))
         .unwrap();
 
     // Now we need to apply shuffle function k = 101741582076661 times within modulo m = 119315717514047
@@ -40,7 +43,8 @@ fn part_b(instructions: Vec<(i128, i128)>) {
     let a_to_the_k = pow_mod(shuffle_fn.0, k, m);
     let fn_to_the_k: (i128, i128) = (
         a_to_the_k,
-        ((((shuffle_fn.1 % m) * ((1 - a_to_the_k) % m)) % m) * pow_mod(1 - shuffle_fn.0, m - 2, m)) % m
+        ((((shuffle_fn.1 % m) * ((1 - a_to_the_k) % m)) % m) * pow_mod(1 - shuffle_fn.0, m - 2, m))
+            % m,
     );
 
     // And finally, we need to inverse the function
@@ -52,7 +56,9 @@ fn part_b(instructions: Vec<(i128, i128)>) {
 
 fn prepare_instructions(input: &String) -> Vec<(i128, i128)> {
     let re = Regex::new(r"^(deal into new stack|deal with increment|cut)(\s[\-0-9]+)?$").unwrap();
-    input.trim().split("\n")
+    input
+        .trim()
+        .split("\n")
         // Parse each instruction
         .map(|s| {
             let captures = re.captures(s).unwrap();
@@ -64,19 +70,20 @@ fn prepare_instructions(input: &String) -> Vec<(i128, i128)> {
             (technique, n)
         })
         // Map each technique into linear congruential function
-        .map(|(technique, n)| {
-            match technique {
-                "deal into new stack" => { (-1, -1) }
-                "cut" => { (1, -n) }
-                "deal with increment" => { (n, 0) }
-                c => panic!("Unknown command: {}", c),
-            }
-        }).collect()
+        .map(|(technique, n)| match technique {
+            "deal into new stack" => (-1, -1),
+            "cut" => (1, -n),
+            "deal with increment" => (n, 0),
+            c => panic!("Unknown command: {}", c),
+        })
+        .collect()
 }
 
 // x ^ n mod m
 fn pow_mod(x: i128, n: i128, m: i128) -> i128 {
-    if n == 0 { return 1; }
+    if n == 0 {
+        return 1;
+    }
     let t = pow_mod(x, n / 2, m);
 
     if n % 2 == 0 {

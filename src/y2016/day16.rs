@@ -22,9 +22,12 @@ fn solve(disk_len: usize, initial: &str) -> String {
 fn dragon_curve(a: Vec<char>) -> Vec<char> {
     let mut b = a.clone();
     b.reverse();
-    b = b.iter().map(|c| if *c == '1' { '0' } else { '1' }).collect();
+    b = b
+        .iter()
+        .map(|c| if *c == '1' { '0' } else { '1' })
+        .collect();
 
-    let mut ans = vec!();
+    let mut ans = vec![];
     for i in 0..a.len() {
         ans.push(a[i]);
     }
@@ -36,12 +39,16 @@ fn dragon_curve(a: Vec<char>) -> Vec<char> {
 }
 
 fn checksum(mut data: Vec<char>) -> Vec<char> {
-    data = data.into_iter().tuples()
+    data = data
+        .into_iter()
+        .tuples()
         .map(|(a, b)| if a == b { '1' } else { '0' })
         .collect();
 
     while data.len() % 2 == 0 {
-        data = data.into_iter().tuples()
+        data = data
+            .into_iter()
+            .tuples()
             .map(|(a, b)| if a == b { '1' } else { '0' })
             .collect();
     }

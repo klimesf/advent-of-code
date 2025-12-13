@@ -16,15 +16,18 @@ pub(crate) fn day20() {
 type Particle = ((i32, i32, i32), (i32, i32, i32), (i32, i32, i32));
 
 fn find_closest(particles: &Vec<Particle>) -> usize {
-    particles.iter().enumerate()
+    particles
+        .iter()
+        .enumerate()
         .map(|(i, (_, _, a))| (i, a.0.abs() + a.1.abs() + a.2.abs()))
         .min_by(|a, b| a.1.cmp(&b.1))
-        .unwrap().0
+        .unwrap()
+        .0
 }
 
 fn resolve_collisions(particles: &Vec<Particle>) -> usize {
-    let mut surviving_particles: HashMap<usize, Particle> = particles.iter().enumerate()
-        .map(|(i, p)| (i, *p)).collect();
+    let mut surviving_particles: HashMap<usize, Particle> =
+        particles.iter().enumerate().map(|(i, p)| (i, *p)).collect();
 
     for _ in 0..50 {
         let mut next_generation = HashMap::new();
@@ -35,15 +38,21 @@ fn resolve_collisions(particles: &Vec<Particle>) -> usize {
             v = (v.0 + a.0, v.1 + a.1, v.2 + a.2);
             p = (p.0 + v.0, p.1 + v.1, p.2 + v.2);
             next_generation.insert(*id, (p, v, *a));
-            collision_map.entry(p).or_insert(vec!()).push(*id);
+            collision_map.entry(p).or_insert(vec![]).push(*id);
         }
 
         for (_, ids) in &collision_map {
-            if ids.len() < 2 { continue; }
+            if ids.len() < 2 {
+                continue;
+            }
             for id in ids {
                 match next_generation.entry(*id) {
-                    Entry::Occupied(o) => { o.remove_entry(); }
-                    _ => { panic!("Removing already removed entry {}", id) }
+                    Entry::Occupied(o) => {
+                        o.remove_entry();
+                    }
+                    _ => {
+                        panic!("Removing already removed entry {}", id)
+                    }
                 }
             }
         }
@@ -55,26 +64,29 @@ fn resolve_collisions(particles: &Vec<Particle>) -> usize {
 
 fn parse(input: &str) -> Vec<Particle> {
     let re = Regex::new(r"^p=<([\-0-9]+),([\-0-9]+),([\-0-9]+)>, v=<([\-0-9]+),([\-0-9]+),([\-0-9]+)>, a=<([\-0-9]+),([\-0-9]+),([\-0-9]+)>$").unwrap();
-    input.lines().map(|line| {
-        let g = re.captures(line).unwrap();
-        let px = parse_i32(g.get(1));
-        let py = parse_i32(g.get(2));
-        let pz = parse_i32(g.get(3));
-        let vx = parse_i32(g.get(4));
-        let vy = parse_i32(g.get(5));
-        let vz = parse_i32(g.get(6));
-        let ax = parse_i32(g.get(7));
-        let ay = parse_i32(g.get(8));
-        let az = parse_i32(g.get(9));
-        ((px, py, pz), (vx, vy, vz), (ax, ay, az))
-    }).collect()
+    input
+        .lines()
+        .map(|line| {
+            let g = re.captures(line).unwrap();
+            let px = parse_i32(g.get(1));
+            let py = parse_i32(g.get(2));
+            let pz = parse_i32(g.get(3));
+            let vx = parse_i32(g.get(4));
+            let vy = parse_i32(g.get(5));
+            let vz = parse_i32(g.get(6));
+            let ax = parse_i32(g.get(7));
+            let ay = parse_i32(g.get(8));
+            let az = parse_i32(g.get(9));
+            ((px, py, pz), (vx, vy, vz), (ax, ay, az))
+        })
+        .collect()
 }
 
 #[cfg(test)]
 mod day20_tests {
     use std::fs;
 
-    use crate::y2017::day20::{parse, find_closest, resolve_collisions};
+    use crate::y2017::day20::{find_closest, parse, resolve_collisions};
 
     #[test]
     fn test_works() {

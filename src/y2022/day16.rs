@@ -1,13 +1,15 @@
+use regex::Regex;
 use std::collections::{HashMap, VecDeque};
 use std::fs;
-use regex::{Regex};
 
 pub(crate) fn day16() {
     let input = fs::read_to_string("input/2022/day16/input.txt").unwrap();
     let mut pressures: HashMap<&str, i32> = HashMap::new();
     let mut adjacency_list: HashMap<&str, Vec<&str>> = HashMap::new();
 
-    let re = Regex::new(r"^Valve ([A-Z]+) has flow rate=([0-9]+); tunnels? leads? to valves? (.+)$").unwrap();
+    let re =
+        Regex::new(r"^Valve ([A-Z]+) has flow rate=([0-9]+); tunnels? leads? to valves? (.+)$")
+            .unwrap();
     for line in input.lines().into_iter() {
         let g = re.captures(line).unwrap();
         let from = g.get(1).unwrap().as_str();
@@ -32,13 +34,17 @@ pub(crate) fn day16() {
                 continue;
             }
 
-            adjacency_list.get(valve).unwrap().iter()
+            adjacency_list
+                .get(valve)
+                .unwrap()
+                .iter()
                 .for_each(|neighbor| stack.push_back((neighbor, time + 1)))
         }
         distances.insert(from, distance_map);
     }
 
-    let valves_with_pressure: Vec<&str> = pressures.iter()
+    let valves_with_pressure: Vec<&str> = pressures
+        .iter()
         .filter(|(_, pressure)| **pressure > 0)
         .map(|(valve, _)| *valve)
         .collect();
@@ -59,11 +65,11 @@ fn solve<'a>(
     remaining: Vec<&'a str>,
     time: i32,
 ) -> (i32, Vec<&'a str>) {
-    let mut stack: Vec<(&str, Vec<&str>, i32, i32)> = vec!();
+    let mut stack: Vec<(&str, Vec<&str>, i32, i32)> = vec![];
     stack.push(("AA", remaining.clone(), time, 0));
 
     let mut max = i32::MIN;
-    let mut best_path = vec!();
+    let mut best_path = vec![];
     while !stack.is_empty() {
         let (from, remaining, time, total) = stack.pop().unwrap();
         if total > max {

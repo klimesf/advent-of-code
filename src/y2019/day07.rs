@@ -7,7 +7,11 @@ use std::thread::JoinHandle;
 
 pub(crate) fn day07() {
     let input = fs::read_to_string("input/2019/day07/input.txt").unwrap();
-    let intcode: Vec<i32> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let intcode: Vec<i32> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
 
     part_a(&intcode);
     part_b(&intcode);
@@ -56,7 +60,11 @@ fn part_b(intcode: &Vec<i32>) {
     println!("{}", max_e_output);
 }
 
-fn spawn_amp(intcode: &Vec<i32>, input: &BlockingQueue<i32>, output: &BlockingQueue<i32>) -> JoinHandle<()> {
+fn spawn_amp(
+    intcode: &Vec<i32>,
+    input: &BlockingQueue<i32>,
+    output: &BlockingQueue<i32>,
+) -> JoinHandle<()> {
     let intcode_clone = intcode.clone();
     let input_clone = input.clone();
     let output_clone = output.clone();
@@ -67,10 +75,12 @@ fn spawn_amp(intcode: &Vec<i32>, input: &BlockingQueue<i32>, output: &BlockingQu
 
 fn run_intcode(mut intcode: Vec<i32>, mut input: Vec<i32>) -> Vec<i32> {
     let mut instruction_ptr = 0;
-    let mut output = vec!();
+    let mut output = vec![];
 
     loop {
-        if intcode[instruction_ptr] > 9999 { panic!("c mode > 0, what to do?") }
+        if intcode[instruction_ptr] > 9999 {
+            panic!("c mode > 0, what to do?")
+        }
 
         let opcode = intcode[instruction_ptr] % 100;
         let a_mode = intcode[instruction_ptr] / 100 % 10;
@@ -149,19 +159,29 @@ fn run_intcode(mut intcode: Vec<i32>, mut input: Vec<i32>) -> Vec<i32> {
                 intcode[c] = if a_val == b_val { 1 } else { 0 };
                 instruction_ptr += 4;
             }
-            99 => { break; }
-            _ => { panic!("Unknown opcode {} at pos {}", opcode, instruction_ptr) }
+            99 => {
+                break;
+            }
+            _ => {
+                panic!("Unknown opcode {} at pos {}", opcode, instruction_ptr)
+            }
         }
     }
 
     return output;
 }
 
-fn run_intcode_parallel(mut intcode: Vec<i32>, input: &BlockingQueue<i32>, output: &BlockingQueue<i32>) {
+fn run_intcode_parallel(
+    mut intcode: Vec<i32>,
+    input: &BlockingQueue<i32>,
+    output: &BlockingQueue<i32>,
+) {
     let mut instruction_ptr = 0;
 
     loop {
-        if intcode[instruction_ptr] > 9999 { panic!("c mode > 0, what to do?") }
+        if intcode[instruction_ptr] > 9999 {
+            panic!("c mode > 0, what to do?")
+        }
 
         let opcode = intcode[instruction_ptr] % 100;
         let a_mode = intcode[instruction_ptr] / 100 % 10;
@@ -240,8 +260,12 @@ fn run_intcode_parallel(mut intcode: Vec<i32>, input: &BlockingQueue<i32>, outpu
                 intcode[c] = if a_val == b_val { 1 } else { 0 };
                 instruction_ptr += 4;
             }
-            99 => { break; }
-            _ => { panic!("Unknown opcode {} at pos {}", opcode, instruction_ptr) }
+            99 => {
+                break;
+            }
+            _ => {
+                panic!("Unknown opcode {} at pos {}", opcode, instruction_ptr)
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
+use crate::utils::toolbox::gcd;
 use std::collections::{HashMap, HashSet};
 use std::f32::consts::PI;
 use std::fs;
-use crate::utils::toolbox::gcd;
 
 type Coord = (i32, i32);
 
@@ -14,7 +14,9 @@ pub(crate) fn day10() {
     for (y, row) in input.trim().split('\n').enumerate() {
         for (x, val) in row.chars().enumerate() {
             match val {
-                '#' => { asteroids.insert((x as i32, y as i32)); }
+                '#' => {
+                    asteroids.insert((x as i32, y as i32));
+                }
                 _ => {}
             }
         }
@@ -26,7 +28,9 @@ pub(crate) fn day10() {
     let mut los: HashMap<Coord, Vec<Coord>> = HashMap::new();
     for asteroid in &asteroids {
         for other in &asteroids {
-            if asteroid == other { continue; }
+            if asteroid == other {
+                continue;
+            }
 
             // Check if we have a line of sight, if yes, add it to the map:
             // First, find the direction vector between the asteroids.
@@ -46,22 +50,27 @@ pub(crate) fn day10() {
             }
 
             if visible {
-                let edges = los.entry(*asteroid).or_insert(vec!());
+                let edges = los.entry(*asteroid).or_insert(vec![]);
                 edges.push(*other);
             }
         }
     }
 
-    let (station, station_count) = &los.iter()
+    let (station, station_count) = &los
+        .iter()
         .max_by(|(_, e1), (_, e2)| e1.len().cmp(&e2.len()))
         .unwrap();
-    println!("Station at {:?} sees {} asteroids", station, station_count.len());
+    println!(
+        "Station at {:?} sees {} asteroids",
+        station,
+        station_count.len()
+    );
     // --- Part B
 
     // Calculate angles between starting positions and the vector from station to each asteroid
     let mut targets = asteroids.clone();
     targets.remove(station);
-    let mut angles: Vec<(Coord, f32)> = vec!();
+    let mut angles: Vec<(Coord, f32)> = vec![];
     for target in &targets {
         let dir = direction(target.0 - station.0, target.1 - station.1);
         let angle = clockwise_angle((0, -dim), dir);
@@ -72,7 +81,7 @@ pub(crate) fn day10() {
     }
     angles.sort_by(|t1, t2| return t1.1.partial_cmp(&t2.1).unwrap());
 
-    let mut hits: Vec<Coord> = vec!();
+    let mut hits: Vec<Coord> = vec![];
     let mut i = 1;
     while !targets.is_empty() {
         for (dir, _) in &angles {
@@ -101,7 +110,11 @@ fn clockwise_angle(b: Coord, a: Coord) -> f32 {
     // It gives only degrees up to PI, both positive and negative.
     // But we want it to calculate the whole angle clockwise
     // So we need to transform to the whole circle by adding 2*PI in case it's negative..
-    return if angle < (0 as f32) { angle + PI + PI } else { angle };
+    return if angle < (0 as f32) {
+        angle + PI + PI
+    } else {
+        angle
+    };
 }
 
 fn direction(mut x: i32, mut y: i32) -> (i32, i32) {

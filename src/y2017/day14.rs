@@ -13,30 +13,37 @@ pub(crate) fn day14() {
 }
 
 fn parse(input: &str) -> Vec<Vec<bool>> {
-    (0..128).into_iter().map(|i| {
-        let hash = knot_hash(format!("{}-{}", input, i).as_str());
-        hash.chars().into_iter().tuples()
-            .map(|(a, b)| u8::from_str_radix(format!("{}{}", a, b).as_str(), 16).unwrap())
-            .flat_map(|mut num| {
-                let mut cell = vec!();
-                for _ in 0..8 {
-                    cell.push(num & 1 == 1);
-                    num = num >> 1;
-                }
-                cell.reverse();
-                cell
-            })
-            .collect()
-    }).collect()
+    (0..128)
+        .into_iter()
+        .map(|i| {
+            let hash = knot_hash(format!("{}-{}", input, i).as_str());
+            hash.chars()
+                .into_iter()
+                .tuples()
+                .map(|(a, b)| u8::from_str_radix(format!("{}{}", a, b).as_str(), 16).unwrap())
+                .flat_map(|mut num| {
+                    let mut cell = vec![];
+                    for _ in 0..8 {
+                        cell.push(num & 1 == 1);
+                        num = num >> 1;
+                    }
+                    cell.reverse();
+                    cell
+                })
+                .collect()
+        })
+        .collect()
 }
 
 fn count_used(data: &Vec<Vec<bool>>) -> usize {
-    data.iter().map(|row| row.iter().filter(|c| **c).count()).sum()
+    data.iter()
+        .map(|row| row.iter().filter(|c| **c).count())
+        .sum()
 }
 
 fn count_regions(data: &Vec<Vec<bool>>) -> usize {
     let mut visited: HashSet<(usize, usize)> = HashSet::new();
-    visited.reserve(128*128);
+    visited.reserve(128 * 128);
     let mut group_ctr = 0;
 
     for x in 0..128 {
@@ -48,11 +55,21 @@ fn count_regions(data: &Vec<Vec<bool>>) -> usize {
 
                 // Run BFS to each adjacent used cell
                 while let Some(next) = stack.pop_front() {
-                    if !visited.insert(next) { continue; }
-                    if next.0 > 0 && data[next.0 - 1][next.1] { stack.push_back((next.0 - 1, next.1)) }
-                    if next.0 < 127 && data[next.0 + 1][next.1] { stack.push_back((next.0 + 1, next.1)) }
-                    if next.1 > 0 && data[next.0][next.1 - 1] { stack.push_back((next.0, next.1 - 1)) }
-                    if next.1 < 127 && data[next.0][next.1 + 1] { stack.push_back((next.0, next.1 + 1)) }
+                    if !visited.insert(next) {
+                        continue;
+                    }
+                    if next.0 > 0 && data[next.0 - 1][next.1] {
+                        stack.push_back((next.0 - 1, next.1))
+                    }
+                    if next.0 < 127 && data[next.0 + 1][next.1] {
+                        stack.push_back((next.0 + 1, next.1))
+                    }
+                    if next.1 > 0 && data[next.0][next.1 - 1] {
+                        stack.push_back((next.0, next.1 - 1))
+                    }
+                    if next.1 < 127 && data[next.0][next.1 + 1] {
+                        stack.push_back((next.0, next.1 + 1))
+                    }
                 }
             }
         }

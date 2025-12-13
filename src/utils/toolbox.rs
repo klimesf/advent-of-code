@@ -67,21 +67,22 @@ pub(crate) fn parse_char(g: Option<Match>) -> char {
 
 #[allow(dead_code)]
 pub(crate) fn prime_factors(mut n: u32) -> Vec<u32> {
-    let mut ans = vec!();
+    let mut ans = vec![];
     while n % 2 == 0 {
         ans.push(2);
         n /= 2;
     }
 
     for i in (3..=(n as f64).sqrt() as u32).step_by(2) {
-        while n % i == 0
-        {
+        while n % i == 0 {
             ans.push(i);
             n /= i;
         }
     }
 
-    if n > 2 { ans.push(n) }
+    if n > 2 {
+        ans.push(n)
+    }
 
     ans
 }
@@ -112,7 +113,7 @@ macro_rules! measure {
 
 #[cfg(test)]
 mod toolbox_tests {
-    use crate::utils::toolbox::{prime_factors, manhattan_dist};
+    use crate::utils::toolbox::{manhattan_dist, prime_factors};
 
     #[test]
     fn prime_factors_works() {

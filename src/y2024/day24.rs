@@ -1,10 +1,14 @@
+use itertools::Itertools;
 use std::collections::{HashMap, VecDeque};
 use std::fs;
-use itertools::Itertools;
 
 pub fn day24(print_usize: fn(usize), print_string: fn(String)) {
-    print_usize(part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
-    print_string(part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
+    print_usize(part_a(
+        fs::read_to_string("input/2024/day24/input.txt").unwrap(),
+    ));
+    print_string(part_b(
+        fs::read_to_string("input/2024/day24/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
@@ -31,7 +35,8 @@ fn part_a(input: String) -> usize {
     eval_wires(variables.clone(), instructions.clone())
 }
 
-fn part_b(input: String) -> String {let (svars, sinstr) = input.split_once("\n\n").unwrap();
+fn part_b(input: String) -> String {
+    let (svars, sinstr) = input.split_once("\n\n").unwrap();
     let mut variables: HashMap<&str, usize> = HashMap::new();
 
     svars.lines().for_each(|line| {
@@ -39,7 +44,7 @@ fn part_b(input: String) -> String {let (svars, sinstr) = input.split_once("\n\n
         variables.insert(name, value.parse().unwrap());
     });
 
-    let mut instructions = vec!();
+    let mut instructions = vec![];
     sinstr.lines().for_each(|line| {
         let (op, to) = line.split_once(" -> ").unwrap();
         let op_parts = op.split_whitespace().collect::<Vec<&str>>();
@@ -51,7 +56,8 @@ fn part_b(input: String) -> String {let (svars, sinstr) = input.split_once("\n\n
         instructions.push((*left, *middle, *right, to));
     });
 
-    let x_str = variables.iter()
+    let x_str = variables
+        .iter()
         .filter(|(k, _)| k.starts_with("x"))
         .sorted_by(|(k1, _), (k2, _)| k1.cmp(k2))
         .map(|(_, v)| v.to_string())
@@ -59,7 +65,8 @@ fn part_b(input: String) -> String {let (svars, sinstr) = input.split_once("\n\n
         .join("");
     let _x = usize::from_str_radix(x_str.as_str(), 2).unwrap();
 
-    let y_str = variables.iter()
+    let y_str = variables
+        .iter()
         .filter(|(k, _)| k.starts_with("y"))
         .sorted_by(|(k1, _), (k2, _)| k1.cmp(k2))
         .map(|(_, v)| v.to_string())
@@ -98,7 +105,12 @@ fn part_b(input: String) -> String {let (svars, sinstr) = input.split_once("\n\n
     // z18 swap skf
     // nvr swap wkr
 
-    for pair in [["z07", "bjm"], ["z13", "hsw"], ["z18", "skf"], ["nvr", "wkr"]] {
+    for pair in [
+        ["z07", "bjm"],
+        ["z13", "hsw"],
+        ["z18", "skf"],
+        ["nvr", "wkr"],
+    ] {
         let mut swap_from = 0;
         let mut swap_from_instr = ("", "", "", "");
         for i in 0..instructions.len() {
@@ -127,10 +139,16 @@ fn part_b(input: String) -> String {let (svars, sinstr) = input.split_once("\n\n
 
     // You can eval here
 
-    ["z07", "bjm", "hsw", "skf", "z13", "z18", "nvr", "wkr"].iter().sorted().join(",")
+    ["z07", "bjm", "hsw", "skf", "z13", "z18", "nvr", "wkr"]
+        .iter()
+        .sorted()
+        .join(",")
 }
 
-fn eval_wires<'a>(mut variables: HashMap<&'a str, usize>, mut instructions: VecDeque<(&str, &str, &str, &'a str)>) -> usize {
+fn eval_wires<'a>(
+    mut variables: HashMap<&'a str, usize>,
+    mut instructions: VecDeque<(&str, &str, &str, &'a str)>,
+) -> usize {
     while let Some((left, op, right, to)) = instructions.pop_front() {
         if !variables.contains_key(left) || !variables.contains_key(right) {
             instructions.push_back((left, op, right, to));
@@ -159,11 +177,12 @@ fn eval_wires<'a>(mut variables: HashMap<&'a str, usize>, mut instructions: VecD
                     variables.insert(to, 0);
                 }
             }
-            _ => panic!()
+            _ => panic!(),
         }
     }
 
-    let bin = variables.iter()
+    let bin = variables
+        .iter()
         .filter(|(k, _)| k.starts_with("z"))
         .sorted_by(|(k1, _), (k2, _)| k1.cmp(k2))
         .map(|(_, v)| v.to_string())
@@ -181,13 +200,25 @@ mod day24_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(4, part_a(fs::read_to_string("input/2024/day24/test.txt").unwrap()));
-        assert_eq!(2024, part_a(fs::read_to_string("input/2024/day24/test_2.txt").unwrap()));
+        assert_eq!(
+            4,
+            part_a(fs::read_to_string("input/2024/day24/test.txt").unwrap())
+        );
+        assert_eq!(
+            2024,
+            part_a(fs::read_to_string("input/2024/day24/test_2.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(56729630917616, part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
-        assert_eq!("bjm,hsw,nvr,skf,wkr,z07,z13,z18", part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
+        assert_eq!(
+            56729630917616,
+            part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap())
+        );
+        assert_eq!(
+            "bjm,hsw,nvr,skf,wkr,z07,z13,z18",
+            part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap())
+        );
     }
 }

@@ -1,12 +1,12 @@
-use std::fs;
+use rayon::iter::ParallelIterator;
 use rayon::iter::{IntoParallelRefIterator, ParallelBridge};
 use regex::{Match, Regex};
-use rayon::iter::ParallelIterator;
+use std::fs;
 
 pub(crate) fn day19() {
     let input = fs::read_to_string("input/2022/day19/input.txt").unwrap();
     let re = Regex::new(r"^Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore. Each clay robot costs ([0-9]+) ore. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian.$").unwrap();
-    let mut blueprints = vec!();
+    let mut blueprints = vec![];
     for line in input.lines().into_iter() {
         let g = re.captures(line).unwrap();
         let costs = (
@@ -19,17 +19,21 @@ pub(crate) fn day19() {
         blueprints.push(costs);
     }
 
-    let ans = blueprints.par_iter()
-        .map(|(id, ore_cost, clay_cost, obsidian_cost, geode_cost)|
-            solve(24, *ore_cost, *clay_cost, *obsidian_cost, *geode_cost) * id)
+    let ans = blueprints
+        .par_iter()
+        .map(|(id, ore_cost, clay_cost, obsidian_cost, geode_cost)| {
+            solve(24, *ore_cost, *clay_cost, *obsidian_cost, *geode_cost) * id
+        })
         .sum::<i32>();
     println!("{}", ans);
 
-    let ans = blueprints.iter()
+    let ans = blueprints
+        .iter()
         .take(3)
         .par_bridge()
-        .map(|(_, ore_cost, clay_cost, obsidian_cost, geode_cost)|
-            solve(32, *ore_cost, *clay_cost, *obsidian_cost, *geode_cost))
+        .map(|(_, ore_cost, clay_cost, obsidian_cost, geode_cost)| {
+            solve(32, *ore_cost, *clay_cost, *obsidian_cost, *geode_cost)
+        })
         .product::<i32>();
     println!("{}", ans);
 }
@@ -43,14 +47,20 @@ type Cost = (i32, i32, i32);
 fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_cost: Cost) -> i32 {
     let robot_ctr = [1, 0, 0, 0];
     let resource_ctr = [0; 4];
-    let max_ore_cost = vec!(ore_cost.0, clay_cost.0, obsidian_cost.0, geode_cost.0).into_iter().max().unwrap();
-    let max_clay_cost = vec!(ore_cost.1, clay_cost.1, obsidian_cost.1, geode_cost.1).into_iter().max().unwrap();
-    let mut states = vec!();
+    let max_ore_cost = vec![ore_cost.0, clay_cost.0, obsidian_cost.0, geode_cost.0]
+        .into_iter()
+        .max()
+        .unwrap();
+    let max_clay_cost = vec![ore_cost.1, clay_cost.1, obsidian_cost.1, geode_cost.1]
+        .into_iter()
+        .max()
+        .unwrap();
+    let mut states = vec![];
     states.push((0, robot_ctr.clone(), resource_ctr.clone()));
 
     let mut max = 0;
     while !states.is_empty() {
-        let (minute,robot_ctr, resource_ctr) = states.pop().unwrap();
+        let (minute, robot_ctr, resource_ctr) = states.pop().unwrap();
         if minute == time {
             if resource_ctr[3] > max {
                 max = resource_ctr[3];
@@ -70,7 +80,8 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build ore bot next
         if robot_ctr[0] < max_ore_cost {
-            let ore_available_in = ((ore_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let ore_available_in =
+                ((ore_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
             if minute + ore_available_in <= time {
                 branch_count += 1;
                 let mut res_clone = resource_ctr.clone();
@@ -86,7 +97,8 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build clay bot next
         if robot_ctr[1] < max_clay_cost {
-            let ore_available_in = ((clay_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let ore_available_in =
+                ((clay_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
             if minute + ore_available_in <= time {
                 branch_count += 1;
                 let mut res_clone = resource_ctr.clone();
@@ -102,8 +114,10 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build obsidian bot next
         if robot_ctr[0] > 0 && robot_ctr[1] > 0 {
-            let ore_available_in = ((obsidian_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
-            let clay_available_in = ((obsidian_cost.1 - resource_ctr[1] + robot_ctr[1] - 1) / robot_ctr[1]).max(0) + 1;
+            let ore_available_in =
+                ((obsidian_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let clay_available_in =
+                ((obsidian_cost.1 - resource_ctr[1] + robot_ctr[1] - 1) / robot_ctr[1]).max(0) + 1;
             let robot_available_in = ore_available_in.max(clay_available_in);
             if minute + robot_available_in <= time {
                 branch_count += 1;
@@ -120,8 +134,10 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build geode bot next
         if robot_ctr[0] > 0 && robot_ctr[2] > 0 {
-            let ore_available_in = ((geode_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
-            let obsidian_available_in = ((geode_cost.2 - resource_ctr[2] + robot_ctr[2] - 1) / robot_ctr[2]).max(0) + 1;
+            let ore_available_in =
+                ((geode_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let obsidian_available_in =
+                ((geode_cost.2 - resource_ctr[2] + robot_ctr[2] - 1) / robot_ctr[2]).max(0) + 1;
             let robot_available_in = ore_available_in.max(obsidian_available_in);
             if minute + robot_available_in <= time {
                 branch_count += 1;

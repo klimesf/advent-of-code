@@ -1,30 +1,41 @@
 use std::fs;
 
 pub(crate) fn day15() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day15/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2023/day15/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2023/day15/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2023/day15/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> u32 {
-    input.split(",").map(|seq| {
-        let mut ans = 0;
-        for c in seq.chars() {
-            let ci = c as u32;
-            ans += ci;
-            ans *= 17;
-            ans = ans % 256;
-        }
-        ans
-    }).sum()
+    input
+        .split(",")
+        .map(|seq| {
+            let mut ans = 0;
+            for c in seq.chars() {
+                let ci = c as u32;
+                ans += ci;
+                ans *= 17;
+                ans = ans % 256;
+            }
+            ans
+        })
+        .sum()
 }
 
 fn part_b(input: String) -> usize {
-    let mut boxes: Vec<Vec<(&str, usize)>> = vec! { vec!(); 256 };
+    let mut boxes: Vec<Vec<(&str, usize)>> = vec![vec!(); 256];
     input.split(",").for_each(|seq| {
         let mut label = String::new();
         let mut ans = 0;
         for c in seq.chars() {
-            if c == '-' || c == '=' { break; }
+            if c == '-' || c == '=' {
+                break;
+            }
             label.push(c);
 
             let ci = c as usize;
@@ -34,7 +45,8 @@ fn part_b(input: String) -> usize {
         }
 
         if seq.ends_with("-") {
-            boxes[ans] = boxes[ans].iter()
+            boxes[ans] = boxes[ans]
+                .iter()
                 .filter(|(l2, _)| l2 != &label.as_str())
                 .map(|v| *v)
                 .collect();
@@ -66,13 +78,25 @@ mod day15_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(1320, part_a(fs::read_to_string("input/2023/day15/test.txt").unwrap()));
-        assert_eq!(145, part_b(fs::read_to_string("input/2023/day15/test.txt").unwrap()));
+        assert_eq!(
+            1320,
+            part_a(fs::read_to_string("input/2023/day15/test.txt").unwrap())
+        );
+        assert_eq!(
+            145,
+            part_b(fs::read_to_string("input/2023/day15/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(495972, part_a(fs::read_to_string("input/2023/day15/input.txt").unwrap()));
-        assert_eq!(245223, part_b(fs::read_to_string("input/2023/day15/input.txt").unwrap()));
+        assert_eq!(
+            495972,
+            part_a(fs::read_to_string("input/2023/day15/input.txt").unwrap())
+        );
+        assert_eq!(
+            245223,
+            part_b(fs::read_to_string("input/2023/day15/input.txt").unwrap())
+        );
     }
 }

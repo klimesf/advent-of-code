@@ -14,17 +14,28 @@ pub(crate) fn day08() {
 }
 
 fn parse(input: &str) -> Vec<(&str, &str, i32, &str, &str, i32)> {
-    let re = Regex::new(r"^(.+) (inc|dec) ([\-0-9]+) if (.+) (==|>|<|>=|<=|!=) ([\-0-9]+)$").unwrap();
-    input.lines().map(|line| {
-        let g = re.captures(line).unwrap();
-        let target = g.get(1).unwrap().as_str();
-        let operand = g.get(2).unwrap().as_str();
-        let argument = parse_i32(g.get(3));
-        let condition_left = g.get(4).unwrap().as_str();
-        let condition = g.get(5).unwrap().as_str();
-        let condition_right = parse_i32(g.get(6));
-        (target, operand, argument, condition_left, condition, condition_right)
-    }).collect()
+    let re =
+        Regex::new(r"^(.+) (inc|dec) ([\-0-9]+) if (.+) (==|>|<|>=|<=|!=) ([\-0-9]+)$").unwrap();
+    input
+        .lines()
+        .map(|line| {
+            let g = re.captures(line).unwrap();
+            let target = g.get(1).unwrap().as_str();
+            let operand = g.get(2).unwrap().as_str();
+            let argument = parse_i32(g.get(3));
+            let condition_left = g.get(4).unwrap().as_str();
+            let condition = g.get(5).unwrap().as_str();
+            let condition_right = parse_i32(g.get(6));
+            (
+                target,
+                operand,
+                argument,
+                condition_left,
+                condition,
+                condition_right,
+            )
+        })
+        .collect()
 }
 
 fn interpret(instructions: &Vec<(&str, &str, i32, &str, &str, i32)>) -> (i32, i32) {
@@ -33,24 +44,28 @@ fn interpret(instructions: &Vec<(&str, &str, i32, &str, &str, i32)>) -> (i32, i3
     for (target, operand, argument, condition_left, condition, condition_right) in instructions {
         let value_left = *registers.entry(condition_left).or_insert(0);
         let condition_met = match *condition {
-            "==" => { value_left == *condition_right }
-            ">" => { value_left > *condition_right }
-            "<" => { value_left < *condition_right }
-            ">=" => { value_left >= *condition_right }
-            "<=" => { value_left <= *condition_right }
-            "!=" => { value_left != *condition_right }
-            _ => panic!("Unknown condition {}", condition)
+            "==" => value_left == *condition_right,
+            ">" => value_left > *condition_right,
+            "<" => value_left < *condition_right,
+            ">=" => value_left >= *condition_right,
+            "<=" => value_left <= *condition_right,
+            "!=" => value_left != *condition_right,
+            _ => panic!("Unknown condition {}", condition),
         };
 
-        if !condition_met { continue; }
+        if !condition_met {
+            continue;
+        }
         match *operand {
-            "inc" => { *registers.entry(target).or_insert(0) += argument }
-            "dec" => { *registers.entry(target).or_insert(0) -= argument }
-            _ => panic!("Unknown operand {}", operand)
+            "inc" => *registers.entry(target).or_insert(0) += argument,
+            "dec" => *registers.entry(target).or_insert(0) -= argument,
+            _ => panic!("Unknown operand {}", operand),
         }
 
         let local_max = *registers.values().max().unwrap();
-        if local_max > global_max { global_max = local_max }
+        if local_max > global_max {
+            global_max = local_max
+        }
     }
 
     (*registers.values().max().unwrap(), global_max)

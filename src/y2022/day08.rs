@@ -3,10 +3,10 @@ use std::fs;
 
 pub(crate) fn day08() {
     let input = fs::read_to_string("input/2022/day08/input.txt").unwrap();
-    let mut trees: Vec<Vec<i32>> = vec!();
+    let mut trees: Vec<Vec<i32>> = vec![];
 
     for line in input.lines() {
-        let mut row = vec!();
+        let mut row = vec![];
         for c in line.chars() {
             row.push(c.to_digit(10).unwrap() as i32)
         }

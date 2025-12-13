@@ -1,18 +1,22 @@
+use itertools::Itertools;
 use std::collections::HashMap;
 use std::fs;
-use itertools::Itertools;
 
 pub fn day23(print_usize: fn(usize), print_string: fn(String)) {
-    print_usize(part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
-    print_string(part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
+    print_usize(part_a(
+        fs::read_to_string("input/2024/day23/input.txt").unwrap(),
+    ));
+    print_string(part_b(
+        fs::read_to_string("input/2024/day23/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
     let mut adjacency_list: HashMap<&str, Vec<&str>> = HashMap::new();
     input.lines().for_each(|line| {
         let (l, r) = line.split_once('-').unwrap();
-        adjacency_list.entry(l).or_insert(vec!()).push(r);
-        adjacency_list.entry(r).or_insert(vec!()).push(l);
+        adjacency_list.entry(l).or_insert(vec![]).push(r);
+        adjacency_list.entry(r).or_insert(vec![]).push(l);
     });
 
     let keys = adjacency_list.keys().cloned().collect::<Vec<&str>>();
@@ -21,15 +25,17 @@ fn part_a(input: String) -> usize {
         .filter(|k| adjacency_list[*k].len() >= 2)
         .filter(|k| k.starts_with("t"))
         .map(|k| {
-            adjacency_list[*k].iter().combinations(2)
-                .filter(|comb|
+            adjacency_list[*k]
+                .iter()
+                .combinations(2)
+                .filter(|comb| {
                     adjacency_list[*k].contains(comb[0])
                         && adjacency_list[*k].contains(comb[1])
                         && adjacency_list[comb[0]].contains(k)
                         && adjacency_list[comb[0]].contains(comb[1])
                         && adjacency_list[comb[1]].contains(k)
                         && adjacency_list[comb[1]].contains(comb[0])
-                )
+                })
                 .map(|v| {
                     let mut comb = v.clone();
                     comb.push(k);
@@ -47,13 +53,17 @@ fn part_b(input: String) -> String {
     let mut adjacency_list: HashMap<&str, Vec<&str>> = HashMap::new();
     input.lines().for_each(|line| {
         let (l, r) = line.split_once('-').unwrap();
-        adjacency_list.entry(l).or_insert(vec!()).push(r);
-        adjacency_list.entry(r).or_insert(vec!()).push(l);
+        adjacency_list.entry(l).or_insert(vec![]).push(r);
+        adjacency_list.entry(r).or_insert(vec![]).push(l);
     });
-    let keys = adjacency_list.keys().cloned().sorted().collect::<Vec<&str>>();
+    let keys = adjacency_list
+        .keys()
+        .cloned()
+        .sorted()
+        .collect::<Vec<&str>>();
 
     let mut max = usize::MIN;
-    let mut max_clique = vec!();
+    let mut max_clique = vec![];
 
     for i in 0..keys.len() {
         let from = keys[i];
@@ -81,13 +91,25 @@ mod day23_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(7, part_a(fs::read_to_string("input/2024/day23/test.txt").unwrap()));
-        assert_eq!("co,de,ka,ta", part_b(fs::read_to_string("input/2024/day23/test.txt").unwrap()));
+        assert_eq!(
+            7,
+            part_a(fs::read_to_string("input/2024/day23/test.txt").unwrap())
+        );
+        assert_eq!(
+            "co,de,ka,ta",
+            part_b(fs::read_to_string("input/2024/day23/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1304, part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
-        assert_eq!("ao,es,fe,if,in,io,ky,qq,rd,rn,rv,vc,vl", part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
+        assert_eq!(
+            1304,
+            part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap())
+        );
+        assert_eq!(
+            "ao,es,fe,if,in,io,ky,qq,rd,rn,rv,vc,vl",
+            part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap())
+        );
     }
 }

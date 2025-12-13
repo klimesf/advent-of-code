@@ -1,8 +1,6 @@
 extern crate itertools;
 extern crate regex;
 
-use colored::Colorize;
-use std::env;
 use crate::measure;
 use crate::y2017::day01::day01;
 use crate::y2017::day02::day02;
@@ -29,6 +27,8 @@ use crate::y2017::day22::day22;
 use crate::y2017::day23::day23;
 use crate::y2017::day24::day24;
 use crate::y2017::day25::day25;
+use colored::Colorize;
+use std::env;
 
 mod day01;
 mod day02;
@@ -183,7 +183,10 @@ pub(crate) fn y2017() {
         measure!(day24());
     }
 
-    if args.contains(&"all".to_string()) || args.contains(&"day25".to_string()) || args.contains(&"latest".to_string()) {
+    if args.contains(&"all".to_string())
+        || args.contains(&"day25".to_string())
+        || args.contains(&"latest".to_string())
+    {
         println!("{}", format!("--- day25:").underline().green());
         measure!(day25());
     }

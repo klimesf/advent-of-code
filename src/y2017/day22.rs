@@ -13,7 +13,11 @@ fn parse(input: &str) -> ((i32, i32), HashSet<(i32, i32)>) {
     let mut start = (0, 0);
     input.lines().enumerate().for_each(|(x, line)| {
         start = ((x / 2) as i32, (x / 2) as i32);
-        line.chars().enumerate().for_each(|(y, c)| if c == '#' { map.insert((x as i32, y as i32)); })
+        line.chars().enumerate().for_each(|(y, c)| {
+            if c == '#' {
+                map.insert((x as i32, y as i32));
+            }
+        })
     });
     (start, map)
 }
@@ -47,7 +51,8 @@ enum Status {
 fn evolved_virus(start: (i32, i32), map: &HashSet<(i32, i32)>) -> usize {
     let mut dir = (-1, 0);
     let mut pos = start;
-    let mut statuses: HashMap<(i32, i32), Status> = map.iter().map(|pos| (*pos, Status::Infected)).collect();
+    let mut statuses: HashMap<(i32, i32), Status> =
+        map.iter().map(|pos| (*pos, Status::Infected)).collect();
     let mut ans = 0;
 
     for _ in 0..10000000 {
@@ -80,7 +85,7 @@ fn turn_left(dir: &(i32, i32)) -> (i32, i32) {
         (0, -1) => (1, 0),
         (1, 0) => (0, 1),
         (0, 1) => (-1, 0),
-        _ => panic!()
+        _ => panic!(),
     }
 }
 
@@ -90,14 +95,14 @@ fn turn_right(dir: &(i32, i32)) -> (i32, i32) {
         (0, 1) => (1, 0),
         (1, 0) => (0, -1),
         (0, -1) => (-1, 0),
-        _ => panic!()
+        _ => panic!(),
     }
 }
 
 #[cfg(test)]
 mod day22_tests {
-    use std::fs;
     use crate::y2017::day22::{evolved_virus, parse, virus};
+    use std::fs;
 
     #[test]
     fn test_works() {

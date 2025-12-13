@@ -1,5 +1,5 @@
-use std::{cmp, fs};
 use std::collections::HashMap;
+use std::{cmp, fs};
 
 pub(crate) fn day03() {
     let (a, b) = solve(fs::read_to_string("input/2023/day03/input.txt").unwrap());
@@ -10,7 +10,7 @@ pub(crate) fn day03() {
 fn solve(input: String) -> (u32, u32) {
     let engine: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
-    let mut digits: Vec<(usize, usize, usize, u32)> = vec!();
+    let mut digits: Vec<(usize, usize, usize, u32)> = vec![];
     let x_max = engine.len();
     let y_max = engine[0].len();
 
@@ -22,7 +22,7 @@ fn solve(input: String) -> (u32, u32) {
                 num = num * 10 + c.to_digit(10).unwrap();
                 start_y = cmp::min(y, start_y);
                 if y == y_max - 1 {
-                    digits.push((x, start_y, y , num));
+                    digits.push((x, start_y, y, num));
                 }
             } else {
                 if num > 0 {
@@ -45,7 +45,7 @@ fn solve(input: String) -> (u32, u32) {
                     if engine[dx][dy] != '.' && !engine[dx][dy].is_ascii_digit() {
                         sum_a += num;
                         if engine[dx][dy] == '*' {
-                            gears.entry((dx, dy)).or_insert(vec!()).push(*num);
+                            gears.entry((dx, dy)).or_insert(vec![]).push(*num);
                         }
                         return;
                     }
@@ -54,10 +54,14 @@ fn solve(input: String) -> (u32, u32) {
         }
     });
 
-    (sum_a, gears.values()
-        .filter(|nums| nums.len() > 1)
-        .map(|nums| nums.iter().map(|n| *n).product::<u32>())
-        .sum())
+    (
+        sum_a,
+        gears
+            .values()
+            .filter(|nums| nums.len() > 1)
+            .map(|nums| nums.iter().map(|n| *n).product::<u32>())
+            .sum(),
+    )
 }
 
 #[cfg(test)]
@@ -74,6 +78,9 @@ mod day03_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!((539713, 84159075), solve(fs::read_to_string("input/2023/day03/input.txt").unwrap()));
+        assert_eq!(
+            (539713, 84159075),
+            solve(fs::read_to_string("input/2023/day03/input.txt").unwrap())
+        );
     }
 }

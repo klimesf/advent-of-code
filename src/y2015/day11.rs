@@ -17,9 +17,13 @@ fn inc(pass: String) -> String {
 
     for i in (0..new_pass.len()).rev() {
         let mut new_c = new_pass[i] as u8 + 1;
-        if new_c > b'z' { new_c = b'a' }
+        if new_c > b'z' {
+            new_c = b'a'
+        }
         new_pass[i] = new_c as char;
-        if new_c != b'a' { break }
+        if new_c != b'a' {
+            break;
+        }
     }
 
     let mut ans = String::new();
@@ -30,9 +34,15 @@ fn inc(pass: String) -> String {
 }
 
 fn is_valid(pass: &str) -> bool {
-    if !has_increasing(pass) { return false; }
-    if pass.contains("i") || pass.contains("o") || pass.contains("l") { return false; }
-    if !has_two_pairs(pass) { return false; }
+    if !has_increasing(pass) {
+        return false;
+    }
+    if pass.contains("i") || pass.contains("o") || pass.contains("l") {
+        return false;
+    }
+    if !has_two_pairs(pass) {
+        return false;
+    }
     true
 }
 
@@ -42,7 +52,9 @@ fn has_increasing(pass: &str) -> bool {
         let c1 = cs[i];
         let c2 = cs[i + 1];
         let c3 = cs[i + 2];
-        if c1 + 1 == c2 && c2 + 1 == c3 { return true }
+        if c1 + 1 == c2 && c2 + 1 == c3 {
+            return true;
+        }
     }
     false
 }
@@ -55,8 +67,11 @@ fn has_two_pairs(pass: &str) -> bool {
         let c2 = cs[i + 1];
 
         if c1 == c2 {
-            if fp == c1 || fp == '_' { fp = c1 }
-            else { return true }
+            if fp == c1 || fp == '_' {
+                fp = c1
+            } else {
+                return true;
+            }
         }
     }
     false

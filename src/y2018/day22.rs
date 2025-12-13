@@ -3,8 +3,14 @@ use std::collections::{BinaryHeap, HashSet};
 use std::fs;
 
 pub(crate) fn day22() {
-    println!("{}", part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -26,11 +32,18 @@ fn part_b(input: String) -> usize {
 
     let mut visited = HashSet::new();
     let mut stack = BinaryHeap::new();
-    stack.push(Pos { x: 0, y: 0, time: 0, tool: Tool::Torch });
+    stack.push(Pos {
+        x: 0,
+        y: 0,
+        time: 0,
+        tool: Tool::Torch,
+    });
 
     while let Some(pos) = stack.pop() {
         if pos.x == target.0 && pos.y == target.1 {
-            if pos.tool != Tool::Torch { panic!("fuck off") }
+            if pos.tool != Tool::Torch {
+                panic!("fuck off")
+            }
             return pos.time;
         }
 
@@ -39,28 +52,97 @@ fn part_b(input: String) -> usize {
         }
 
         // Move left, right, up, down if possible
-        if pos.x > 0 && pos.tool.compatible_with(erosion_level[pos.y][pos.x - 1] % 3, (pos.x - 1, pos.y), target) {
-            stack.push(Pos { x: pos.x - 1, y: pos.y, time: pos.time + 1, tool: pos.tool })
+        if pos.x > 0
+            && pos.tool.compatible_with(
+                erosion_level[pos.y][pos.x - 1] % 3,
+                (pos.x - 1, pos.y),
+                target,
+            )
+        {
+            stack.push(Pos {
+                x: pos.x - 1,
+                y: pos.y,
+                time: pos.time + 1,
+                tool: pos.tool,
+            })
         }
-        if pos.tool.compatible_with(erosion_level[pos.y][pos.x + 1] % 3, (pos.x + 1, pos.y), target) {
-            stack.push(Pos { x: pos.x + 1, y: pos.y, time: pos.time + 1, tool: pos.tool })
+        if pos.tool.compatible_with(
+            erosion_level[pos.y][pos.x + 1] % 3,
+            (pos.x + 1, pos.y),
+            target,
+        ) {
+            stack.push(Pos {
+                x: pos.x + 1,
+                y: pos.y,
+                time: pos.time + 1,
+                tool: pos.tool,
+            })
         }
-        if pos.y > 0 && pos.tool.compatible_with(erosion_level[pos.y - 1][pos.x] % 3, (pos.x, pos.y - 1), target) {
-            stack.push(Pos { x: pos.x, y: pos.y - 1, time: pos.time + 1, tool: pos.tool })
+        if pos.y > 0
+            && pos.tool.compatible_with(
+                erosion_level[pos.y - 1][pos.x] % 3,
+                (pos.x, pos.y - 1),
+                target,
+            )
+        {
+            stack.push(Pos {
+                x: pos.x,
+                y: pos.y - 1,
+                time: pos.time + 1,
+                tool: pos.tool,
+            })
         }
-        if pos.tool.compatible_with(erosion_level[pos.y + 1][pos.x] % 3, (pos.x, pos.y + 1), target) {
-            stack.push(Pos { x: pos.x, y: pos.y + 1, time: pos.time + 1, tool: pos.tool })
+        if pos.tool.compatible_with(
+            erosion_level[pos.y + 1][pos.x] % 3,
+            (pos.x, pos.y + 1),
+            target,
+        ) {
+            stack.push(Pos {
+                x: pos.x,
+                y: pos.y + 1,
+                time: pos.time + 1,
+                tool: pos.tool,
+            })
         }
 
         // Switch tools without moving
-        if pos.tool != Tool::Torch && Tool::Torch.compatible_with(erosion_level[pos.y][pos.x] % 3, (pos.x, pos.y), target) {
-            stack.push(Pos { x: pos.x, y: pos.y, time: pos.time + 7, tool: Tool::Torch })
+        if pos.tool != Tool::Torch
+            && Tool::Torch.compatible_with(erosion_level[pos.y][pos.x] % 3, (pos.x, pos.y), target)
+        {
+            stack.push(Pos {
+                x: pos.x,
+                y: pos.y,
+                time: pos.time + 7,
+                tool: Tool::Torch,
+            })
         }
-        if pos.tool != Tool::ClimbingGear && Tool::ClimbingGear.compatible_with(erosion_level[pos.y][pos.x] % 3, (pos.x, pos.y), target) {
-            stack.push(Pos { x: pos.x, y: pos.y, time: pos.time + 7, tool: Tool::ClimbingGear })
+        if pos.tool != Tool::ClimbingGear
+            && Tool::ClimbingGear.compatible_with(
+                erosion_level[pos.y][pos.x] % 3,
+                (pos.x, pos.y),
+                target,
+            )
+        {
+            stack.push(Pos {
+                x: pos.x,
+                y: pos.y,
+                time: pos.time + 7,
+                tool: Tool::ClimbingGear,
+            })
         }
-        if pos.tool != Tool::Neither && Tool::Neither.compatible_with(erosion_level[pos.y][pos.x] % 3, (pos.x, pos.y), target) {
-            stack.push(Pos { x: pos.x, y: pos.y, time: pos.time + 7, tool: Tool::Neither })
+        if pos.tool != Tool::Neither
+            && Tool::Neither.compatible_with(
+                erosion_level[pos.y][pos.x] % 3,
+                (pos.x, pos.y),
+                target,
+            )
+        {
+            stack.push(Pos {
+                x: pos.x,
+                y: pos.y,
+                time: pos.time + 7,
+                tool: Tool::Neither,
+            })
         }
     }
     panic!("never reached target");
@@ -77,7 +159,7 @@ fn parse_input(input: String) -> (usize, (usize, usize)) {
 }
 
 fn get_erosion_level(depth: usize, target: (usize, usize)) -> Vec<Vec<usize>> {
-    let mut erosion_level = vec! {vec! {0; target.0 * 100}; target.1 * 20};
+    let mut erosion_level = vec![vec! {0; target.0 * 100}; target.1 * 20];
     for y in 0..target.1 * 20 {
         for x in 0..target.0 * 100 {
             if x == 0 && y == 0 {
@@ -89,7 +171,8 @@ fn get_erosion_level(depth: usize, target: (usize, usize)) -> Vec<Vec<usize>> {
             } else if y == 0 {
                 erosion_level[y][x] = (x * 16807 + depth) % 20183;
             } else {
-                erosion_level[y][x] = (erosion_level[y - 1][x] * erosion_level[y][x - 1] + depth) % 20183;
+                erosion_level[y][x] =
+                    (erosion_level[y - 1][x] * erosion_level[y][x - 1] + depth) % 20183;
             }
         }
     }
@@ -131,12 +214,14 @@ impl Tool {
 
         match terrain {
             // rocky
-            0 => { self == &Tool::Torch || self == &Tool::ClimbingGear }
+            0 => self == &Tool::Torch || self == &Tool::ClimbingGear,
             // wet
-            1 => { self == &Tool::ClimbingGear || self == &Tool::Neither }
+            1 => self == &Tool::ClimbingGear || self == &Tool::Neither,
             // narrow
-            2 => { self == &Tool::Torch || self == &Tool::Neither }
-            _ => { panic!("unknown terrain {terrain}") }
+            2 => self == &Tool::Torch || self == &Tool::Neither,
+            _ => {
+                panic!("unknown terrain {terrain}")
+            }
         }
     }
 }
@@ -149,13 +234,25 @@ mod day22_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(114, part_a(fs::read_to_string("input/2018/day22/test.txt").unwrap()));
-        assert_eq!(45, part_b(fs::read_to_string("input/2018/day22/test.txt").unwrap()));
+        assert_eq!(
+            114,
+            part_a(fs::read_to_string("input/2018/day22/test.txt").unwrap())
+        );
+        assert_eq!(
+            45,
+            part_b(fs::read_to_string("input/2018/day22/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(8090, part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
-        assert_eq!(992, part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
+        assert_eq!(
+            8090,
+            part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap())
+        );
+        assert_eq!(
+            992,
+            part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap())
+        );
     }
 }

@@ -1,8 +1,12 @@
 use std::fs;
 
 pub fn day13(print: fn(i64)) {
-    print(part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2024/day13/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2024/day13/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> i64 {
@@ -41,7 +45,7 @@ fn part_b(input: String) -> i64 {
 }
 
 fn parse_input(input: String) -> Vec<(i64, i64, i64, i64, i64, i64)> {
-    let mut configurations = vec!();
+    let mut configurations = vec![];
     input.split("\n\n").for_each(|block| {
         let lines = block.lines().collect::<Vec<&str>>();
         let (_, s_a) = lines[0].split_once(": ").unwrap();
@@ -124,12 +128,21 @@ mod day13_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(480, part_a(fs::read_to_string("input/2024/day13/test.txt").unwrap()));
+        assert_eq!(
+            480,
+            part_a(fs::read_to_string("input/2024/day13/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(33481, part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
-        assert_eq!(92572057880885, part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
+        assert_eq!(
+            33481,
+            part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap())
+        );
+        assert_eq!(
+            92572057880885,
+            part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap())
+        );
     }
 }

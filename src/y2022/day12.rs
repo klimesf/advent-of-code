@@ -4,7 +4,9 @@ use std::fs;
 
 pub(crate) fn day12() {
     let input = fs::read_to_string("input/2022/day12/input.txt").unwrap();
-    let map: Vec<Vec<char>> = input.lines().into_iter()
+    let map: Vec<Vec<char>> = input
+        .lines()
+        .into_iter()
         .map(|line| line.chars().into_iter().collect())
         .collect();
     let mut start = (0, 0);
@@ -26,7 +28,11 @@ fn dijkstra(start: (usize, usize), map: &Vec<Vec<char>>, stop_on: char) -> usize
     let mut to_visit: BinaryHeap<Pos> = BinaryHeap::new();
 
     dist.insert(start, 0);
-    to_visit.push(Pos { x: start.0, y: start.1, dist: 0 });
+    to_visit.push(Pos {
+        x: start.0,
+        y: start.1,
+        dist: 0,
+    });
 
     while let Some(pos) = to_visit.pop() {
         let c = map[pos.x][pos.y];
@@ -38,7 +44,7 @@ fn dijkstra(start: (usize, usize), map: &Vec<Vec<char>>, stop_on: char) -> usize
             continue;
         }
 
-        let mut neighbors = vec!();
+        let mut neighbors = vec![];
         if pos.x > 0 && is_within_range(c, map[pos.x - 1][pos.y]) {
             neighbors.push((pos.x - 1, pos.y));
         }
@@ -55,7 +61,11 @@ fn dijkstra(start: (usize, usize), map: &Vec<Vec<char>>, stop_on: char) -> usize
         for neighbor in neighbors {
             if *dist.get(&neighbor).unwrap_or(&usize::MAX) > pos.dist + 1 {
                 dist.insert(neighbor, pos.dist + 1);
-                to_visit.push(Pos { x: neighbor.0, y: neighbor.1, dist: pos.dist + 1 })
+                to_visit.push(Pos {
+                    x: neighbor.0,
+                    y: neighbor.1,
+                    dist: pos.dist + 1,
+                })
             }
         }
     }
@@ -92,7 +102,11 @@ fn is_within_range(from: char, to: char) -> bool {
     let from_u = from as u32;
     let to_u = to as u32;
 
-    return if from_u > to_u { from_u - to_u == 1 } else { true };
+    return if from_u > to_u {
+        from_u - to_u == 1
+    } else {
+        true
+    };
 }
 
 #[cfg(test)]

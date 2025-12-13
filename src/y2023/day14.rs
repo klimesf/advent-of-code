@@ -1,25 +1,31 @@
 use std::fs;
 
 pub(crate) fn day14() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day14/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2023/day14/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2023/day14/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2023/day14/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
-    let mut dish: Vec<Vec<char>> = input.lines().map(|line| {
-        line.chars().collect()
-    }).collect();
+    let mut dish: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
     for r in 0..dish.len() {
         for c in 0..dish[r].len() {
-            if dish[r][c] != 'O' { continue }
+            if dish[r][c] != 'O' {
+                continue;
+            }
 
             for i in 1..=r {
                 if dish[r - i][c] == '.' {
                     dish[r - i][c] = 'O';
                     dish[r - i + 1][c] = '.';
                 } else {
-                    break
+                    break;
                 }
             }
         }
@@ -28,7 +34,9 @@ fn part_a(input: String) -> usize {
     let mut ans = 0;
     for r in 0..dish.len() {
         'uh: for c in 0..dish[r].len() {
-            if dish[r][c] != 'O' { continue 'uh }
+            if dish[r][c] != 'O' {
+                continue 'uh;
+            }
             ans += dish.len() - r;
         }
     }
@@ -37,25 +45,24 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> usize {
-    let mut dish: Vec<Vec<char>> = input.lines().map(|line| {
-        line.chars().collect()
-    }).collect();
+    let mut dish: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
-    let mut prev_dishes: Vec<Vec<Vec<char>>> = vec!();
+    let mut prev_dishes: Vec<Vec<Vec<char>>> = vec![];
     let mut repeat = (0, 0);
     'outer: for cycle in 0..1000000000 {
-
         'next: for i in 0..prev_dishes.len() {
             let prev_dish = &prev_dishes[i];
             for r in 0..dish.len() {
                 for c in 0..dish[r].len() {
-                    if dish[r][c] != prev_dish[r][c] { continue 'next }
+                    if dish[r][c] != prev_dish[r][c] {
+                        continue 'next;
+                    }
                 }
             }
 
             repeat = (i, cycle);
             prev_dishes.push(dish.clone());
-            break 'outer
+            break 'outer;
         }
 
         prev_dishes.push(dish.clone());
@@ -63,14 +70,16 @@ fn part_b(input: String) -> usize {
         // North
         for r in 0..dish.len() {
             for c in 0..dish[r].len() {
-                if dish[r][c] != 'O' { continue }
+                if dish[r][c] != 'O' {
+                    continue;
+                }
 
                 for i in 1..=r {
                     if dish[r - i][c] == '.' {
                         dish[r - i][c] = 'O';
                         dish[r - i + 1][c] = '.';
                     } else {
-                        break
+                        break;
                     }
                 }
             }
@@ -79,14 +88,16 @@ fn part_b(input: String) -> usize {
         // West
         for r in 0..dish.len() {
             for c in 0..dish[r].len() {
-                if dish[r][c] != 'O' { continue }
+                if dish[r][c] != 'O' {
+                    continue;
+                }
 
                 for i in 1..=c {
                     if dish[r][c - i] == '.' {
                         dish[r][c - i] = 'O';
                         dish[r][c - i + 1] = '.';
                     } else {
-                        break
+                        break;
                     }
                 }
             }
@@ -95,14 +106,16 @@ fn part_b(input: String) -> usize {
         // South
         for r in (0..dish.len()).rev() {
             for c in 0..dish[r].len() {
-                if dish[r][c] != 'O' { continue }
+                if dish[r][c] != 'O' {
+                    continue;
+                }
 
                 for i in r..(dish.len() - 1) {
                     if dish[i + 1][c] == '.' {
                         dish[i + 1][c] = 'O';
                         dish[i][c] = '.';
                     } else {
-                        break
+                        break;
                     }
                 }
             }
@@ -111,14 +124,16 @@ fn part_b(input: String) -> usize {
         // East
         for r in 0..dish.len() {
             for c in (0..dish[r].len()).rev() {
-                if dish[r][c] != 'O' { continue }
+                if dish[r][c] != 'O' {
+                    continue;
+                }
 
                 for i in c..(dish[r].len() - 1) {
                     if dish[r][i + 1] == '.' {
                         dish[r][i + 1] = 'O';
                         dish[r][i] = '.';
                     } else {
-                        break
+                        break;
                     }
                 }
             }
@@ -132,7 +147,9 @@ fn part_b(input: String) -> usize {
     let mut ans = 0;
     for r in 0..dish.len() {
         for c in 0..dish[r].len() {
-            if dish[r][c] != 'O' { continue }
+            if dish[r][c] != 'O' {
+                continue;
+            }
             ans += dish.len() - r;
         }
     }
@@ -148,13 +165,25 @@ mod day14_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(136, part_a(fs::read_to_string("input/2023/day14/test.txt").unwrap()));
-        assert_eq!(64, part_b(fs::read_to_string("input/2023/day14/test.txt").unwrap()));
+        assert_eq!(
+            136,
+            part_a(fs::read_to_string("input/2023/day14/test.txt").unwrap())
+        );
+        assert_eq!(
+            64,
+            part_b(fs::read_to_string("input/2023/day14/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(109345, part_a(fs::read_to_string("input/2023/day14/input.txt").unwrap()));
-        assert_eq!(112452, part_b(fs::read_to_string("input/2023/day14/input.txt").unwrap()));
+        assert_eq!(
+            109345,
+            part_a(fs::read_to_string("input/2023/day14/input.txt").unwrap())
+        );
+        assert_eq!(
+            112452,
+            part_b(fs::read_to_string("input/2023/day14/input.txt").unwrap())
+        );
     }
 }

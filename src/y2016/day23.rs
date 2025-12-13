@@ -2,8 +2,17 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day23() {
-    println!("{}", solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7));
-    println!("{}", solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 12));
+    println!(
+        "{}",
+        solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7)
+    );
+    println!(
+        "{}",
+        solve(
+            fs::read_to_string("input/2016/day23/input.txt").unwrap(),
+            12
+        )
+    );
 }
 
 fn solve(input: String, a_initial: i32) -> i32 {
@@ -61,7 +70,7 @@ fn solve(input: String, a_initial: i32) -> i32 {
                 let what = *registers.entry(args.to_string()).or_insert(0);
                 if i + what < 0 || i + what >= instructions.len() as i32 {
                     i += 1;
-                    continue
+                    continue;
                 }
                 let mut new_instructions = instructions.clone();
 
@@ -83,12 +92,16 @@ fn solve(input: String, a_initial: i32) -> i32 {
                     "tgl" => {
                         new_instructions[(i + what) as usize] = format!("inc {}", to_toggle_args);
                     }
-                    _ => { panic!("unknown instruction {}", instr) }
+                    _ => {
+                        panic!("unknown instruction {}", instr)
+                    }
                 }
                 instructions = new_instructions;
                 i += 1;
             }
-            _ => { panic!("unknown instruction {}", instr) }
+            _ => {
+                panic!("unknown instruction {}", instr)
+            }
         }
     }
 
@@ -99,16 +112,28 @@ fn solve(input: String, a_initial: i32) -> i32 {
 mod day23_tests {
     use std::fs;
 
-    use crate::y2016::day23::{solve};
+    use crate::y2016::day23::solve;
 
     #[test]
     fn test_works() {
-        assert_eq!(3, solve(fs::read_to_string("input/2016/day23/test.txt").unwrap(), 7));
+        assert_eq!(
+            3,
+            solve(fs::read_to_string("input/2016/day23/test.txt").unwrap(), 7)
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(14065, solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7));
-        assert_eq!(0, solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 12));
+        assert_eq!(
+            14065,
+            solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7)
+        );
+        assert_eq!(
+            0,
+            solve(
+                fs::read_to_string("input/2016/day23/input.txt").unwrap(),
+                12
+            )
+        );
     }
 }

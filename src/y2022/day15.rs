@@ -1,7 +1,7 @@
-use std::fs;
 use rayon::iter::IntoParallelIterator;
 use rayon::iter::ParallelIterator;
 use regex::{Match, Regex};
+use std::fs;
 
 pub(crate) fn day15() {
     println!("{}", part_a("input/2022/day15/input.txt", 2000000));
@@ -20,30 +20,40 @@ fn part_b(filename: &str, max: i64) -> i64 {
 }
 
 fn calculate_no_beacon_slow(signals: Vec<(i64, i64, i64, i64)>, y: i64) -> usize {
-    let sig: Vec<(i64, i64, i64)> = signals.iter()
+    let sig: Vec<(i64, i64, i64)> = signals
+        .iter()
         .map(|(xs, ys, xb, yb)| (*xs, *ys, manhattan_dist((*xs, *ys), (*xb, *yb))))
         .collect();
-    return (-100000..=5000000).into_par_iter()
-        .filter(|x| sig.iter()
-            .any(|(xs_2, ys_2, dist_2)|
-                manhattan_dist((*xs_2, *ys_2), (*x, y)) <= *dist_2))
-        .count() - 1;
+    return (-100000..=5000000)
+        .into_par_iter()
+        .filter(|x| {
+            sig.iter()
+                .any(|(xs_2, ys_2, dist_2)| manhattan_dist((*xs_2, *ys_2), (*x, y)) <= *dist_2)
+        })
+        .count()
+        - 1;
 }
 
 fn find_uncovered_coords(signals: Vec<(i64, i64, i64, i64)>, max: i64) -> (i64, i64) {
-    let sig: Vec<(i64, i64, i64)> = signals.iter()
+    let sig: Vec<(i64, i64, i64)> = signals
+        .iter()
         .map(|(xs, ys, xb, yb)| (*xs, *ys, manhattan_dist((*xs, *ys), (*xb, *yb))))
         .collect();
     for (xs, ys, dist) in sig.iter() {
         for dx in 0..=dist + 1 {
             let dy = dist + 1 - dx;
-            for (signx, signy) in vec!((-1, -1), (-1, 1), (1, -1), (1, 1)) {
+            for (signx, signy) in vec![(-1, -1), (-1, 1), (1, -1), (1, 1)] {
                 let x = xs + (dx * signx);
                 let y = ys + (dy * signy);
-                if 0 > x || x > max || 0 > y || y > max { continue; }
+                if 0 > x || x > max || 0 > y || y > max {
+                    continue;
+                }
 
-                if sig.iter().all(|(xs_2, ys_2, dist_2)| manhattan_dist((*xs_2, *ys_2), (x, y)) > *dist_2) {
-                    return (x, y)
+                if sig
+                    .iter()
+                    .all(|(xs_2, ys_2, dist_2)| manhattan_dist((*xs_2, *ys_2), (x, y)) > *dist_2)
+                {
+                    return (x, y);
                 }
             }
         }
@@ -61,8 +71,11 @@ fn parse_i64(g: Option<Match>) -> i64 {
 
 fn read_signals(filename: &str) -> Vec<(i64, i64, i64, i64)> {
     let input = fs::read_to_string(filename).unwrap();
-    let re = Regex::new(r"^Sensor at x=([\-0-9]+), y=([\-0-9]+): closest beacon is at x=([\-0-9]+), y=([\-0-9]+)$").unwrap();
-    let mut signals = vec!();
+    let re = Regex::new(
+        r"^Sensor at x=([\-0-9]+), y=([\-0-9]+): closest beacon is at x=([\-0-9]+), y=([\-0-9]+)$",
+    )
+    .unwrap();
+    let mut signals = vec![];
     for line in input.lines().into_iter() {
         let g = re.captures(line).unwrap();
         let signal = (

@@ -1,23 +1,30 @@
 use std::fs;
 
 pub(crate) fn day05(print: fn(usize)) {
-    print(part_a(fs::read_to_string("input/2025/day05/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2025/day05/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2025/day05/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2025/day05/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
     let (i1, i2) = input.split_once("\n\n").unwrap();
 
-    let intervals: Vec<(usize, usize)> = i1.lines().map(|l| {
-        let (l, r) = l.split_once('-').unwrap();
-        let start = l.parse::<usize>().unwrap();
-        let end = r.parse::<usize>().unwrap();
+    let intervals: Vec<(usize, usize)> = i1
+        .lines()
+        .map(|l| {
+            let (l, r) = l.split_once('-').unwrap();
+            let start = l.parse::<usize>().unwrap();
+            let end = r.parse::<usize>().unwrap();
 
-        if start > end {
-            panic!("invalid input");
-        }
-        (start, end)
-    }).collect();
+            if start > end {
+                panic!("invalid input");
+            }
+            (start, end)
+        })
+        .collect();
 
     let mut ans = 0;
     i2.lines().for_each(|l| {
@@ -37,16 +44,19 @@ fn part_a(input: String) -> usize {
 fn part_b(input: String) -> usize {
     let (i1, _) = input.split_once("\n\n").unwrap();
 
-    let mut intervals: Vec<(usize, usize)> = i1.lines().map(|l| {
-        let (l, r) = l.split_once('-').unwrap();
-        let start = l.parse::<usize>().unwrap();
-        let end = r.parse::<usize>().unwrap();
+    let mut intervals: Vec<(usize, usize)> = i1
+        .lines()
+        .map(|l| {
+            let (l, r) = l.split_once('-').unwrap();
+            let start = l.parse::<usize>().unwrap();
+            let end = r.parse::<usize>().unwrap();
 
-        if start > end {
-            panic!("invalid input");
-        }
-        (start, end)
-    }).collect();
+            if start > end {
+                panic!("invalid input");
+            }
+            (start, end)
+        })
+        .collect();
 
     intervals.sort_by(|a, b| {
         if a.0 == b.0 {
@@ -55,8 +65,8 @@ fn part_b(input: String) -> usize {
         a.0.cmp(&b.0)
     });
 
-    let mut res = vec!();
-    let mut skip: Vec<usize> = vec!();
+    let mut res = vec![];
+    let mut skip: Vec<usize> = vec![];
     for i in 0..intervals.len() {
         if skip.contains(&i) {
             continue;
@@ -90,13 +100,25 @@ mod day05_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(3, part_a(fs::read_to_string("input/2025/day05/test.txt").unwrap()));
-        assert_eq!(14, part_b(fs::read_to_string("input/2025/day05/test.txt").unwrap()));
+        assert_eq!(
+            3,
+            part_a(fs::read_to_string("input/2025/day05/test.txt").unwrap())
+        );
+        assert_eq!(
+            14,
+            part_b(fs::read_to_string("input/2025/day05/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(811, part_a(fs::read_to_string("input/2025/day05/input.txt").unwrap()));
-        assert_eq!(338189277144473, part_b(fs::read_to_string("input/2025/day05/input.txt").unwrap()));
+        assert_eq!(
+            811,
+            part_a(fs::read_to_string("input/2025/day05/input.txt").unwrap())
+        );
+        assert_eq!(
+            338189277144473,
+            part_b(fs::read_to_string("input/2025/day05/input.txt").unwrap())
+        );
     }
 }

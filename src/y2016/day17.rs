@@ -1,5 +1,5 @@
 use std::cmp::Ordering;
-use std::collections::{BinaryHeap};
+use std::collections::BinaryHeap;
 
 pub(crate) fn day17() {
     println!("{}", part_a("njfxhljp"));
@@ -8,30 +8,56 @@ pub(crate) fn day17() {
 
 fn part_a(password: &str) -> String {
     let mut stack: BinaryHeap<Pos> = BinaryHeap::new();
-    stack.push(Pos { r: 0, c: 0, steps: String::new() });
+    stack.push(Pos {
+        r: 0,
+        c: 0,
+        steps: String::new(),
+    });
 
     while let Some(pos) = stack.pop() {
         if pos.reached_fin() {
             return pos.steps;
         }
 
-        let hash: Vec<char> = format!("{:x}", md5::compute(format!("{}{}", password, pos.steps))).chars().collect();
-        let up_open = hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
-        let down_open = hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
-        let left_open = hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
-        let right_open = hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
+        let hash: Vec<char> = format!("{:x}", md5::compute(format!("{}{}", password, pos.steps)))
+            .chars()
+            .collect();
+        let up_open =
+            hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
+        let down_open =
+            hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
+        let left_open =
+            hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
+        let right_open =
+            hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
 
         if pos.r > 0 && up_open {
-            stack.push(Pos { r: pos.r - 1, c: pos.c, steps: format!("{}U", pos.steps) })
+            stack.push(Pos {
+                r: pos.r - 1,
+                c: pos.c,
+                steps: format!("{}U", pos.steps),
+            })
         }
         if pos.r < 3 && down_open {
-            stack.push(Pos { r: pos.r + 1, c: pos.c, steps: format!("{}D", pos.steps) })
+            stack.push(Pos {
+                r: pos.r + 1,
+                c: pos.c,
+                steps: format!("{}D", pos.steps),
+            })
         }
         if pos.c > 0 && left_open {
-            stack.push(Pos { r: pos.r, c: pos.c - 1, steps: format!("{}L", pos.steps) })
+            stack.push(Pos {
+                r: pos.r,
+                c: pos.c - 1,
+                steps: format!("{}L", pos.steps),
+            })
         }
         if pos.c < 3 && right_open {
-            stack.push(Pos { r: pos.r, c: pos.c + 1, steps: format!("{}R", pos.steps) })
+            stack.push(Pos {
+                r: pos.r,
+                c: pos.c + 1,
+                steps: format!("{}R", pos.steps),
+            })
         }
     }
 
@@ -40,32 +66,60 @@ fn part_a(password: &str) -> String {
 
 fn part_b(password: &str) -> usize {
     let mut stack: BinaryHeap<Pos> = BinaryHeap::new();
-    stack.push(Pos { r: 0, c: 0, steps: String::new() });
+    stack.push(Pos {
+        r: 0,
+        c: 0,
+        steps: String::new(),
+    });
 
     let mut max = 0;
     while let Some(pos) = stack.pop() {
         if pos.reached_fin() {
-            if max < pos.steps.len() { max = pos.steps.len() }
-            continue
+            if max < pos.steps.len() {
+                max = pos.steps.len()
+            }
+            continue;
         }
 
-        let hash: Vec<char> = format!("{:x}", md5::compute(format!("{}{}", password, pos.steps))).chars().collect();
-        let up_open = hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
-        let down_open = hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
-        let left_open = hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
-        let right_open = hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
+        let hash: Vec<char> = format!("{:x}", md5::compute(format!("{}{}", password, pos.steps)))
+            .chars()
+            .collect();
+        let up_open =
+            hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
+        let down_open =
+            hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
+        let left_open =
+            hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
+        let right_open =
+            hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
 
         if pos.r > 0 && up_open {
-            stack.push(Pos { r: pos.r - 1, c: pos.c, steps: format!("{}U", pos.steps) })
+            stack.push(Pos {
+                r: pos.r - 1,
+                c: pos.c,
+                steps: format!("{}U", pos.steps),
+            })
         }
         if pos.r < 3 && down_open {
-            stack.push(Pos { r: pos.r + 1, c: pos.c, steps: format!("{}D", pos.steps) })
+            stack.push(Pos {
+                r: pos.r + 1,
+                c: pos.c,
+                steps: format!("{}D", pos.steps),
+            })
         }
         if pos.c > 0 && left_open {
-            stack.push(Pos { r: pos.r, c: pos.c - 1, steps: format!("{}L", pos.steps) })
+            stack.push(Pos {
+                r: pos.r,
+                c: pos.c - 1,
+                steps: format!("{}L", pos.steps),
+            })
         }
         if pos.c < 3 && right_open {
-            stack.push(Pos { r: pos.r, c: pos.c + 1, steps: format!("{}R", pos.steps) })
+            stack.push(Pos {
+                r: pos.r,
+                c: pos.c + 1,
+                steps: format!("{}R", pos.steps),
+            })
         }
     }
 

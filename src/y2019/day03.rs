@@ -12,16 +12,15 @@ pub(crate) fn day03() {
     let points_a_set: HashSet<(i32, i32)> = points_a.keys().cloned().collect();
     let points_b_set: HashSet<(i32, i32)> = points_b.keys().cloned().collect();
     let intersections = points_a_set.intersection(&points_b_set);
-    let closest_intersection = intersections.into_iter()
-        .map(|i| manhattan_dist(*i))
-        .min();
+    let closest_intersection = intersections.into_iter().map(|i| manhattan_dist(*i)).min();
     println!("{}", closest_intersection.unwrap_or(0));
 
     // Part B
     let points_a_set: HashSet<(i32, i32)> = points_a.keys().cloned().collect();
     let points_b_set: HashSet<(i32, i32)> = points_b.keys().cloned().collect();
     let intersections = points_a_set.intersection(&points_b_set);
-    let closest_intersection_2 = intersections.into_iter()
+    let closest_intersection_2 = intersections
+        .into_iter()
         .map(|i| points_a[i] + points_b[i])
         .min();
     println!("{}", closest_intersection_2.unwrap_or(0));
@@ -42,29 +41,31 @@ fn get_points(wire: String) -> HashMap<(i32, i32), i32> {
                     step += 1;
                     points.insert(pos, step);
                 }
-            },
+            }
             "L" => {
                 for _ in 0..num {
                     pos.0 -= 1;
                     step += 1;
                     points.insert(pos, step);
                 }
-            },
+            }
             "U" => {
                 for _ in 0..num {
                     pos.1 += 1;
                     step += 1;
                     points.insert(pos, step);
                 }
-            },
+            }
             "D" => {
                 for _ in 0..num {
                     pos.1 -= 1;
                     step += 1;
                     points.insert(pos, step);
                 }
-            },
-            _ => { panic!("Unknown direction: {}", direction) }
+            }
+            _ => {
+                panic!("Unknown direction: {}", direction)
+            }
         }
     }
     return points;

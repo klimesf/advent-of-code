@@ -14,13 +14,13 @@ fn walk_hexagonal(input: &str) -> (i32, i32) {
     input.split(",").into_iter().for_each(|dir| {
         match dir {
             // Cube coordinates (see https://www.redblobgames.com/grids/hexagons/)
-            "n" => { pos = (pos.0, pos.1 + 1, pos.2 - 1) }
-            "ne" => { pos = (pos.0 + 1, pos.1 + 1, pos.2) }
-            "nw" => { pos = (pos.0 - 1, pos.1, pos.2 - 1) }
-            "s" => { pos = (pos.0, pos.1 - 1, pos.2 + 1) }
-            "se" => { pos = (pos.0 + 1, pos.1, pos.2 + 1) }
-            "sw" => { pos = (pos.0 - 1, pos.1 - 1, pos.2) }
-            _ => panic!("Unknown dir {}", dir)
+            "n" => pos = (pos.0, pos.1 + 1, pos.2 - 1),
+            "ne" => pos = (pos.0 + 1, pos.1 + 1, pos.2),
+            "nw" => pos = (pos.0 - 1, pos.1, pos.2 - 1),
+            "s" => pos = (pos.0, pos.1 - 1, pos.2 + 1),
+            "se" => pos = (pos.0 + 1, pos.1, pos.2 + 1),
+            "sw" => pos = (pos.0 - 1, pos.1 - 1, pos.2),
+            _ => panic!("Unknown dir {}", dir),
         }
         max = max.max(distance(pos));
     });
@@ -34,8 +34,8 @@ fn distance(pos: (i32, i32, i32)) -> i32 {
 
 #[cfg(test)]
 mod day11_tests {
-    use std::fs;
     use crate::y2017::day11::walk_hexagonal;
+    use std::fs;
 
     #[test]
     fn part_a_works() {

@@ -9,13 +9,17 @@ pub(crate) fn day19() {
 }
 
 fn route(input: &str) -> (String, i32) {
-    let map: HashMap<(i32, i32), char> = input.lines().enumerate()
-        .flat_map(|(x, line)|
-            line.chars().enumerate()
+    let map: HashMap<(i32, i32), char> = input
+        .lines()
+        .enumerate()
+        .flat_map(|(x, line)| {
+            line.chars()
+                .enumerate()
                 .filter(|(_, c)| *c != ' ')
                 .map(|(y, c)| ((x as i32, y as i32), c))
                 .collect::<Vec<((i32, i32), char)>>()
-        ).collect();
+        })
+        .collect();
     let mut pos: (i32, i32) = *map.keys().find(|(x, _)| *x == 0).unwrap();
     let mut ans = String::new();
     let mut steps = 0;
@@ -24,17 +28,29 @@ fn route(input: &str) -> (String, i32) {
     loop {
         match map.get(&pos) {
             Some('|') | Some('-') => {} // Continue
-            Some('+') => { // Find new dir
-                let lookup = if dir.0 != 0 { [(0, 1), (0, -1)] } else { [(1, 0), (-1, 0)] };
-                let new_dir = lookup.iter()
+            Some('+') => {
+                // Find new dir
+                let lookup = if dir.0 != 0 {
+                    [(0, 1), (0, -1)]
+                } else {
+                    [(1, 0), (-1, 0)]
+                };
+                let new_dir = lookup
+                    .iter()
                     .find(|(dx, dy)| map.get(&(pos.0 + dx, pos.1 + dy)).is_some());
                 match new_dir {
-                    Some(n) => { dir = *n }
-                    None => { panic!("No new dir found at {:?}", pos) }
+                    Some(n) => dir = *n,
+                    None => {
+                        panic!("No new dir found at {:?}", pos)
+                    }
                 }
             }
-            Some(c) => { ans.push(*c); }
-            None => { return (ans, steps); } // Nowhere else to go
+            Some(c) => {
+                ans.push(*c);
+            }
+            None => {
+                return (ans, steps);
+            } // Nowhere else to go
         }
         pos = (pos.0 + dir.0, pos.1 + dir.1);
         steps += 1;

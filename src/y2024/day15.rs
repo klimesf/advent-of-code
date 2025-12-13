@@ -1,19 +1,25 @@
+use crate::utils::grid::{Grid, DOWN, LEFT, P, RIGHT, UP};
 use std::collections::HashSet;
 use std::fs;
-use crate::utils::grid::{Grid, DOWN, LEFT, P, RIGHT, UP};
 
 pub fn day15(print: fn(i32)) {
-    print(part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2024/day15/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2024/day15/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> i32 {
     let (sm, sd) = input.split_once("\n\n").unwrap();
     let mut map = Grid::parse(sm);
     let mut robot = map.find_first(b'@').unwrap();
-    let instructions: Vec<char> = sd.lines()
+    let instructions: Vec<char> = sd
+        .lines()
         .map(|line| line.chars().collect::<Vec<char>>())
-        .flatten().collect();
+        .flatten()
+        .collect();
 
     for inst in instructions {
         let dir = match inst {
@@ -46,7 +52,9 @@ fn push(c: u8, p: P, dir: P, map: &mut Grid<u8>) -> bool {
             if push(map[p], p + dir, dir, map) {
                 map[p] = c;
                 true
-            } else { false }
+            } else {
+                false
+            }
         }
     }
 }
@@ -54,9 +62,11 @@ fn push(c: u8, p: P, dir: P, map: &mut Grid<u8>) -> bool {
 fn part_b(input: String) -> i32 {
     let (sm, sd) = input.split_once("\n\n").unwrap();
     let initial_map = Grid::parse(sm);
-    let instructions: Vec<char> = sd.lines()
+    let instructions: Vec<char> = sd
+        .lines()
         .map(|line| line.chars().collect::<Vec<char>>())
-        .flatten().collect();
+        .flatten()
+        .collect();
 
     let mut map = Grid::new(initial_map.x_len, initial_map.y_len * 2, b'.');
     for x in 0..initial_map.x_len {
@@ -78,7 +88,7 @@ fn part_b(input: String) -> i32 {
                     map[(x, 2 * y)] = b'@';
                     map[(x, 2 * y + 1)] = b'.';
                 }
-                _ => panic!()
+                _ => panic!(),
             }
         }
     }
@@ -108,15 +118,17 @@ fn part_b(input: String) -> i32 {
 }
 
 fn find_obj(p: P, dir: P, map: &Grid<u8>, visited: &mut HashSet<P>) -> Vec<(P, u8)> {
-    if !visited.insert(p) { return vec!(); } // Prevent visiting same nodes twice
-    let mut ans = vec!();
+    if !visited.insert(p) {
+        return vec![];
+    } // Prevent visiting same nodes twice
+    let mut ans = vec![];
     match map[p] {
         b'@' => {
             ans.push((p, map[p]));
             ans.extend(find_obj(p + dir, dir, map, visited));
         }
-        b'.' => { }
-        b'#' => { }
+        b'.' => {}
+        b'#' => {}
         b'[' => {
             ans.push((p, map[p]));
             if dir == LEFT || dir == RIGHT {
@@ -135,7 +147,7 @@ fn find_obj(p: P, dir: P, map: &Grid<u8>, visited: &mut HashSet<P>) -> Vec<(P, u
                 ans.extend(find_obj(p + LEFT, dir, map, visited));
             }
         }
-        _ => panic!()
+        _ => panic!(),
     }
     ans
 }
@@ -151,9 +163,7 @@ fn push_object(obj: &Vec<(P, u8)>, dir: P, map: &mut Grid<u8>) {
     });
 
     // Cleanup
-    let new_positions = obj.iter()
-        .map(|(p, _)| *p + dir)
-        .collect::<HashSet<P>>();
+    let new_positions = obj.iter().map(|(p, _)| *p + dir).collect::<HashSet<P>>();
     obj.iter()
         .filter(|(p, _)| !new_positions.contains(p))
         .for_each(|(p, _)| map[*p] = b'.');
@@ -167,15 +177,33 @@ mod day15_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(2028, part_a(fs::read_to_string("input/2024/day15/test.txt").unwrap()));
-        assert_eq!(10092, part_a(fs::read_to_string("input/2024/day15/test_2.txt").unwrap()));
-        assert_eq!(618, part_b(fs::read_to_string("input/2024/day15/test_3.txt").unwrap()));
-        assert_eq!(9021, part_b(fs::read_to_string("input/2024/day15/test_2.txt").unwrap()));
+        assert_eq!(
+            2028,
+            part_a(fs::read_to_string("input/2024/day15/test.txt").unwrap())
+        );
+        assert_eq!(
+            10092,
+            part_a(fs::read_to_string("input/2024/day15/test_2.txt").unwrap())
+        );
+        assert_eq!(
+            618,
+            part_b(fs::read_to_string("input/2024/day15/test_3.txt").unwrap())
+        );
+        assert_eq!(
+            9021,
+            part_b(fs::read_to_string("input/2024/day15/test_2.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1492518, part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
-        assert_eq!(1512860, part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
+        assert_eq!(
+            1492518,
+            part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap())
+        );
+        assert_eq!(
+            1512860,
+            part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap())
+        );
     }
 }

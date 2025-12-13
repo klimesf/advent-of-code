@@ -9,30 +9,50 @@ pub(crate) fn day02() {
 }
 
 fn parse(input: String) -> Vec<Vec<i32>> {
-    input.lines().into_iter()
-        .map(|line| line.split_whitespace().map(|num| num.parse().unwrap()).collect::<Vec<i32>>())
+    input
+        .lines()
+        .into_iter()
+        .map(|line| {
+            line.split_whitespace()
+                .map(|num| num.parse().unwrap())
+                .collect::<Vec<i32>>()
+        })
         .collect()
 }
 
 fn part_a(input: &Vec<Vec<i32>>) -> i32 {
-    input.iter().map(|line| {
-        let max = line.iter().max().unwrap();
-        let min = line.iter().min().unwrap();
-        max - min
-    }).sum()
+    input
+        .iter()
+        .map(|line| {
+            let max = line.iter().max().unwrap();
+            let min = line.iter().min().unwrap();
+            max - min
+        })
+        .sum()
 }
 
 fn part_b(input: &Vec<Vec<i32>>) -> i32 {
-    input.iter().map(|line| {
-        line.iter().combinations(2).map(|aha| {
-            let mut a = *aha[0];
-            let mut b = *aha[1];
-            if a < b { mem::swap(&mut a, &mut b) }
-            if a % b == 0 { a / b } else { 0 }
-        }).sum::<i32>()
-    }).sum()
+    input
+        .iter()
+        .map(|line| {
+            line.iter()
+                .combinations(2)
+                .map(|aha| {
+                    let mut a = *aha[0];
+                    let mut b = *aha[1];
+                    if a < b {
+                        mem::swap(&mut a, &mut b)
+                    }
+                    if a % b == 0 {
+                        a / b
+                    } else {
+                        0
+                    }
+                })
+                .sum::<i32>()
+        })
+        .sum()
 }
-
 
 #[cfg(test)]
 mod day02_tests {

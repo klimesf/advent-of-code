@@ -3,7 +3,11 @@ use std::fs;
 
 pub(crate) fn day15() {
     let input = fs::read_to_string("input/2019/day15/input.txt").unwrap();
-    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let code: Vec<i64> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
     let mut intcode = intcode_instance(&code);
 
     // Part A - walk the whole map in search for the oxygen point, use modified dijsktra to count the shortest
@@ -21,9 +25,11 @@ pub(crate) fn day15() {
                      dist: &mut i32,
                      map: &mut HashMap<(i32, i32), i32>,
                      exhausted: &mut HashSet<(i32, i32)>,
-                     output: &Vec<i64>| -> i64 {
-
-        if exhausted.len() == map.len() { return 0; } // We can end
+                     output: &Vec<i64>|
+     -> i64 {
+        if exhausted.len() == map.len() {
+            return 0;
+        } // We can end
 
         // Remember how far is the point from the starting pos
         // While backtracking, prefer to go to the point with shorter distance
@@ -65,7 +71,8 @@ pub(crate) fn day15() {
                 }
 
                 // Prefer the unvisited
-                let unvisited = [1, 4, 2, 3].iter()
+                let unvisited = [1, 4, 2, 3]
+                    .iter()
                     .find(|new_dir| !map.contains_key(&add_dir_to_pos(&new_dir, pos)));
                 if unvisited.is_some() {
                     let new_dir = unvisited.unwrap();
@@ -75,22 +82,37 @@ pub(crate) fn day15() {
 
                 // In case we hit the visited one, we need to backtrack to the place with least dist
                 exhausted.insert(pos.clone()); // We can exhaust the curr pos, since we cannot find a new way from there
-                let visited_possible = [1, 4, 2, 3].iter()
+                let visited_possible = [1, 4, 2, 3]
+                    .iter()
                     .filter(|new_dir| *map.get(&add_dir_to_pos(&new_dir, pos)).unwrap() > -1)
-                    .min_by(|new_dir, other_new_dir|
-                        map.get(&add_dir_to_pos(&new_dir, pos)).unwrap().cmp(
-                            map.get(&add_dir_to_pos(&other_new_dir, pos)).unwrap()))
+                    .min_by(|new_dir, other_new_dir| {
+                        map.get(&add_dir_to_pos(&new_dir, pos))
+                            .unwrap()
+                            .cmp(map.get(&add_dir_to_pos(&other_new_dir, pos)).unwrap())
+                    })
                     .unwrap();
 
                 *dir = *visited_possible;
                 return *dir as i64;
             }
-            None => { return 1; } // We haven't sent any instruction yet
+            None => {
+                return 1;
+            } // We haven't sent any instruction yet
         }
     };
-    intcode.run(&mut pos, &mut dir, &mut dist, &mut map, &mut exhausted, &mut input);
+    intcode.run(
+        &mut pos,
+        &mut dir,
+        &mut dist,
+        &mut map,
+        &mut exhausted,
+        &mut input,
+    );
 
-    println!("It takes {} commands to reach the oxygen systems", map.get(&oxygen_system_pos).unwrap());
+    println!(
+        "It takes {} commands to reach the oxygen systems",
+        map.get(&oxygen_system_pos).unwrap()
+    );
     map.insert(oxygen_system_pos, -2); // Mark for printing
     print_map(&map);
 
@@ -101,7 +123,7 @@ pub(crate) fn day15() {
     let mut to_visit = vec![oxygen_system_pos];
 
     while total_locations > filled_locations.len() {
-        let mut neighbors = vec!();
+        let mut neighbors = vec![];
         for v in to_visit {
             let west = (v.0 - 1, v.1);
             let east = (v.0 + 1, v.1);
@@ -125,7 +147,10 @@ pub(crate) fn day15() {
         to_visit = neighbors;
         minutes += 1;
     }
-    println!("It takes {} minutes to fill the area with oxygen", minutes - 1);
+    println!(
+        "It takes {} minutes to fill the area with oxygen",
+        minutes - 1
+    );
 }
 
 fn add_dir_to_pos(dir: &i32, pos: &(i32, i32)) -> (i32, i32) {
@@ -147,14 +172,12 @@ fn print_map(map: &HashMap<(i32, i32), i32>) {
     for y in min_y..=max_y {
         for x in min_x..=max_x {
             match map.get(&(x, y)) {
-                Some(v) => {
-                    match v {
-                        -2 => print!("X"),
-                        -1 => print!("#"),
-                        0 => print!("D"),
-                        _ => print!("."),
-                    }
-                }
+                Some(v) => match v {
+                    -2 => print!("X"),
+                    -1 => print!("#"),
+                    0 => print!("D"),
+                    _ => print!("."),
+                },
                 None => print!(" "),
             }
         }
@@ -170,13 +193,21 @@ struct IntcodeProcessor {
 }
 
 impl IntcodeProcessor {
-    fn run(&mut self,
-           pos: &mut (i32, i32),
-           dir: &mut i32,
-           dist: &mut i32,
-           map: &mut HashMap<(i32, i32), i32>,
-           exhausted: &mut HashSet<(i32, i32)>,
-           input: &mut dyn FnMut(&mut (i32, i32), &mut i32, &mut i32, &mut HashMap<(i32, i32), i32>, &mut HashSet<(i32, i32)>, &Vec<i64>) -> i64,
+    fn run(
+        &mut self,
+        pos: &mut (i32, i32),
+        dir: &mut i32,
+        dist: &mut i32,
+        map: &mut HashMap<(i32, i32), i32>,
+        exhausted: &mut HashSet<(i32, i32)>,
+        input: &mut dyn FnMut(
+            &mut (i32, i32),
+            &mut i32,
+            &mut i32,
+            &mut HashMap<(i32, i32), i32>,
+            &mut HashSet<(i32, i32)>,
+            &Vec<i64>,
+        ) -> i64,
     ) {
         loop {
             let _instr = self.memory[&self.instruction_ptr];
@@ -210,7 +241,11 @@ impl IntcodeProcessor {
                 }
                 3 => {
                     let a = self.memory[&(self.instruction_ptr + 1)];
-                    self.mem_write(a_mode, a, input(pos, dir, dist, map, exhausted, &self.output));
+                    self.mem_write(
+                        a_mode,
+                        a,
+                        input(pos, dir, dist, map, exhausted, &self.output),
+                    );
                     self.instruction_ptr += 2;
                 }
                 4 => {
@@ -269,8 +304,12 @@ impl IntcodeProcessor {
                     self.relative_base += a_val;
                     self.instruction_ptr += 2;
                 }
-                99 => { break; }
-                _ => { panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr); }
+                99 => {
+                    break;
+                }
+                _ => {
+                    panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr);
+                }
             }
         }
     }
@@ -278,13 +317,17 @@ impl IntcodeProcessor {
     fn mem_read(&mut self, mode: i32, val: i64) -> i64 {
         match mode {
             0 => {
-                if val < 0 { panic!("Invalid memory address: {}", val) }
+                if val < 0 {
+                    panic!("Invalid memory address: {}", val)
+                }
                 *self.memory.entry(val).or_insert(0)
             }
             1 => val,
             2 => {
                 let addr = val + self.relative_base;
-                if addr < 0 { panic!("Invalid memory address: {}", addr) }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr)
+                }
                 *self.memory.entry(addr).or_insert(0)
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -294,13 +337,17 @@ impl IntcodeProcessor {
     fn mem_write(&mut self, mode: i32, addr: i64, val: i64) {
         match mode {
             0 => {
-                if addr < 0 { panic!("Invalid memory address: {}", addr); }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr);
+                }
                 self.memory.insert(addr, val);
             }
             1 => panic!("How to write in mode 1?"),
             2 => {
                 let i = addr + self.relative_base;
-                if i < 0 { panic!("Invalid memory address: {}", i) }
+                if i < 0 {
+                    panic!("Invalid memory address: {}", i)
+                }
                 self.memory.insert(i, val);
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -316,7 +363,7 @@ fn intcode_instance(code: &Vec<i64>) -> IntcodeProcessor {
     IntcodeProcessor {
         instruction_ptr: 0,
         memory,
-        output: vec!(),
+        output: vec![],
         relative_base: 0,
     }
 }

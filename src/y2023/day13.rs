@@ -1,17 +1,25 @@
 use std::fs;
 
 pub(crate) fn day13() {
-    println!("{}", part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> i32 {
     let mut ans_cols = 0;
     let mut ans_rows = 0;
     for s in input.split("\n\n") {
-        let mut matrix: Vec<Vec<char>> = vec!();
+        let mut matrix: Vec<Vec<char>> = vec![];
         for row in s.split("\n") {
-            if row.len() == 0 { continue }
+            if row.len() == 0 {
+                continue;
+            }
             matrix.push(row.chars().collect());
         }
 
@@ -31,9 +39,11 @@ fn part_b(input: String) -> i32 {
     let mut ans_cols = 0;
     let mut ans_rows = 0;
     'outer: for s in input.split("\n\n") {
-        let mut matrix: Vec<Vec<char>> = vec!();
+        let mut matrix: Vec<Vec<char>> = vec![];
         for row in s.split("\n") {
-            if row.len() == 0 { continue }
+            if row.len() == 0 {
+                continue;
+            }
             matrix.push(row.chars().collect());
         }
 
@@ -44,7 +54,8 @@ fn part_b(input: String) -> i32 {
                 let new_char = if og_char == '.' { '#' } else { '.' };
                 matrix[i][j] = new_char;
 
-                let new_reflections = find_reflection(&matrix).iter()
+                let new_reflections = find_reflection(&matrix)
+                    .iter()
                     .filter(|nrf| !og_reflections.contains(nrf))
                     .map(|nrf| *nrf)
                     .collect::<Vec<(i32, bool)>>();
@@ -69,13 +80,16 @@ fn part_b(input: String) -> i32 {
 }
 
 fn find_reflection(matrix: &Vec<Vec<char>>) -> Vec<(i32, bool)> {
-    let mut ans = vec!();
+    let mut ans = vec![];
 
     for i in 1..(matrix[0].len() as i32) {
         let mut left: i32 = i - 1;
         let mut right: i32 = i;
 
-        while left >= 0 && right < matrix[0].len() as i32 && (0..matrix.len()).all(|z| matrix[z][left as usize] == matrix[z][right as usize]) {
+        while left >= 0
+            && right < matrix[0].len() as i32
+            && (0..matrix.len()).all(|z| matrix[z][left as usize] == matrix[z][right as usize])
+        {
             left -= 1;
             right += 1;
         }
@@ -89,7 +103,11 @@ fn find_reflection(matrix: &Vec<Vec<char>>) -> Vec<(i32, bool)> {
         let mut up: i32 = i - 1;
         let mut down: i32 = i;
 
-        while up >= 0 && down < matrix.len() as i32 && (0..matrix[up as usize].len()).all(|z| matrix[up as usize][z] == matrix[down as usize][z]) {
+        while up >= 0
+            && down < matrix.len() as i32
+            && (0..matrix[up as usize].len())
+                .all(|z| matrix[up as usize][z] == matrix[down as usize][z])
+        {
             up -= 1;
             down += 1;
         }
@@ -110,13 +128,25 @@ mod day13_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(405, part_a(fs::read_to_string("input/2023/day13/test.txt").unwrap()));
-        assert_eq!(400, part_b(fs::read_to_string("input/2023/day13/test.txt").unwrap()));
+        assert_eq!(
+            405,
+            part_a(fs::read_to_string("input/2023/day13/test.txt").unwrap())
+        );
+        assert_eq!(
+            400,
+            part_b(fs::read_to_string("input/2023/day13/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(28895, part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
-        assert_eq!(31603, part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
+        assert_eq!(
+            28895,
+            part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap())
+        );
+        assert_eq!(
+            31603,
+            part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap())
+        );
     }
 }

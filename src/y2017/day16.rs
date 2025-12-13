@@ -17,7 +17,9 @@ enum DanceMove {
 }
 
 fn parse(input: &str) -> Vec<DanceMove> {
-    input.trim().split(",")
+    input
+        .trim()
+        .split(",")
         .map(|m| match m.chars().nth(0).unwrap() {
             's' => {
                 let i = m[1..m.len()].parse::<usize>().unwrap();
@@ -32,7 +34,7 @@ fn parse(input: &str) -> Vec<DanceMove> {
                 let second = m.chars().nth(3).unwrap();
                 DanceMove::P(first, second)
             }
-            c => panic!("Unknown move {}", c)
+            c => panic!("Unknown move {}", c),
         })
         .collect()
 }
@@ -88,7 +90,7 @@ fn dance_a_lot(programs: &str, moves: &Vec<DanceMove>) -> String {
 mod day16_tests {
     use std::fs;
 
-    use crate::y2017::day16::{dance, dance_a_lot, DanceMove, parse};
+    use crate::y2017::day16::{dance, dance_a_lot, parse, DanceMove};
 
     #[test]
     fn test_works() {

@@ -1,4 +1,4 @@
-use std::collections::{HashSet};
+use std::collections::HashSet;
 use std::fs;
 
 use regex::Regex;
@@ -18,13 +18,14 @@ pub(crate) fn day10() {
 }
 
 fn parse_row(s: &str) -> Star {
-    let re = Regex::new(r"^position=<([\s\d\-]+),([\s\d\-]+)> velocity=<([\s\d\-]+),([\s\d\-]+)>$").unwrap();
+    let re = Regex::new(r"^position=<([\s\d\-]+),([\s\d\-]+)> velocity=<([\s\d\-]+),([\s\d\-]+)>$")
+        .unwrap();
     let c = re.captures(s).unwrap();
     (
         c.get(1).unwrap().as_str().trim().parse::<i32>().unwrap(),
         c.get(2).unwrap().as_str().trim().parse::<i32>().unwrap(),
         c.get(3).unwrap().as_str().trim().parse::<i32>().unwrap(),
-        c.get(4).unwrap().as_str().trim().parse::<i32>().unwrap()
+        c.get(4).unwrap().as_str().trim().parse::<i32>().unwrap(),
     )
 }
 
@@ -38,10 +39,14 @@ fn print_sky(stars: &Vec<Star>) -> bool {
     let min_y = stars.iter().map(|star| star.1).min().unwrap();
     let max_y = stars.iter().map(|star| star.1).max().unwrap();
 
-    if max_y - min_y > 10 { return false; }
+    if max_y - min_y > 10 {
+        return false;
+    }
 
     let mut sky = HashSet::new();
-    stars.iter().for_each(|star| { sky.insert((star.0, star.1)); });
+    stars.iter().for_each(|star| {
+        sky.insert((star.0, star.1));
+    });
 
     for y in min_y..=max_y {
         for x in min_x..=max_x {
@@ -58,8 +63,14 @@ mod day10_tests {
 
     #[test]
     fn parse_row_works() {
-        assert_eq!((9, 1, 0, 2), parse_row("position=< 9,  1> velocity=< 0,  2>"));
-        assert_eq!((-6, 10, 2, -2), parse_row("position=<-6, 10> velocity=< 2, -2>"));
+        assert_eq!(
+            (9, 1, 0, 2),
+            parse_row("position=< 9,  1> velocity=< 0,  2>")
+        );
+        assert_eq!(
+            (-6, 10, 2, -2),
+            parse_row("position=<-6, 10> velocity=< 2, -2>")
+        );
     }
 
     #[test]

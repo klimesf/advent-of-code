@@ -4,33 +4,33 @@ use std::fs;
 pub(crate) fn day13() {
     let input = fs::read_to_string("input/2018/day13/input.txt").unwrap();
     let mut map = HashMap::new();
-    let mut carts = vec!();
-    input.split("\n").enumerate()
-        .for_each(|(y, row)| {
-            row.chars().enumerate()
-                .for_each(|(x, c)| {
-                    match c {
-                        '-' | '|' | '/' | '\\' | '+' => { map.insert((x, y), c); }
-                        'v' => {
-                            map.insert((x, y), '|');
-                            carts.push((x, y, c, 0));
-                        }
-                        '^' => {
-                            map.insert((x, y), '|');
-                            carts.push((x, y, c, 0));
-                        }
-                        '>' => {
-                            map.insert((x, y), '-');
-                            carts.push((x, y, c, 0));
-                        }
-                        '<' => {
-                            map.insert((x, y), '-');
-                            carts.push((x, y, c, 0));
-                        }
-                        _ => {}
-                    };
-                });
+    let mut carts = vec![];
+    input.split("\n").enumerate().for_each(|(y, row)| {
+        row.chars().enumerate().for_each(|(x, c)| {
+            match c {
+                '-' | '|' | '/' | '\\' | '+' => {
+                    map.insert((x, y), c);
+                }
+                'v' => {
+                    map.insert((x, y), '|');
+                    carts.push((x, y, c, 0));
+                }
+                '^' => {
+                    map.insert((x, y), '|');
+                    carts.push((x, y, c, 0));
+                }
+                '>' => {
+                    map.insert((x, y), '-');
+                    carts.push((x, y, c, 0));
+                }
+                '<' => {
+                    map.insert((x, y), '-');
+                    carts.push((x, y, c, 0));
+                }
+                _ => {}
+            };
         });
+    });
 
     part_a(&mut map, carts.clone());
     part_b(&mut map, carts.clone());
@@ -39,9 +39,11 @@ pub(crate) fn day13() {
 fn part_a(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize, char, usize)>) {
     let first_collision;
     'outer: loop {
-        let mut new_carts = vec!();
+        let mut new_carts = vec![];
         let mut positions = HashSet::new();
-        for cart in &carts { positions.insert((cart.0, cart.1)); };
+        for cart in &carts {
+            positions.insert((cart.0, cart.1));
+        }
 
         for cart in &carts {
             let new_cart = eval_cart(&cart, &map);
@@ -63,16 +65,21 @@ fn part_a(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize,
         });
         carts = new_carts;
     }
-    println!("First collision happens at {},{}", first_collision.0, first_collision.1);
+    println!(
+        "First collision happens at {},{}",
+        first_collision.0, first_collision.1
+    );
 }
 
 fn part_b(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize, char, usize)>) {
     let last_cart;
     loop {
-        let mut new_carts = vec!();
+        let mut new_carts = vec![];
         let mut collisions = HashSet::new();
         let mut positions = HashSet::new();
-        for cart in &carts { positions.insert((cart.0, cart.1)); };
+        for cart in &carts {
+            positions.insert((cart.0, cart.1));
+        }
 
         if carts.len() == 1 {
             last_cart = carts[0];
@@ -80,7 +87,9 @@ fn part_b(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize,
         }
 
         for cart in &carts {
-            if collisions.contains(&(cart.0, cart.1)) { continue; }
+            if collisions.contains(&(cart.0, cart.1)) {
+                continue;
+            }
 
             let new_cart = eval_cart(&cart, &map);
             positions.remove(&(cart.0, cart.1));
@@ -91,9 +100,11 @@ fn part_b(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize,
                 new_carts.push(new_cart);
             }
         }
-        let mut new_new_carts = vec!();
+        let mut new_new_carts = vec![];
         for cart in new_carts {
-            if collisions.contains(&(cart.0, cart.1)) { continue; }
+            if collisions.contains(&(cart.0, cart.1)) {
+                continue;
+            }
             new_new_carts.push(cart);
         }
 
@@ -107,10 +118,16 @@ fn part_b(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize,
         });
         carts = new_new_carts;
     }
-    println!("Last remaining cart ends up at {},{}", last_cart.0, last_cart.1);
+    println!(
+        "Last remaining cart ends up at {},{}",
+        last_cart.0, last_cart.1
+    );
 }
 
-fn eval_cart(cart: &(usize, usize, char, usize), map: &HashMap<(usize, usize), char>) -> (usize, usize, char, usize) {
+fn eval_cart(
+    cart: &(usize, usize, char, usize),
+    map: &HashMap<(usize, usize), char>,
+) -> (usize, usize, char, usize) {
     let new_pos = match cart.2 {
         '>' => (cart.0 + 1, cart.1),
         '<' => (cart.0 - 1, cart.1),
@@ -140,7 +157,8 @@ fn eval_cart(cart: &(usize, usize, char, usize), map: &HashMap<(usize, usize), c
             _ => panic!("Cannot approach / from direction {}", cart.2),
         },
         '+' => match cart.3 {
-            0 => { // Turns left
+            0 => {
+                // Turns left
                 match cart.2 {
                     'v' => (new_pos.0, new_pos.1, '>', 1),
                     '<' => (new_pos.0, new_pos.1, 'v', 1),
@@ -150,7 +168,8 @@ fn eval_cart(cart: &(usize, usize, char, usize), map: &HashMap<(usize, usize), c
                 }
             }
             1 => (new_pos.0, new_pos.1, cart.2, 2), // Goes straight
-            2 => { // Turns right
+            2 => {
+                // Turns right
                 match cart.2 {
                     'v' => (new_pos.0, new_pos.1, '<', 0),
                     '<' => (new_pos.0, new_pos.1, '^', 0),

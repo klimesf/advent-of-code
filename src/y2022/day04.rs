@@ -28,20 +28,20 @@ pub(crate) fn day04() {
 
 fn fully_contains(start1: i32, end1: i32, start2: i32, end2: i32) -> bool {
     if start1 <= start2 && end1 >= end2 {
-        return true
+        return true;
     } else if start1 >= start2 && end1 <= end2 {
-        return true
+        return true;
     } else {
-        return false
+        return false;
     }
 }
 
 fn overlaps(start1: i32, end1: i32, start2: i32, end2: i32) -> bool {
     if start1 <= start2 && end1 >= start2 {
-        return true
+        return true;
     } else if start2 <= start1 && end2 >= start1 {
-        return true
+        return true;
     } else {
-        return false
+        return false;
     }
 }

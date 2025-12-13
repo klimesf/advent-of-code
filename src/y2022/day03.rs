@@ -20,7 +20,7 @@ fn part_a() {
 fn part_b() {
     let input = fs::read_to_string("input/2022/day03/input.txt").unwrap();
     let mut total = 0;
-    let mut group = vec!();
+    let mut group = vec![];
     for line in input.lines() {
         group.push(line);
         if group.len() == 3 {
@@ -68,11 +68,11 @@ fn find_badge(line1: &str, line2: &str, line3: &str) -> char {
 fn score(c: char) -> u32 {
     let n = c as u32;
     if n > 96 {
-        return n - 96
+        return n - 96;
     } else if n > 38 {
-        return n - 38
+        return n - 38;
     } else {
-        return n
+        return n;
     }
 }
 

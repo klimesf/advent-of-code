@@ -15,17 +15,21 @@ pub(crate) fn day14() {
             .collect();
 
         chemicals.insert(to_name.to_string());
-        from_parts.iter().for_each(|(_, name)| { chemicals.insert(name.to_string()); });
+        from_parts.iter().for_each(|(_, name)| {
+            chemicals.insert(name.to_string());
+        });
 
         reactions.insert(to_name.to_string(), (to_price.parse().unwrap(), from_parts));
     }
 
     // Create topological ordering of the graph of chemical reactions
-    let mut ordering: Vec<String> = vec!();
+    let mut ordering: Vec<String> = vec![];
     let mut visited: HashSet<String> = HashSet::new();
 
     for c in chemicals {
-        if visited.contains(&c) { continue; }
+        if visited.contains(&c) {
+            continue;
+        }
         topological_order(c.to_string(), &mut ordering, &mut visited, &reactions);
     }
     println!("{:?}", ordering);
@@ -34,7 +38,9 @@ pub(crate) fn day14() {
     let mut required = HashMap::new();
     ordering.reverse();
     for c in &ordering {
-        if !reactions.contains_key(c) { continue; }
+        if !reactions.contains_key(c) {
+            continue;
+        }
 
         let (c_created, from) = reactions.get(c).unwrap();
         let c_required = *required.entry(c.to_string()).or_insert(1 as usize);
@@ -55,7 +61,9 @@ pub(crate) fn day14() {
         let mut required = HashMap::new();
         required.insert("FUEL".to_string(), i);
         for c in &ordering {
-            if !reactions.contains_key(c) { continue; }
+            if !reactions.contains_key(c) {
+                continue;
+            }
 
             let (c_created, from) = reactions.get(c).unwrap();
             let c_required = required.get(c).unwrap();
@@ -74,12 +82,19 @@ pub(crate) fn day14() {
     println!("{}", i - 1)
 }
 
-fn topological_order(c: String, ordering: &mut Vec<String>, visited: &mut HashSet<String>, reactions: &HashMap<String, (usize, Vec<(usize, String)>)>) {
-    if visited.contains(&c) { return; }
+fn topological_order(
+    c: String,
+    ordering: &mut Vec<String>,
+    visited: &mut HashSet<String>,
+    reactions: &HashMap<String, (usize, Vec<(usize, String)>)>,
+) {
+    if visited.contains(&c) {
+        return;
+    }
 
     let edges = match reactions.get(&c) {
         Some((_, edges)) => edges.clone(),
-        None => vec!(),
+        None => vec![],
     };
 
     for (_, e) in edges {
@@ -89,4 +104,3 @@ fn topological_order(c: String, ordering: &mut Vec<String>, visited: &mut HashSe
     visited.insert(c.clone());
     ordering.push(c.clone());
 }
-

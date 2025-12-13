@@ -14,9 +14,15 @@ pub(crate) fn day11() {
     for y in 0..300 {
         for x in 0..300 {
             summed_area_table[y][x] = grid[y][x];
-            if y > 0 { summed_area_table[y][x] += summed_area_table[y - 1][x]; }
-            if x > 0 { summed_area_table[y][x] += summed_area_table[y][x - 1]; }
-            if x > 0 && y > 0 { summed_area_table[y][x] -= summed_area_table[y - 1][x - 1]; }
+            if y > 0 {
+                summed_area_table[y][x] += summed_area_table[y - 1][x];
+            }
+            if x > 0 {
+                summed_area_table[y][x] += summed_area_table[y][x - 1];
+            }
+            if x > 0 && y > 0 {
+                summed_area_table[y][x] -= summed_area_table[y - 1][x - 1];
+            }
         }
     }
 
@@ -24,8 +30,7 @@ pub(crate) fn day11() {
     let mut max_coord = (0, 0);
     for y in 3..300 {
         for x in 3..300 {
-            let sum = summed_area_table[y][x]
-                + summed_area_table[y - 3][x - 3]
+            let sum = summed_area_table[y][x] + summed_area_table[y - 3][x - 3]
                 - summed_area_table[y - 3][x]
                 - summed_area_table[y][x - 3];
             if sum > max {
@@ -34,8 +39,10 @@ pub(crate) fn day11() {
             };
         }
     }
-    println!("{},{} is the coord of 3x3 square with largest total power {}", max_coord.0, max_coord.1, max);
-
+    println!(
+        "{},{} is the coord of 3x3 square with largest total power {}",
+        max_coord.0, max_coord.1, max
+    );
 
     let mut max = i32::MIN;
     let mut max_coord = (0, 0, 0);
@@ -43,8 +50,7 @@ pub(crate) fn day11() {
     for size in 1..=300 {
         for y in size..300 {
             for x in size..300 {
-                let sum = summed_area_table[y][x]
-                    + summed_area_table[y - size][x - size]
+                let sum = summed_area_table[y][x] + summed_area_table[y - size][x - size]
                     - summed_area_table[y - size][x]
                     - summed_area_table[y][x - size];
                 if sum > max {

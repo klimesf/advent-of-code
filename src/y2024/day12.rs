@@ -2,13 +2,18 @@ use std::collections::HashMap;
 use std::fs;
 
 pub fn day12(print: fn(usize)) {
-    print(part_a(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
-    print(part_b(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
+    print(part_a(
+        fs::read_to_string("input/2024/day12/input.txt").unwrap(),
+    ));
+    print(part_b(
+        fs::read_to_string("input/2024/day12/input.txt").unwrap(),
+    ));
 }
 
 fn part_a(input: String) -> usize {
     let map = input
-        .lines().map(|line| line.chars().collect())
+        .lines()
+        .map(|line| line.chars().collect())
         .collect::<Vec<Vec<char>>>();
 
     let regions = build_regions(&map);
@@ -23,17 +28,29 @@ fn part_a(input: String) -> usize {
     let mut total = 0;
     for i in 0..map.len() {
         for j in 0..map[i].len() {
-            if i > 0 && regions[i - 1][j] != regions[i][j] { total += perimeter.get(&regions[i][j]).unwrap() }
-            else if i == 0 { total += perimeter.get(&regions[i][j]).unwrap() }
+            if i > 0 && regions[i - 1][j] != regions[i][j] {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            } else if i == 0 {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            }
 
-            if j > 0 && regions[i][j - 1] != regions[i][j] { total += perimeter.get(&regions[i][j]).unwrap() }
-            else if j == 0 { total += perimeter.get(&regions[i][j]).unwrap() }
+            if j > 0 && regions[i][j - 1] != regions[i][j] {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            } else if j == 0 {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            }
 
-            if i < map.len() - 1 && regions[i + 1][j] != regions[i][j] { total += perimeter.get(&regions[i][j]).unwrap() }
-            else if i == map.len() - 1 { total += perimeter.get(&regions[i][j]).unwrap() }
+            if i < map.len() - 1 && regions[i + 1][j] != regions[i][j] {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            } else if i == map.len() - 1 {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            }
 
-            if j < map[i].len() - 1 && regions[i][j + 1] != regions[i][j] { total += perimeter.get(&regions[i][j]).unwrap() }
-            else if j == map[i].len() - 1 { total += perimeter.get(&regions[i][j]).unwrap() }
+            if j < map[i].len() - 1 && regions[i][j + 1] != regions[i][j] {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            } else if j == map[i].len() - 1 {
+                total += perimeter.get(&regions[i][j]).unwrap()
+            }
         }
     }
 
@@ -42,7 +59,8 @@ fn part_a(input: String) -> usize {
 
 fn part_b(input: String) -> usize {
     let map = input
-        .lines().map(|line| line.chars().collect())
+        .lines()
+        .map(|line| line.chars().collect())
         .collect::<Vec<Vec<char>>>();
 
     let regions = build_regions(&map);
@@ -50,11 +68,26 @@ fn part_b(input: String) -> usize {
     let mut sides = HashMap::new();
     for i in 0..=map.len() {
         for j in 0..=map[0].len() {
-
-            let up_left = if i == 0 || j == 0 { - 1 } else { regions[i - 1][j - 1] };
-            let up = if i == 0 || j == map[0].len() { -1 } else { regions[i - 1][j] };
-            let left = if j == 0 || i == map.len() { - 1 } else { regions[i][j - 1] };
-            let here = if i == map.len() || j == map[0].len() { - 1 } else { regions[i][j] };
+            let up_left = if i == 0 || j == 0 {
+                -1
+            } else {
+                regions[i - 1][j - 1]
+            };
+            let up = if i == 0 || j == map[0].len() {
+                -1
+            } else {
+                regions[i - 1][j]
+            };
+            let left = if j == 0 || i == map.len() {
+                -1
+            } else {
+                regions[i][j - 1]
+            };
+            let here = if i == map.len() || j == map[0].len() {
+                -1
+            } else {
+                regions[i][j]
+            };
 
             // _*
             // *A
@@ -122,25 +155,47 @@ fn build_regions(map: &Vec<Vec<char>>) -> Vec<Vec<i32>> {
     let mut id = 0;
     for i in 0..map.len() {
         for j in 0..map[i].len() {
-            if regions[i][j] > -1 && regions[i][j] < id { continue; }
+            if regions[i][j] > -1 && regions[i][j] < id {
+                continue;
+            }
 
             regions[i][j] = id;
-            let mut stack = vec!();
+            let mut stack = vec![];
 
-            if i > 0 { stack.push((i - 1, j, map[i][j])); }
-            if j > 0 { stack.push((i, j - 1, map[i][j])); }
-            if i < map.len() - 1 { stack.push((i + 1, j, map[i][j])); }
-            if j < map[i].len() - 1 { stack.push((i, j + 1, map[i][j])); }
+            if i > 0 {
+                stack.push((i - 1, j, map[i][j]));
+            }
+            if j > 0 {
+                stack.push((i, j - 1, map[i][j]));
+            }
+            if i < map.len() - 1 {
+                stack.push((i + 1, j, map[i][j]));
+            }
+            if j < map[i].len() - 1 {
+                stack.push((i, j + 1, map[i][j]));
+            }
 
             while let Some((x, y, prev)) = stack.pop() {
-                if map[x][y] != prev { continue; }
-                if regions[x][y] > -1 && regions[x][y] < id { continue; }
+                if map[x][y] != prev {
+                    continue;
+                }
+                if regions[x][y] > -1 && regions[x][y] < id {
+                    continue;
+                }
 
                 regions[x][y] = id;
-                if x > 0 && regions[x - 1][y] == -1 { stack.push((x - 1, y, map[x][y])); }
-                if y > 0 && regions[x][y - 1] == -1 { stack.push((x, y - 1, map[x][y])); }
-                if x < map.len() - 1 && regions[x + 1][y] == -1 { stack.push((x + 1, y, map[x][y])); }
-                if y < map[y].len() - 1 && regions[x][y + 1] == -1 { stack.push((x, y + 1, map[x][y])); }
+                if x > 0 && regions[x - 1][y] == -1 {
+                    stack.push((x - 1, y, map[x][y]));
+                }
+                if y > 0 && regions[x][y - 1] == -1 {
+                    stack.push((x, y - 1, map[x][y]));
+                }
+                if x < map.len() - 1 && regions[x + 1][y] == -1 {
+                    stack.push((x + 1, y, map[x][y]));
+                }
+                if y < map[y].len() - 1 && regions[x][y + 1] == -1 {
+                    stack.push((x, y + 1, map[x][y]));
+                }
             }
             id += 1;
         }
@@ -156,15 +211,33 @@ mod day12_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(140, part_a(fs::read_to_string("input/2024/day12/test.txt").unwrap()));
-        assert_eq!(772, part_a(fs::read_to_string("input/2024/day12/test_2.txt").unwrap()));
-        assert_eq!(80, part_b(fs::read_to_string("input/2024/day12/test.txt").unwrap()));
-        assert_eq!(436, part_b(fs::read_to_string("input/2024/day12/test_2.txt").unwrap()));
+        assert_eq!(
+            140,
+            part_a(fs::read_to_string("input/2024/day12/test.txt").unwrap())
+        );
+        assert_eq!(
+            772,
+            part_a(fs::read_to_string("input/2024/day12/test_2.txt").unwrap())
+        );
+        assert_eq!(
+            80,
+            part_b(fs::read_to_string("input/2024/day12/test.txt").unwrap())
+        );
+        assert_eq!(
+            436,
+            part_b(fs::read_to_string("input/2024/day12/test_2.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(1431440, part_a(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
-        assert_eq!(869070, part_b(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
+        assert_eq!(
+            1431440,
+            part_a(fs::read_to_string("input/2024/day12/input.txt").unwrap())
+        );
+        assert_eq!(
+            869070,
+            part_b(fs::read_to_string("input/2024/day12/input.txt").unwrap())
+        );
     }
 }

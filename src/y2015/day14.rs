@@ -1,12 +1,24 @@
-use std::collections::HashMap;
-use std::fs;
+use crate::utils::toolbox::parse_usize;
 use itertools::Itertools;
 use regex::Regex;
-use crate::utils::toolbox::parse_usize;
+use std::collections::HashMap;
+use std::fs;
 
 pub(crate) fn day14() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
-    println!("{}", part_b(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
+    println!(
+        "{}",
+        part_a(
+            fs::read_to_string("input/2015/day14/input.txt").unwrap(),
+            2503
+        )
+    );
+    println!(
+        "{}",
+        part_b(
+            fs::read_to_string("input/2015/day14/input.txt").unwrap(),
+            2503
+        )
+    );
 }
 
 fn part_a(input: String, total_time: usize) -> usize {
@@ -26,7 +38,7 @@ fn part_a(input: String, total_time: usize) -> usize {
 }
 
 fn part_b(input: String, total_time: usize) -> usize {
-    let mut reindeers = vec!();
+    let mut reindeers = vec![];
     input.lines().for_each(|line| {
         let re = Regex::new("^(.+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds\\.$").unwrap();
         let caps = re.captures(line).unwrap();
@@ -49,7 +61,8 @@ fn part_b(input: String, total_time: usize) -> usize {
             }
         }
 
-        let leads: Vec<(&str, usize)> = distances.iter()
+        let leads: Vec<(&str, usize)> = distances
+            .iter()
             .sorted_by(|(_, a), (_, b)| b.cmp(a))
             .map(|(k, v)| (**k, *v))
             .collect();
@@ -57,7 +70,9 @@ fn part_b(input: String, total_time: usize) -> usize {
 
         for i in 0..leads.len() {
             let (reindeer, dist) = leads[i];
-            if dist < max { break };
+            if dist < max {
+                break;
+            };
             *score.entry(reindeer).or_insert(0) += 1;
         }
     }
@@ -73,13 +88,37 @@ mod day14_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(1120, part_a(fs::read_to_string("input/2015/day14/test.txt").unwrap(), 1000));
-        assert_eq!(689, part_b(fs::read_to_string("input/2015/day14/test.txt").unwrap(), 1000));
+        assert_eq!(
+            1120,
+            part_a(
+                fs::read_to_string("input/2015/day14/test.txt").unwrap(),
+                1000
+            )
+        );
+        assert_eq!(
+            689,
+            part_b(
+                fs::read_to_string("input/2015/day14/test.txt").unwrap(),
+                1000
+            )
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(2655, part_a(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
-        assert_eq!(1059, part_b(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
+        assert_eq!(
+            2655,
+            part_a(
+                fs::read_to_string("input/2015/day14/input.txt").unwrap(),
+                2503
+            )
+        );
+        assert_eq!(
+            1059,
+            part_b(
+                fs::read_to_string("input/2015/day14/input.txt").unwrap(),
+                2503
+            )
+        );
     }
 }

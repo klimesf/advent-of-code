@@ -9,7 +9,8 @@ pub(crate) fn day24() {
 }
 
 fn parse(input: &str) -> HashMap<i64, (usize, usize)> {
-    input.lines()
+    input
+        .lines()
         .map(|line| line.split_once("/").unwrap())
         .map(|(a, b)| (a.parse().unwrap(), b.parse().unwrap()))
         .enumerate()
@@ -20,14 +21,15 @@ fn parse(input: &str) -> HashMap<i64, (usize, usize)> {
 fn find_strongest(components: &HashMap<i64, (usize, usize)>) -> usize {
     let mut available = components.keys().sum();
     let mut duplicates = HashSet::new();
-    components.iter()
+    components
+        .iter()
         .filter(|(_, (a, b))| a == b)
         .for_each(|(k, (a, _))| {
             available -= k;
             duplicates.insert(a);
         });
 
-    let mut stack: Vec<(usize, usize, i64)> = vec!();
+    let mut stack: Vec<(usize, usize, i64)> = vec![];
     stack.push((0, 0, available));
     let mut max = usize::MIN;
 
@@ -36,9 +38,12 @@ fn find_strongest(components: &HashMap<i64, (usize, usize)>) -> usize {
         if duplicates.contains(&pins) {
             strength += pins * 2;
         }
-        if strength > max { max = strength }
+        if strength > max {
+            max = strength
+        }
 
-        components.iter()
+        components
+            .iter()
             .filter(|(k, _)| available & **k > 0)
             .filter(|(_, (a, b))| *a == pins || *b == pins)
             .for_each(|(k, (a, b))| {
@@ -52,14 +57,15 @@ fn find_strongest(components: &HashMap<i64, (usize, usize)>) -> usize {
 fn find_longest(components: &HashMap<i64, (usize, usize)>) -> usize {
     let mut available = components.keys().sum();
     let mut duplicates = HashSet::new();
-    components.iter()
+    components
+        .iter()
         .filter(|(_, (a, b))| a == b)
         .for_each(|(k, (a, _))| {
             available -= k;
             duplicates.insert(a);
         });
 
-    let mut stack: Vec<(usize, usize, usize, i64)> = vec!();
+    let mut stack: Vec<(usize, usize, usize, i64)> = vec![];
     stack.push((0, 0, 0, available));
     let mut max = (usize::MIN, usize::MIN);
 
@@ -69,9 +75,12 @@ fn find_longest(components: &HashMap<i64, (usize, usize)>) -> usize {
             strength += pins * 2;
             length += 1;
         }
-        if length > max.0 || (length == max.0 && strength > max.1) { max = (length, strength) }
+        if length > max.0 || (length == max.0 && strength > max.1) {
+            max = (length, strength)
+        }
 
-        components.iter()
+        components
+            .iter()
             .filter(|(k, _)| available & **k > 0)
             .filter(|(_, (a, b))| *a == pins || *b == pins)
             .for_each(|(k, (a, b))| {
@@ -84,8 +93,8 @@ fn find_longest(components: &HashMap<i64, (usize, usize)>) -> usize {
 
 #[cfg(test)]
 mod day24_tests {
-    use std::fs;
     use crate::y2017::day24::{find_longest, find_strongest, parse};
+    use std::fs;
 
     #[test]
     fn test_works() {

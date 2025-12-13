@@ -3,7 +3,7 @@ use std::fs;
 
 pub(crate) fn day09() {
     let input = fs::read_to_string("input/2022/day09/input.txt").unwrap();
-    let mut rope: Vec<(i32, i32)> = vec!((0, 0); 10);
+    let mut rope: Vec<(i32, i32)> = vec![(0, 0); 10];
     let mut visited_a: HashSet<(i32, i32)> = HashSet::new();
     let mut visited_b: HashSet<(i32, i32)> = HashSet::new();
     visited_a.insert(rope[1]);
@@ -16,11 +16,19 @@ pub(crate) fn day09() {
 
         for _ in 0..amount {
             match dir {
-                "R" => { rope[0].0 += 1; }
-                "L" => { rope[0].0 -= 1; }
-                "U" => { rope[0].1 += 1; }
-                "D" => { rope[0].1 -= 1; }
-                _ => panic!("Unknown dir {}", dir)
+                "R" => {
+                    rope[0].0 += 1;
+                }
+                "L" => {
+                    rope[0].0 -= 1;
+                }
+                "U" => {
+                    rope[0].1 += 1;
+                }
+                "D" => {
+                    rope[0].1 -= 1;
+                }
+                _ => panic!("Unknown dir {}", dir),
             }
 
             for j in 1..10 {

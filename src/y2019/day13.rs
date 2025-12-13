@@ -1,16 +1,20 @@
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day13() {
     let input = fs::read_to_string("input/2019/day13/input.txt").unwrap();
-    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
+    let code: Vec<i64> = input
+        .trim()
+        .split(',')
+        .map(|c| c.parse().unwrap())
+        .collect();
     part_a(&code);
     part_b(&code);
 }
 
 fn part_a(code: &Vec<i64>) {
     let mut intcode = intcode_instance(&code);
-    let mut input = |_: &Vec<i64>| { 0 };
+    let mut input = |_: &Vec<i64>| 0;
     intcode.run(&mut input);
 
     let mut screen = HashMap::new();
@@ -19,7 +23,7 @@ fn part_a(code: &Vec<i64>) {
         let pos = (intcode.output[i], intcode.output[i + 1]);
         screen.insert(pos, intcode.output[i + 2]);
         i += 3;
-    };
+    }
 
     print_screen(&screen);
     let block_count = screen.values().into_iter().filter(|v| **v == 2).count();
@@ -42,7 +46,7 @@ fn part_b(code: &Vec<i64>) {
                 ball_pos = output[i];
             }
             i += 3;
-        };
+        }
 
         // Just follow the ball with the platform, cannot miss
         if platform_pos > ball_pos {
@@ -61,7 +65,7 @@ fn part_b(code: &Vec<i64>) {
         let pos = (intcode.output[i], intcode.output[i + 1]);
         screen.insert(pos, intcode.output[i + 2]);
         i += 3;
-    };
+    }
 
     print_screen(&screen);
     println!("Score: {}", screen.get(&(-1, 0)).unwrap());
@@ -193,8 +197,12 @@ impl IntcodeProcessor {
                     self.relative_base += a_val;
                     self.instruction_ptr += 2;
                 }
-                99 => { break; }
-                _ => { panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr); }
+                99 => {
+                    break;
+                }
+                _ => {
+                    panic!("Unknown opcode {} at pos {}", opcode, self.instruction_ptr);
+                }
             }
         }
     }
@@ -202,13 +210,17 @@ impl IntcodeProcessor {
     fn mem_read(&mut self, mode: i32, val: i64) -> i64 {
         match mode {
             0 => {
-                if val < 0 { panic!("Invalid memory address: {}", val) }
+                if val < 0 {
+                    panic!("Invalid memory address: {}", val)
+                }
                 *self.memory.entry(val).or_insert(0)
             }
             1 => val,
             2 => {
                 let addr = val + self.relative_base;
-                if addr < 0 { panic!("Invalid memory address: {}", addr) }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr)
+                }
                 *self.memory.entry(addr).or_insert(0)
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -218,13 +230,17 @@ impl IntcodeProcessor {
     fn mem_write(&mut self, mode: i32, addr: i64, val: i64) {
         match mode {
             0 => {
-                if addr < 0 { panic!("Invalid memory address: {}", addr); }
+                if addr < 0 {
+                    panic!("Invalid memory address: {}", addr);
+                }
                 self.memory.insert(addr, val);
             }
             1 => panic!("How to write in mode 1?"),
             2 => {
                 let i = addr + self.relative_base;
-                if i < 0 { panic!("Invalid memory address: {}", i) }
+                if i < 0 {
+                    panic!("Invalid memory address: {}", i)
+                }
                 self.memory.insert(i, val);
             }
             _ => panic!("Unknown mode: {}", mode),
@@ -240,7 +256,7 @@ fn intcode_instance(code: &Vec<i64>) -> IntcodeProcessor {
     IntcodeProcessor {
         instruction_ptr: 0,
         memory,
-        output: vec!(),
+        output: vec![],
         relative_base: 0,
     }
 }

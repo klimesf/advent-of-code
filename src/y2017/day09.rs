@@ -23,19 +23,24 @@ fn score(stream: &str) -> (i32, i32) {
             continue;
         }
         if garbage_open {
-            if c == '>' { garbage_open = false; }
-            else { part_b += 1; }
+            if c == '>' {
+                garbage_open = false;
+            } else {
+                part_b += 1;
+            }
             continue;
         }
         match c {
-            '{' => { depth += 1 }
+            '{' => depth += 1,
             '}' => {
                 part_a += depth;
                 depth -= 1;
             }
-            '<' => { garbage_open = true; }
-            ',' => { }
-            _ => panic!("Unknown character {}", c)
+            '<' => {
+                garbage_open = true;
+            }
+            ',' => {}
+            _ => panic!("Unknown character {}", c),
         }
     }
     (part_a, part_b)
@@ -43,8 +48,8 @@ fn score(stream: &str) -> (i32, i32) {
 
 #[cfg(test)]
 mod day09_tests {
-    use std::fs;
     use crate::y2017::day09::score;
+    use std::fs;
 
     #[test]
     fn part_a_works() {

@@ -2,8 +2,14 @@ use std::collections::HashSet;
 use std::fs;
 
 pub(crate) fn day07() {
-    println!("{}", part_a(fs::read_to_string("input/2016/day07/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2016/day07/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2016/day07/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2016/day07/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -52,8 +58,8 @@ fn supports_ssl(addr: &str) -> bool {
 }
 
 fn split_brackets(addr: &str) -> (Vec<String>, Vec<String>) {
-    let mut out_bracket_parts = vec!();
-    let mut in_bracket_parts = vec!();
+    let mut out_bracket_parts = vec![];
+    let mut in_bracket_parts = vec![];
     let mut curr = String::new();
     let mut in_bracket = false;
     let chars: Vec<char> = addr.chars().collect();
@@ -88,14 +94,14 @@ fn contains_abba(addr: &str) -> bool {
         let i4 = chars[i + 3];
 
         if i1 != i2 && i1 == i4 && i2 == i3 {
-            return true
+            return true;
         }
     }
     false
 }
 
 fn get_abas(addr: String) -> Vec<String> {
-    let mut abas = vec!();
+    let mut abas = vec![];
     let chars: Vec<char> = addr.chars().collect();
     for i in 0..(addr.len() - 2) {
         let i1 = chars[i];
@@ -113,7 +119,7 @@ fn get_abas(addr: String) -> Vec<String> {
 mod day07_tests {
     use std::fs;
 
-    use crate::y2016::day07::{part_a, part_b, supports_tls, supports_ssl};
+    use crate::y2016::day07::{part_a, part_b, supports_ssl, supports_tls};
 
     #[test]
     fn supports_tls_works() {
@@ -133,13 +139,25 @@ mod day07_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(2, part_a(fs::read_to_string("input/2016/day07/test.txt").unwrap()));
-        assert_eq!(0, part_b(fs::read_to_string("input/2016/day07/test.txt").unwrap()));
+        assert_eq!(
+            2,
+            part_a(fs::read_to_string("input/2016/day07/test.txt").unwrap())
+        );
+        assert_eq!(
+            0,
+            part_b(fs::read_to_string("input/2016/day07/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(115, part_a(fs::read_to_string("input/2016/day07/input.txt").unwrap()));
-        assert_eq!(231, part_b(fs::read_to_string("input/2016/day07/input.txt").unwrap()));
+        assert_eq!(
+            115,
+            part_a(fs::read_to_string("input/2016/day07/input.txt").unwrap())
+        );
+        assert_eq!(
+            231,
+            part_b(fs::read_to_string("input/2016/day07/input.txt").unwrap())
+        );
     }
 }

@@ -51,7 +51,7 @@ impl Mul<i32> for P {
 
 #[cfg(test)]
 mod point_tests {
-    use crate::utils::grid::{P};
+    use crate::utils::grid::P;
 
     #[test]
     fn add_works() {
@@ -73,7 +73,6 @@ mod point_tests {
     }
 }
 
-
 #[derive(Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Grid<T> {
     pub x_len: i32,
@@ -84,24 +83,42 @@ pub struct Grid<T> {
 impl Grid<usize> {
     #[inline]
     pub fn new_usize(x_len: i32, y_len: i32, val: usize) -> Self {
-        Grid { x_len, y_len, items: vec![val; (x_len * y_len) as usize] }
+        Grid {
+            x_len,
+            y_len,
+            items: vec![val; (x_len * y_len) as usize],
+        }
     }
 }
 
 impl Grid<u8> {
     #[inline]
     pub fn parse(input: &str) -> Self {
-        let items = input.lines()
+        let items = input
+            .lines()
             .map(|line| line.chars().map(|c| c as u8).collect::<Vec<u8>>())
-            .flatten().collect();
+            .flatten()
+            .collect();
         let x_len = input.lines().count() as i32;
-        let y_len = if x_len > 0 { input.len() as i32 / x_len } else { 0 };
-        Grid { x_len, y_len, items }
+        let y_len = if x_len > 0 {
+            input.len() as i32 / x_len
+        } else {
+            0
+        };
+        Grid {
+            x_len,
+            y_len,
+            items,
+        }
     }
 
     #[inline]
     pub fn new(x_len: i32, y_len: i32, c: u8) -> Self {
-        Grid { x_len, y_len, items: vec![c; (x_len * y_len) as usize] }
+        Grid {
+            x_len,
+            y_len,
+            items: vec![c; (x_len * y_len) as usize],
+        }
     }
 
     #[inline]
@@ -127,7 +144,7 @@ impl Grid<u8> {
     }
 }
 
-impl <T> Grid<T> {
+impl<T> Grid<T> {
     #[inline]
     pub fn contains(&self, p: &P) -> bool {
         p.x >= 0 && p.x < self.x_len && p.y >= 0 && p.y < self.y_len
@@ -171,22 +188,30 @@ impl IntoIterator for Grid<u8> {
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.items.into_iter().enumerate().map(|(i, c)| (
-            i as i32 / self.y_len,
-            i as i32 % self.y_len,
-            c
-        )).collect::<Vec<Self::Item>>().into_iter()
+        self.items
+            .into_iter()
+            .enumerate()
+            .map(|(i, c)| (i as i32 / self.y_len, i as i32 % self.y_len, c))
+            .collect::<Vec<Self::Item>>()
+            .into_iter()
     }
 }
 
 #[cfg(test)]
 mod grid_tests {
-    use crate::utils::grid::{P, Grid};
+    use crate::utils::grid::{Grid, P};
 
     #[test]
     fn parse_works() {
         let empty_map = Grid::parse("");
-        assert_eq!(empty_map, Grid { x_len: 0, y_len: 0, items: vec![] });
+        assert_eq!(
+            empty_map,
+            Grid {
+                x_len: 0,
+                y_len: 0,
+                items: vec![]
+            }
+        );
 
         let basic_map = Grid::parse("#####\n#   #\n#   #\n#####");
         assert_eq!(4, basic_map.x_len);

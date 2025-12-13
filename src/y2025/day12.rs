@@ -62,7 +62,9 @@ fn part_a(input: String) -> usize {
         })
         .filter(|(max_x, max_y, pos)| {
             let place_for_all = pos.iter().map(|i| i * 3 * 3).sum::<usize>();
-            if max_x * max_y >= place_for_all { return true; }
+            if max_x * max_y >= place_for_all {
+                return true;
+            }
 
             let area = vec![vec![false; *max_y]; *max_x];
             let placed = vec![0; gifts.len()];
@@ -94,9 +96,8 @@ fn part_a(input: String) -> usize {
         .count()
 }
 
-
 fn try_place(area: &Vec<Vec<bool>>, gift: &Vec<Vec<bool>>) -> Vec<Vec<Vec<bool>>> {
-    let mut placed = vec!();
+    let mut placed = vec![];
     let mut rotated_gifts = vec![gift.clone()];
 
     let mut rot1 = vec![vec![false; gift[0].len()]; gift.len()];
@@ -133,7 +134,8 @@ fn try_place(area: &Vec<Vec<bool>>, gift: &Vec<Vec<bool>>) -> Vec<Vec<Vec<bool>>
                         let area_val = area[i + x][j + y];
                         if gift_val {
                             can_be_placed = can_be_placed && !area_val;
-                        } else {}
+                        } else {
+                        }
                     }
                 }
                 if can_be_placed {

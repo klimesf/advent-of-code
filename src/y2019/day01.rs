@@ -5,19 +5,15 @@ pub(crate) fn day01() {
     let file = File::open("input/2019/day01/input.txt");
     let reader = BufReader::new(file.unwrap());
 
-    let mut modules: Vec<u32> = vec!();
+    let mut modules: Vec<u32> = vec![];
     for line in reader.lines() {
         modules.push(line.unwrap().parse().unwrap());
     }
 
-    let part_a: u32 = modules.iter()
-        .map(|m| (m / 3) - 2)
-        .sum();
+    let part_a: u32 = modules.iter().map(|m| (m / 3) - 2).sum();
     println!("{}", part_a);
 
-    let part_b: u32 = modules.iter()
-        .map(|m| calculate_fuel(*m))
-        .sum();
+    let part_b: u32 = modules.iter().map(|m| calculate_fuel(*m)).sum();
     println!("{}", part_b);
 }
 

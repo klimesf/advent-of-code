@@ -1,11 +1,17 @@
+use itertools::Itertools;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
-use itertools::Itertools;
 
 pub(crate) fn day15() {
-    println!("{}", part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -13,7 +19,6 @@ fn part_a(input: String) -> usize {
 
     let mut round = 0;
     'outer: loop {
-
         units.sort_by(|a, b| {
             let sa = a.r * map[0].len() + a.c;
             let sb = b.r * map[0].len() + b.c;
@@ -23,9 +28,13 @@ fn part_a(input: String) -> usize {
         'unit_loop: for i in 0..units.len() {
             // println!("-- -- unit {}", i);
             let mut unit = units[i];
-            if unit.hp == 0 { continue; }
+            if unit.hp == 0 {
+                continue;
+            }
 
-            let targets: Vec<usize> = units.iter().enumerate()
+            let targets: Vec<usize> = units
+                .iter()
+                .enumerate()
                 .filter(|(_, target)| target.t != unit.t && target.hp > 0)
                 .map(|(j, _)| j)
                 .collect();
@@ -37,35 +46,51 @@ fn part_a(input: String) -> usize {
             let mut adjacent_targets = count_adjacent_enemies(&map, &unit);
             if adjacent_targets == 0 {
                 // Move if not in range of a target
-                let mut in_range: Vec<(usize, usize)> = vec!();
-                targets.iter()
+                let mut in_range: Vec<(usize, usize)> = vec![];
+                targets
+                    .iter()
                     .map(|j| units[*j])
                     .map(|target| adjacent_reachable_fields(&map, target.r, target.c))
                     .for_each(|fields| fields.iter().for_each(|(r, c)| in_range.push((*r, *c))));
 
                 // Find reachable
-                let mut reachable = vec!();
+                let mut reachable = vec![];
                 let mut stack = BinaryHeap::new();
                 let mut visited = HashSet::new();
-                stack.push(Pos { r: unit.r, c: unit.c, dist: 0 });
+                stack.push(Pos {
+                    r: unit.r,
+                    c: unit.c,
+                    dist: 0,
+                });
 
                 while let Some(pos) = stack.pop() {
-                    if !visited.insert((pos.r, pos.c)) { continue; }
-                    if in_range.contains(&(pos.r, pos.c)) { reachable.push((pos.r, pos.c, pos.dist)) }
+                    if !visited.insert((pos.r, pos.c)) {
+                        continue;
+                    }
+                    if in_range.contains(&(pos.r, pos.c)) {
+                        reachable.push((pos.r, pos.c, pos.dist))
+                    }
 
                     for (r2, c2) in adjacent_reachable_fields(&map, pos.r, pos.c) {
-                        stack.push(Pos { r: r2, c: c2, dist: pos.dist + 1 });
+                        stack.push(Pos {
+                            r: r2,
+                            c: c2,
+                            dist: pos.dist + 1,
+                        });
                     }
                 }
 
                 // Select nearest (ties resolved by reading order)
-                let destination = reachable.iter().sorted_by(|a, b| {
-                    if a.2 == b.2 {
-                        (a.0 * map[0].len() + a.1).cmp(&(b.0 * map[0].len() + b.1))
-                    } else {
-                        a.2.cmp(&b.2)
-                    }
-                }).find_or_first(|_| true);
+                let destination = reachable
+                    .iter()
+                    .sorted_by(|a, b| {
+                        if a.2 == b.2 {
+                            (a.0 * map[0].len() + a.1).cmp(&(b.0 * map[0].len() + b.1))
+                        } else {
+                            a.2.cmp(&b.2)
+                        }
+                    })
+                    .find_or_first(|_| true);
 
                 match destination {
                     None => {}
@@ -73,18 +98,29 @@ fn part_a(input: String) -> usize {
                         // Select the step that is nearest (tie resolved by reading order)
                         let mut dest_dist: HashMap<(usize, usize), usize> = HashMap::new();
                         let mut stack = BinaryHeap::new();
-                        stack.push(Pos { r: dest.0, c: dest.1, dist: 0 });
+                        stack.push(Pos {
+                            r: dest.0,
+                            c: dest.1,
+                            dist: 0,
+                        });
 
                         while let Some(pos) = stack.pop() {
-                            if dest_dist.contains_key(&(pos.r, pos.c)) { continue; }
+                            if dest_dist.contains_key(&(pos.r, pos.c)) {
+                                continue;
+                            }
                             dest_dist.insert((pos.r, pos.c), pos.dist);
 
                             for (r2, c2) in adjacent_reachable_fields(&map, pos.r, pos.c) {
-                                stack.push(Pos { r: r2, c: c2, dist: pos.dist + 1 });
+                                stack.push(Pos {
+                                    r: r2,
+                                    c: c2,
+                                    dist: pos.dist + 1,
+                                });
                             }
                         }
 
-                        let move_to = *adjacent_reachable_fields(&map, unit.r, unit.c).iter()
+                        let move_to = *adjacent_reachable_fields(&map, unit.r, unit.c)
+                            .iter()
                             .sorted_by(|a, b| {
                                 if !dest_dist.contains_key(&(a.0, a.1)) {
                                     return Ordering::Greater;
@@ -108,8 +144,8 @@ fn part_a(input: String) -> usize {
                         // Move one step, don't forget to change map
                         map[unit.r][unit.c] = '.';
                         map[move_to.0][move_to.1] = match unit.t {
-                            UnitType::ELF => { 'E' }
-                            UnitType::GOBLIN => { 'G' }
+                            UnitType::ELF => 'E',
+                            UnitType::GOBLIN => 'G',
                         };
                         unit.r = move_to.0;
                         unit.c = move_to.1;
@@ -121,16 +157,22 @@ fn part_a(input: String) -> usize {
             }
 
             // Attack adjacent target with lowest HP, ties resolved by reading order
-            if adjacent_targets == 0 { continue 'unit_loop; } // If still not adjacent, continue
+            if adjacent_targets == 0 {
+                continue 'unit_loop;
+            } // If still not adjacent, continue
 
             let mut selected_target = 0;
             let mut min_hp = usize::MAX;
             let mut min_reading_order = usize::MAX;
             for j in &targets {
                 let target = units[*j];
-                if manhattan_dist(&unit, &target) != 1 { continue }
+                if manhattan_dist(&unit, &target) != 1 {
+                    continue;
+                }
                 let target_reading_order = (target.r * map[0].len()) + target.c;
-                if target.hp < min_hp || target.hp == min_hp && target_reading_order < min_reading_order {
+                if target.hp < min_hp
+                    || target.hp == min_hp && target_reading_order < min_reading_order
+                {
                     selected_target = *j;
                     min_hp = target.hp;
                     min_reading_order = target_reading_order
@@ -149,8 +191,16 @@ fn part_a(input: String) -> usize {
         round += 1;
     }
 
-    let elves_hps = units.iter().filter(|u| u.t == UnitType::ELF).map(|u| u.hp).sum::<usize>();
-    let goblin_hps = units.iter().filter(|u| u.t == UnitType::GOBLIN).map(|u| u.hp).sum::<usize>();
+    let elves_hps = units
+        .iter()
+        .filter(|u| u.t == UnitType::ELF)
+        .map(|u| u.hp)
+        .sum::<usize>();
+    let goblin_hps = units
+        .iter()
+        .filter(|u| u.t == UnitType::GOBLIN)
+        .map(|u| u.hp)
+        .sum::<usize>();
 
     return round * (goblin_hps + elves_hps);
 }
@@ -160,13 +210,11 @@ fn part_b(input: String) -> usize {
 
     let mut bonus = 1;
     'bonus: loop {
-
         let mut map = og_map.clone();
         let mut units = og_units.clone();
 
         let mut round = 0;
         'outer: loop {
-
             units.sort_by(|a, b| {
                 let sa = a.r * map[0].len() + a.c;
                 let sb = b.r * map[0].len() + b.c;
@@ -176,9 +224,13 @@ fn part_b(input: String) -> usize {
             'unit_loop: for i in 0..units.len() {
                 // println!("-- -- unit {}", i);
                 let mut unit = units[i];
-                if unit.hp == 0 { continue; }
+                if unit.hp == 0 {
+                    continue;
+                }
 
-                let targets: Vec<usize> = units.iter().enumerate()
+                let targets: Vec<usize> = units
+                    .iter()
+                    .enumerate()
                     .filter(|(_, target)| target.t != unit.t && target.hp > 0)
                     .map(|(j, _)| j)
                     .collect();
@@ -190,35 +242,53 @@ fn part_b(input: String) -> usize {
                 let mut adjacent_targets = count_adjacent_enemies(&map, &unit);
                 if adjacent_targets == 0 {
                     // Move if not in range of a target
-                    let mut in_range: Vec<(usize, usize)> = vec!();
-                    targets.iter()
+                    let mut in_range: Vec<(usize, usize)> = vec![];
+                    targets
+                        .iter()
                         .map(|j| units[*j])
                         .map(|target| adjacent_reachable_fields(&map, target.r, target.c))
-                        .for_each(|fields| fields.iter().for_each(|(r, c)| in_range.push((*r, *c))));
+                        .for_each(|fields| {
+                            fields.iter().for_each(|(r, c)| in_range.push((*r, *c)))
+                        });
 
                     // Find reachable
-                    let mut reachable = vec!();
+                    let mut reachable = vec![];
                     let mut stack = BinaryHeap::new();
                     let mut visited = HashSet::new();
-                    stack.push(Pos { r: unit.r, c: unit.c, dist: 0 });
+                    stack.push(Pos {
+                        r: unit.r,
+                        c: unit.c,
+                        dist: 0,
+                    });
 
                     while let Some(pos) = stack.pop() {
-                        if !visited.insert((pos.r, pos.c)) { continue; }
-                        if in_range.contains(&(pos.r, pos.c)) { reachable.push((pos.r, pos.c, pos.dist)) }
+                        if !visited.insert((pos.r, pos.c)) {
+                            continue;
+                        }
+                        if in_range.contains(&(pos.r, pos.c)) {
+                            reachable.push((pos.r, pos.c, pos.dist))
+                        }
 
                         for (r2, c2) in adjacent_reachable_fields(&map, pos.r, pos.c) {
-                            stack.push(Pos { r: r2, c: c2, dist: pos.dist + 1 });
+                            stack.push(Pos {
+                                r: r2,
+                                c: c2,
+                                dist: pos.dist + 1,
+                            });
                         }
                     }
 
                     // Select nearest (ties resolved by reading order)
-                    let destination = reachable.iter().sorted_by(|a, b| {
-                        if a.2 == b.2 {
-                            (a.0 * map[0].len() + a.1).cmp(&(b.0 * map[0].len() + b.1))
-                        } else {
-                            a.2.cmp(&b.2)
-                        }
-                    }).find_or_first(|_| true);
+                    let destination = reachable
+                        .iter()
+                        .sorted_by(|a, b| {
+                            if a.2 == b.2 {
+                                (a.0 * map[0].len() + a.1).cmp(&(b.0 * map[0].len() + b.1))
+                            } else {
+                                a.2.cmp(&b.2)
+                            }
+                        })
+                        .find_or_first(|_| true);
 
                     match destination {
                         None => {}
@@ -226,18 +296,29 @@ fn part_b(input: String) -> usize {
                             // Select the step that is nearest (tie resolved by reading order)
                             let mut dest_dist: HashMap<(usize, usize), usize> = HashMap::new();
                             let mut stack = BinaryHeap::new();
-                            stack.push(Pos { r: dest.0, c: dest.1, dist: 0 });
+                            stack.push(Pos {
+                                r: dest.0,
+                                c: dest.1,
+                                dist: 0,
+                            });
 
                             while let Some(pos) = stack.pop() {
-                                if dest_dist.contains_key(&(pos.r, pos.c)) { continue; }
+                                if dest_dist.contains_key(&(pos.r, pos.c)) {
+                                    continue;
+                                }
                                 dest_dist.insert((pos.r, pos.c), pos.dist);
 
                                 for (r2, c2) in adjacent_reachable_fields(&map, pos.r, pos.c) {
-                                    stack.push(Pos { r: r2, c: c2, dist: pos.dist + 1 });
+                                    stack.push(Pos {
+                                        r: r2,
+                                        c: c2,
+                                        dist: pos.dist + 1,
+                                    });
                                 }
                             }
 
-                            let move_to = *adjacent_reachable_fields(&map, unit.r, unit.c).iter()
+                            let move_to = *adjacent_reachable_fields(&map, unit.r, unit.c)
+                                .iter()
                                 .sorted_by(|a, b| {
                                     if !dest_dist.contains_key(&(a.0, a.1)) {
                                         return Ordering::Greater;
@@ -261,8 +342,8 @@ fn part_b(input: String) -> usize {
                             // Move one step, don't forget to change map
                             map[unit.r][unit.c] = '.';
                             map[move_to.0][move_to.1] = match unit.t {
-                                UnitType::ELF => { 'E' }
-                                UnitType::GOBLIN => { 'G' }
+                                UnitType::ELF => 'E',
+                                UnitType::GOBLIN => 'G',
                             };
                             unit.r = move_to.0;
                             unit.c = move_to.1;
@@ -274,16 +355,22 @@ fn part_b(input: String) -> usize {
                 }
 
                 // Attack adjacent target with lowest HP, ties resolved by reading order
-                if adjacent_targets == 0 { continue 'unit_loop; } // If still not adjacent, continue
+                if adjacent_targets == 0 {
+                    continue 'unit_loop;
+                } // If still not adjacent, continue
 
                 let mut selected_target = 0;
                 let mut min_hp = usize::MAX;
                 let mut min_reading_order = usize::MAX;
                 for j in &targets {
                     let target = units[*j];
-                    if manhattan_dist(&unit, &target) != 1 { continue }
+                    if manhattan_dist(&unit, &target) != 1 {
+                        continue;
+                    }
                     let target_reading_order = (target.r * map[0].len()) + target.c;
-                    if target.hp < min_hp || target.hp == min_hp && target_reading_order < min_reading_order {
+                    if target.hp < min_hp
+                        || target.hp == min_hp && target_reading_order < min_reading_order
+                    {
                         selected_target = *j;
                         min_hp = target.hp;
                         min_reading_order = target_reading_order
@@ -292,8 +379,8 @@ fn part_b(input: String) -> usize {
 
                 let mut target = units[selected_target];
                 let attack = match unit.t {
-                    UnitType::ELF => { 3 + bonus }
-                    UnitType::GOBLIN => { 3 }
+                    UnitType::ELF => 3 + bonus,
+                    UnitType::GOBLIN => 3,
                 };
 
                 if target.hp <= attack {
@@ -312,30 +399,53 @@ fn part_b(input: String) -> usize {
             round += 1;
         }
 
-        let elves_hps = units.iter().filter(|u| u.t == UnitType::ELF).map(|u| u.hp).sum::<usize>();
-        let goblin_hps = units.iter().filter(|u| u.t == UnitType::GOBLIN).map(|u| u.hp).sum::<usize>();
+        let elves_hps = units
+            .iter()
+            .filter(|u| u.t == UnitType::ELF)
+            .map(|u| u.hp)
+            .sum::<usize>();
+        let goblin_hps = units
+            .iter()
+            .filter(|u| u.t == UnitType::GOBLIN)
+            .map(|u| u.hp)
+            .sum::<usize>();
 
-        return round * (goblin_hps + elves_hps)
+        return round * (goblin_hps + elves_hps);
     }
 }
 
 fn parse_input(input: String) -> (Vec<Vec<char>>, Vec<Unit>) {
-    let mut units = vec!();
-    let map: Vec<Vec<char>> = input.lines().enumerate().map(|(r, line)| {
-        line.chars().enumerate()
-            .map(|(c, pos)| {
-                if pos == 'G' {
-                    units.push(Unit { r, c, hp: 200, t: UnitType::GOBLIN });
-                    pos
-                } else if pos == 'E' {
-                    units.push(Unit { r, c, hp: 200, t: UnitType::ELF });
-                    pos
-                } else {
-                    pos
-                }
-            })
-            .collect()
-    }).collect();
+    let mut units = vec![];
+    let map: Vec<Vec<char>> = input
+        .lines()
+        .enumerate()
+        .map(|(r, line)| {
+            line.chars()
+                .enumerate()
+                .map(|(c, pos)| {
+                    if pos == 'G' {
+                        units.push(Unit {
+                            r,
+                            c,
+                            hp: 200,
+                            t: UnitType::GOBLIN,
+                        });
+                        pos
+                    } else if pos == 'E' {
+                        units.push(Unit {
+                            r,
+                            c,
+                            hp: 200,
+                            t: UnitType::ELF,
+                        });
+                        pos
+                    } else {
+                        pos
+                    }
+                })
+                .collect()
+        })
+        .collect();
     (map, units)
 }
 
@@ -346,7 +456,7 @@ fn manhattan_dist(a: &Unit, b: &Unit) -> usize {
 /// Returns adjacent fields in reading order.
 /// Considers only . fields.
 fn adjacent_reachable_fields(map: &Vec<Vec<char>>, r: usize, c: usize) -> Vec<(usize, usize)> {
-    let mut adjacent = vec!();
+    let mut adjacent = vec![];
     if map[r - 1][c] == '.' {
         adjacent.push((r - 1, c))
     }
@@ -365,8 +475,8 @@ fn adjacent_reachable_fields(map: &Vec<Vec<char>>, r: usize, c: usize) -> Vec<(u
 fn count_adjacent_enemies(map: &Vec<Vec<char>>, unit: &Unit) -> usize {
     let mut adjacent = 0;
     let enemy = match unit.t {
-        UnitType::ELF => { 'G' }
-        UnitType::GOBLIN => { 'E' }
+        UnitType::ELF => 'G',
+        UnitType::GOBLIN => 'E',
     };
     if map[unit.r - 1][unit.c] == enemy {
         adjacent += 1
@@ -424,18 +534,45 @@ mod day15_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(27828, part_a(fs::read_to_string("input/2018/day15/test.txt").unwrap()));
-        assert_eq!(27730, part_a(fs::read_to_string("input/2018/day15/test_27730.txt").unwrap()));
-        assert_eq!(36334, part_a(fs::read_to_string("input/2018/day15/test_36334.txt").unwrap()));
-        assert_eq!(39514, part_a(fs::read_to_string("input/2018/day15/test_39514.txt").unwrap()));
-        assert_eq!(27755, part_a(fs::read_to_string("input/2018/day15/test_27755.txt").unwrap()));
-        assert_eq!(28944, part_a(fs::read_to_string("input/2018/day15/test_28944.txt").unwrap()));
-        assert_eq!(18740, part_a(fs::read_to_string("input/2018/day15/test_18740.txt").unwrap()));
+        assert_eq!(
+            27828,
+            part_a(fs::read_to_string("input/2018/day15/test.txt").unwrap())
+        );
+        assert_eq!(
+            27730,
+            part_a(fs::read_to_string("input/2018/day15/test_27730.txt").unwrap())
+        );
+        assert_eq!(
+            36334,
+            part_a(fs::read_to_string("input/2018/day15/test_36334.txt").unwrap())
+        );
+        assert_eq!(
+            39514,
+            part_a(fs::read_to_string("input/2018/day15/test_39514.txt").unwrap())
+        );
+        assert_eq!(
+            27755,
+            part_a(fs::read_to_string("input/2018/day15/test_27755.txt").unwrap())
+        );
+        assert_eq!(
+            28944,
+            part_a(fs::read_to_string("input/2018/day15/test_28944.txt").unwrap())
+        );
+        assert_eq!(
+            18740,
+            part_a(fs::read_to_string("input/2018/day15/test_18740.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(250648, part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
-        assert_eq!(42224, part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
+        assert_eq!(
+            250648,
+            part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap())
+        );
+        assert_eq!(
+            42224,
+            part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap())
+        );
     }
 }

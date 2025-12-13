@@ -1,8 +1,14 @@
 use std::fs;
 
 pub(crate) fn day05() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day05/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2015/day05/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2015/day05/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2015/day05/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -25,7 +31,9 @@ fn contains_3_vowels(str: &str) -> bool {
 fn contains_two_letters_in_a_row(str: &str) -> bool {
     let mut last = '_';
     for c in str.chars() {
-        if c == last { return true; }
+        if c == last {
+            return true;
+        }
         last = c;
     }
     false
@@ -45,7 +53,9 @@ fn contains_two_pairs(str: &str) -> bool {
         let curr_pair = format!("{}{}", chars[i - 1], chars[i]);
         for j in i + 2..chars.len() {
             let cmp_pair = format!("{}{}", chars[j - 1], chars[j]);
-            if curr_pair == cmp_pair { return true; }
+            if curr_pair == cmp_pair {
+                return true;
+            }
         }
     }
 
@@ -56,7 +66,9 @@ fn contins_two_letters_with_one_in_between(str: &str) -> bool {
     let mut prev_prev = '_';
     let mut prev = '_';
     for c in str.chars() {
-        if c == prev_prev { return true; }
+        if c == prev_prev {
+            return true;
+        }
         prev_prev = prev;
         prev = c;
     }
@@ -79,7 +91,13 @@ mod day05_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(255, part_a(fs::read_to_string("input/2015/day05/input.txt").unwrap()));
-        assert_eq!(55, part_b(fs::read_to_string("input/2015/day05/input.txt").unwrap()));
+        assert_eq!(
+            255,
+            part_a(fs::read_to_string("input/2015/day05/input.txt").unwrap())
+        );
+        assert_eq!(
+            55,
+            part_b(fs::read_to_string("input/2015/day05/input.txt").unwrap())
+        );
     }
 }

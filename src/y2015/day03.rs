@@ -2,8 +2,14 @@ use std::collections::HashSet;
 use std::fs;
 
 pub(crate) fn day03() {
-    println!("{}", part_a(fs::read_to_string("input/2015/day03/input.txt").unwrap()));
-    println!("{}", part_b(fs::read_to_string("input/2015/day03/input.txt").unwrap()));
+    println!(
+        "{}",
+        part_a(fs::read_to_string("input/2015/day03/input.txt").unwrap())
+    );
+    println!(
+        "{}",
+        part_b(fs::read_to_string("input/2015/day03/input.txt").unwrap())
+    );
 }
 
 fn part_a(input: String) -> usize {
@@ -12,11 +18,13 @@ fn part_a(input: String) -> usize {
     houses.insert(pos);
     input.chars().for_each(|c| {
         match c {
-            '^' => { pos = (pos.0 - 1, pos.1) }
-            'v' => { pos = (pos.0 + 1, pos.1) }
-            '>' => { pos = (pos.0, pos.1 - 1) }
-            '<' => { pos = (pos.0, pos.1 + 1) }
-            _ => { panic!() }
+            '^' => pos = (pos.0 - 1, pos.1),
+            'v' => pos = (pos.0 + 1, pos.1),
+            '>' => pos = (pos.0, pos.1 - 1),
+            '<' => pos = (pos.0, pos.1 + 1),
+            _ => {
+                panic!()
+            }
         }
         houses.insert(pos);
     });
@@ -32,20 +40,24 @@ fn part_b(input: String) -> usize {
     input.chars().for_each(|c| {
         if turn % 2 == 0 {
             match c {
-                '^' => { santa_pos = (santa_pos.0 - 1, santa_pos.1) }
-                'v' => { santa_pos = (santa_pos.0 + 1, santa_pos.1) }
-                '>' => { santa_pos = (santa_pos.0, santa_pos.1 - 1) }
-                '<' => { santa_pos = (santa_pos.0, santa_pos.1 + 1) }
-                _ => { panic!() }
+                '^' => santa_pos = (santa_pos.0 - 1, santa_pos.1),
+                'v' => santa_pos = (santa_pos.0 + 1, santa_pos.1),
+                '>' => santa_pos = (santa_pos.0, santa_pos.1 - 1),
+                '<' => santa_pos = (santa_pos.0, santa_pos.1 + 1),
+                _ => {
+                    panic!()
+                }
             }
             houses.insert(santa_pos);
         } else {
             match c {
-                '^' => { robo_santa_pos = (robo_santa_pos.0 - 1, robo_santa_pos.1) }
-                'v' => { robo_santa_pos = (robo_santa_pos.0 + 1, robo_santa_pos.1) }
-                '>' => { robo_santa_pos = (robo_santa_pos.0, robo_santa_pos.1 - 1) }
-                '<' => { robo_santa_pos = (robo_santa_pos.0, robo_santa_pos.1 + 1) }
-                _ => { panic!() }
+                '^' => robo_santa_pos = (robo_santa_pos.0 - 1, robo_santa_pos.1),
+                'v' => robo_santa_pos = (robo_santa_pos.0 + 1, robo_santa_pos.1),
+                '>' => robo_santa_pos = (robo_santa_pos.0, robo_santa_pos.1 - 1),
+                '<' => robo_santa_pos = (robo_santa_pos.0, robo_santa_pos.1 + 1),
+                _ => {
+                    panic!()
+                }
             }
             houses.insert(robo_santa_pos);
         }
@@ -62,7 +74,13 @@ mod day03_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(2081, part_a(fs::read_to_string("input/2015/day03/input.txt").unwrap()));
-        assert_eq!(2341, part_b(fs::read_to_string("input/2015/day03/input.txt").unwrap()));
+        assert_eq!(
+            2081,
+            part_a(fs::read_to_string("input/2015/day03/input.txt").unwrap())
+        );
+        assert_eq!(
+            2341,
+            part_b(fs::read_to_string("input/2015/day03/input.txt").unwrap())
+        );
     }
 }

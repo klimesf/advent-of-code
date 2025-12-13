@@ -1,4 +1,4 @@
-use std::collections::{HashSet};
+use std::collections::HashSet;
 use std::{fs, mem};
 
 pub(crate) fn day23() {
@@ -7,15 +7,27 @@ pub(crate) fn day23() {
     let mut new_map = HashSet::new();
     map.reserve(input.len());
     new_map.reserve(input.len());
-    input.lines().enumerate().for_each(|(x, line)| line.chars().enumerate()
-        .for_each(|(y, c)| {
+    input.lines().enumerate().for_each(|(x, line)| {
+        line.chars().enumerate().for_each(|(y, c)| {
             match c {
-                '#' => { map.insert((x as i32, y as i32)); },
-                _ => { }
+                '#' => {
+                    map.insert((x as i32, y as i32));
+                }
+                _ => {}
             };
-        }));
+        })
+    });
 
-    let all_dirs = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (1, 1), (-1, 1), (-1, -1)];
+    let all_dirs = [
+        (1, 0),
+        (-1, 0),
+        (0, 1),
+        (0, -1),
+        (1, -1),
+        (1, 1),
+        (-1, 1),
+        (-1, -1),
+    ];
     let north_dirs = ([(-1, 0), (-1, -1), (-1, 1)], (-1, 0));
     let south_dirs = ([(1, 0), (1, -1), (1, 1)], (1, 0));
     let west_dirs = ([(0, -1), (1, -1), (-1, -1)], (0, -1));
@@ -28,10 +40,16 @@ pub(crate) fn day23() {
         new_map.clear();
 
         'outer: for elf in &map {
-            if all_dirs.iter().any(|(dx, dy)| map.contains(&(elf.0 + dx, elf.1 + dy))) {
+            if all_dirs
+                .iter()
+                .any(|(dx, dy)| map.contains(&(elf.0 + dx, elf.1 + dy)))
+            {
                 for j in i..i + 4 {
                     let (dirs, mv) = ordnung[j % 4];
-                    if dirs.iter().all(|(dx, dy)| !map.contains(&(elf.0 + dx, elf.1 + dy))) {
+                    if dirs
+                        .iter()
+                        .all(|(dx, dy)| !map.contains(&(elf.0 + dx, elf.1 + dy)))
+                    {
                         let new_pos = (elf.0 + mv.0, elf.1 + mv.1);
                         if new_map.contains(&(new_pos)) {
                             // There is another elf in the position, so we cannot move there
@@ -56,10 +74,12 @@ pub(crate) fn day23() {
         mem::swap(&mut map, &mut new_map);
 
         i += 1;
-        if i == 10 { // Part 1
+        if i == 10 {
+            // Part 1
             get_empty_space(&map);
         }
-        if move_ctr == 0 { // Part 2
+        if move_ctr == 0 {
+            // Part 2
             println!("{}", i);
             break;
         }
@@ -74,7 +94,9 @@ fn get_empty_space(map: &HashSet<(i32, i32)>) {
     let mut ans = 0;
     for x in min_x..=max_x {
         for y in min_y..=max_y {
-            if !map.contains(&(x, y)) { ans += 1 };
+            if !map.contains(&(x, y)) {
+                ans += 1
+            };
         }
     }
     println!("{}", ans);
@@ -84,10 +106,13 @@ fn get_empty_space(map: &HashSet<(i32, i32)>) {
 fn print_map(map: &HashSet<(i32, i32)>) {
     for x in -2..=9 {
         for y in -3..=10 {
-            if !map.contains(&(x, y)) { print!(".") } else { print!("#") };
+            if !map.contains(&(x, y)) {
+                print!(".")
+            } else {
+                print!("#")
+            };
         }
         println!()
     }
     println!();
 }
-

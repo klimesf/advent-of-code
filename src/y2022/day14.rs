@@ -20,13 +20,17 @@ fn part_b(map: HashSet<(i32, i32)>, bottom: i32) {
 
 fn build_map() -> HashSet<(i32, i32)> {
     let mut map: HashSet<(i32, i32)> = HashSet::new();
-    fs::read_to_string("input/2022/day14/input.txt").unwrap().lines()
+    fs::read_to_string("input/2022/day14/input.txt")
+        .unwrap()
+        .lines()
         .into_iter()
-        .map(|line| line.split(" -> ")
-            .into_iter()
-            .map(|path| path.split_once(',').unwrap())
-            .map(|(x, y)| (x.parse::<i32>().unwrap(), y.parse::<i32>().unwrap()))
-            .collect())
+        .map(|line| {
+            line.split(" -> ")
+                .into_iter()
+                .map(|path| path.split_once(',').unwrap())
+                .map(|(x, y)| (x.parse::<i32>().unwrap(), y.parse::<i32>().unwrap()))
+                .collect()
+        })
         .for_each(|mut line: Vec<(i32, i32)>| {
             let mut start = line.pop().unwrap();
             let mut from = line.pop().unwrap();
@@ -44,7 +48,9 @@ fn build_map() -> HashSet<(i32, i32)> {
                     panic!("uh oh, diagonal");
                 }
 
-                if line.is_empty() { break; }
+                if line.is_empty() {
+                    break;
+                }
                 start = from;
                 from = line.pop().unwrap();
             }
@@ -52,7 +58,11 @@ fn build_map() -> HashSet<(i32, i32)> {
     map
 }
 
-fn spawn_sand_a(spawn_point: (i32, i32), map: &mut HashSet<(i32, i32)>, edge_of_abyss: i32) -> bool {
+fn spawn_sand_a(
+    spawn_point: (i32, i32),
+    map: &mut HashSet<(i32, i32)>,
+    edge_of_abyss: i32,
+) -> bool {
     let mut pos = spawn_point;
     loop {
         while !map.contains(&(pos.0, pos.1 + 1)) {

@@ -33,15 +33,15 @@ fn coprocess_debug_mode(instructions: &Vec<&str>) -> i64 {
             "jnz" => {
                 let (check, offset) = parse_args(args, &register, 0);
                 let check_num = match check.parse::<i64>() {
-                    Ok(n) => { n }
-                    Err(_) => { *register.get(check).unwrap_or(&0) }
+                    Ok(n) => n,
+                    Err(_) => *register.get(check).unwrap_or(&0),
                 };
                 if check_num != 0 {
                     i += offset;
                     continue;
                 }
             }
-            _ => panic!("Unknown instruction {}", name)
+            _ => panic!("Unknown instruction {}", name),
         }
         i += 1;
     }
@@ -66,12 +66,20 @@ fn coprocess(instructions: &Vec<&str>) -> i64 {
                     f = 0; // <-- important
                     break 'outer;
                 }
-                if d * e > b { break; }
+                if d * e > b {
+                    break;
+                }
             }
-            if d * 2 > b { break; }
+            if d * 2 > b {
+                break;
+            }
         }
-        if f == 0 { h += 1; }
-        if b - 125100 == 0 { break; }
+        if f == 0 {
+            h += 1;
+        }
+        if b - 125100 == 0 {
+            break;
+        }
         b -= b_inc;
     }
 
@@ -89,8 +97,8 @@ fn parse_args<'a>(args: &'a str, register: &HashMap<&'a str, i64>, default: i64)
 
 #[cfg(test)]
 mod day23_tests {
-    use std::fs;
     use crate::y2017::day23::{coprocess, coprocess_debug_mode};
+    use std::fs;
 
     #[test]
     fn input_works() {

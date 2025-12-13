@@ -1,9 +1,14 @@
-use std::fs;
 use itertools::Itertools;
+use std::fs;
 
 pub fn day17(print: fn(String)) {
-    print(part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
-    print(format!("{}", part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())));
+    print(part_a(
+        fs::read_to_string("input/2024/day17/input.txt").unwrap(),
+    ));
+    print(format!(
+        "{}",
+        part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())
+    ));
 }
 
 fn part_a(input: String) -> String {
@@ -41,7 +46,7 @@ fn part_b(input: String) -> usize {
 
     let mut stack: Vec<usize> = vec![0];
     for pos in (0..program.len()).rev() {
-        let mut new_stack = vec!();
+        let mut new_stack = vec![];
         for i in 0b000..=0b111 {
             for s in &stack {
                 let possible_solution = s + (i << (3 * pos as u32));
@@ -69,23 +74,31 @@ fn parse_input(input: String) -> (usize, usize, usize, Vec<usize>) {
     let reg_c = reg_c_s.parse::<usize>().unwrap();
 
     let (_, prog) = prog.split_once(": ").unwrap();
-    let program = prog.split(',').map(|x| x.parse::<usize>().unwrap()).collect_vec();
+    let program = prog
+        .split(',')
+        .map(|x| x.parse::<usize>().unwrap())
+        .collect_vec();
     (reg_a, reg_b, reg_c, program)
 }
 
-fn interpret(mut reg_a: usize, mut reg_b: usize, mut reg_c: usize, program: &Vec<usize>) -> Vec<usize> {
+fn interpret(
+    mut reg_a: usize,
+    mut reg_b: usize,
+    mut reg_c: usize,
+    program: &Vec<usize>,
+) -> Vec<usize> {
     let mut instruction_pointer = 0;
-    let mut output = vec!();
+    let mut output = vec![];
     while instruction_pointer < program.len() {
         let instr = program[instruction_pointer];
         let operand = program[instruction_pointer + 1];
 
         let value = match operand {
-            0 | 1 | 2 | 3 => { operand }
-            4 => { reg_a }
-            5 => { reg_b }
-            6 => { reg_c }
-            _ => { 0 }
+            0 | 1 | 2 | 3 => operand,
+            4 => reg_a,
+            5 => reg_b,
+            6 => reg_c,
+            _ => 0,
         };
 
         match instr {
@@ -141,7 +154,7 @@ fn interpret(mut reg_a: usize, mut reg_b: usize, mut reg_c: usize, program: &Vec
                 reg_c = numerator / denominator;
                 instruction_pointer += 2;
             }
-            _ => panic!("{}", instr)
+            _ => panic!("{}", instr),
         }
     }
     output
@@ -155,12 +168,21 @@ mod day17_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!("4,6,3,5,6,3,5,2,1,0", part_a(fs::read_to_string("input/2024/day17/test.txt").unwrap()));
+        assert_eq!(
+            "4,6,3,5,6,3,5,2,1,0",
+            part_a(fs::read_to_string("input/2024/day17/test.txt").unwrap())
+        );
     }
 
     #[test]
     fn input_works() {
-        assert_eq!("1,5,0,1,7,4,1,0,3", part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
-        assert_eq!(47910079998866, part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
+        assert_eq!(
+            "1,5,0,1,7,4,1,0,3",
+            part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap())
+        );
+        assert_eq!(
+            47910079998866,
+            part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())
+        );
     }
 }
