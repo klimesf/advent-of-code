@@ -4,6 +4,10 @@ pub const UP: P = P::new(-1, 0);
 pub const RIGHT: P = P::new(0, 1);
 pub const DOWN: P = P::new(1, 0);
 pub const LEFT: P = P::new(0, -1);
+pub const UP_RIGHT: P = P::new(-1, 1);
+pub const UP_LEFT: P = P::new(-1, -1);
+pub const DOWN_RIGHT: P = P::new(1, 1);
+pub const DOWN_LEFT: P = P::new(1, -1);
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct P {
