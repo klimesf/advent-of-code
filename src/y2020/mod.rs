@@ -19,6 +19,7 @@ use crate::y2020::day14::day14;
 use crate::y2020::day15::day15;
 use crate::y2020::day16::day16;
 use crate::y2020::day17::day17;
+use crate::y2020::day18::day18;
 use colored::Colorize;
 use std::env;
 
@@ -39,6 +40,7 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
+mod day18;
 
 pub(crate) fn y2020() {
     let args: Vec<String> = env::args().collect();
@@ -130,5 +132,10 @@ pub(crate) fn y2020() {
     if args.contains(&"all".to_string()) || args.contains(&"day17".to_string()) {
         println!("{}", format!("--- day17:").underline().green());
         measure!(day17());
+    }
+
+    if args.contains(&"all".to_string()) || args.contains(&"day18".to_string()) {
+        println!("{}", format!("--- day18:").underline().green());
+        measure!(day18());
     }
 }
