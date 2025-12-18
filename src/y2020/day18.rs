@@ -1,4 +1,6 @@
+use itertools::Itertools;
 use std::fs;
+use std::iter::once;
 
 pub(crate) fn day18() {
     println!("{}", part_a(fs::read_to_string("input/2020/day18/input.txt").unwrap()));
@@ -14,161 +16,93 @@ fn part_b(input: String) -> usize {
 }
 
 fn eval_left_to_right(tokens: Vec<Token>) -> usize {
-    let mut stack: Vec<(Vec<usize>, Token)> = vec![];
-    let mut operands: Vec<usize> = vec![];
-    let mut operator: Token = Token::Plus;
-
+    let mut stack = vec![];
+    let mut op = Token::Plus;
     for token in tokens {
         match token {
-            Token::Num(val) => {
-                operands.push(val);
-            }
-            Token::Plus => {
-                operator = token;
-            }
-            Token::Multiply => {
-                operator = token;
-            }
-            Token::OpenBracket => {
-                stack.push((operands.clone(), operator));
-                operands = vec![];
-            }
-            Token::CloseBracket => {
-                if operands.len() != 1 || stack.len() < 1 {
-                    panic!("Unexpected close bracket");
-                }
-
-                let a = operands.pop().unwrap();
-                let (ops, oper) = stack.pop().unwrap();
-                operands = ops;
-                operator = oper;
-                operands.push(a);
-            }
+            Token::Num(val) => stack.push(val),
+            Token::Plus => op = token,
+            Token::Multiply => op = token,
+            Token::Brackets(brackets) => stack.push(eval_left_to_right(brackets)),
         }
-
-        if operands.len() == 2 {
-            match operator {
-                Token::Plus => {
-                    let a = operands.pop().unwrap();
-                    let b = operands.pop().unwrap();
-                    operands.push(a + b);
-                }
-                Token::Multiply => {
-                    let a = operands.pop().unwrap();
-                    let b = operands.pop().unwrap();
-                    operands.push(a * b);
-                }
-                _ => panic!("Unexpected operator {:?}", operator),
-            }
+        if stack.len() == 2 {
+            let a = stack[0];
+            let b = stack[1];
+            stack.clear();
+            let c = match op {
+                Token::Plus => a + b,
+                Token::Multiply => a * b,
+                _ => panic!("Unknown operator {:?}", op),
+            };
+            stack.push(c);
         }
     }
-
-    if operands.len() != 1 {
-        panic!("Unexpected end of tokens");
-    }
-    operands.pop().unwrap()
+    debug_assert_eq!(stack.len(), 1);
+    stack[0]
 }
 
 fn eval_advanced(mut tokens: Vec<Token>) -> usize {
     while tokens.len() > 1 {
-        let mut max = 0;
-        let mut max_pos = usize::MAX;
-        let mut height = 0;
+        let pos = tokens
+            .iter()
+            .enumerate()
+            .filter(|(_, token)| matches!(token, Token::Plus | Token::Multiply))
+            .sorted_by(|(a_i, a_token), (b_i, b_token)| match (a_token, b_token) {
+                (Token::Plus, Token::Plus) => b_i.cmp(a_i),
+                (Token::Multiply, Token::Multiply) => b_i.cmp(a_i),
+                (Token::Plus, Token::Multiply) => 1.cmp(&0),
+                (Token::Multiply, Token::Plus) => 0.cmp(&1),
+                _ => panic!(),
+            })
+            .last()
+            .unwrap()
+            .0;
 
-        for i in 0..tokens.len() {
-            let token = tokens[i];
-            match token {
-                Token::Num(_) => {}
-                Token::Plus => {
-                    let val = height * 10 + 2;
-                    if val > max {
-                        max = val;
-                        max_pos = i;
-                    }
-                }
-                Token::Multiply => {
-                    let val = height * 10 + 1;
-                    if val > max {
-                        max = val;
-                        max_pos = i;
-                    }
-                }
-                Token::OpenBracket => height += 1,
-                Token::CloseBracket => height -= 1,
-            }
-        }
+        debug_assert!(pos > 0 && pos < tokens.len() - 1);
+        let l = pos - 1;
+        let r = pos + 1;
 
-        let l = tokens[max_pos - 1];
-        let op = tokens[max_pos];
-        let r = tokens[max_pos + 1];
-        let res: Token;
+        let lv = match &tokens[l] {
+            Token::Num(val) => *val,
+            Token::Brackets(brackets) => eval_advanced(brackets.clone()),
+            un => panic!("Unexpected left side {:?}", un),
+        };
+        let rv = match &tokens[r] {
+            Token::Num(val) => *val,
+            Token::Brackets(brackets) => eval_advanced(brackets.clone()),
+            un => panic!("Unexpected right side {:?}", un),
+        };
+        let res = match &tokens[pos] {
+            Token::Plus => Token::Num(lv + rv),
+            Token::Multiply => Token::Num(lv * rv),
+            un => panic!("Unexpected operator {:?}", un),
+        };
 
-        match (l, r) {
-            (Token::Num(lv), Token::Num(rv)) => match op {
-                Token::Plus => {
-                    res = Token::Num(lv + rv);
-                }
-                Token::Multiply => {
-                    res = Token::Num(lv * rv);
-                }
-                _ => panic!("Unexpected operator {:?}", op),
-            },
-            _ => panic!("Unexpected tokens {:?} {:?}", l, r),
-        }
-
-        let mut new_tokens = vec![];
-
-        for i in 0..max_pos - 1 {
-            new_tokens.push(tokens[i]);
-        }
-        new_tokens.push(res);
-
-        for i in max_pos + 2..tokens.len() {
-            new_tokens.push(tokens[i]);
-        }
-        tokens = new_tokens;
-
-        // Remove braces surrounding a lone number
-        loop {
-            let mut found = false;
-            new_tokens = vec![];
-            for i in 1..tokens.len() - 1 {
-                let l = tokens[i - 1];
-                let r = tokens[i + 1];
-                match (l, r) {
-                    (Token::OpenBracket, Token::CloseBracket) => {
-                        for j in 0..i - 1 {
-                            new_tokens.push(tokens[j]);
-                        }
-                        new_tokens.push(tokens[i]);
-                        for j in i + 2..tokens.len() {
-                            new_tokens.push(tokens[j]);
-                        }
-                        found = true;
-                        break;
-                    }
-                    _ => {}
-                }
-            }
-            if !found {
-                break;
-            }
-            tokens = new_tokens;
-        }
+        tokens.splice(l..=r, once(res));
     }
+
     match tokens[0] {
         Token::Num(val) => val,
-        _ => panic!("Unexpected token left {:?}", tokens[0]),
+        _ => panic!("Unexpected tokens[0]: {:?}", tokens[0]),
     }
 }
 
 fn tokenize(input: &str) -> Vec<Token> {
+    let mut stack: Vec<Vec<Token>> = vec![];
     let mut tokens: Vec<Token> = vec![];
 
     for c in input.chars() {
         match c {
-            '(' => tokens.push(Token::OpenBracket),
-            ')' => tokens.push(Token::CloseBracket),
+            '(' => {
+                stack.push(tokens.clone());
+                tokens = vec![];
+            }
+            ')' => {
+                let token = Token::Brackets(tokens.clone());
+                debug_assert_ne!(stack.len(), 0);
+                tokens = stack.pop().unwrap();
+                tokens.push(token);
+            }
             '+' => tokens.push(Token::Plus),
             '*' => tokens.push(Token::Multiply),
             _ => {
@@ -183,13 +117,12 @@ fn tokenize(input: &str) -> Vec<Token> {
     tokens
 }
 
-#[derive(Eq, PartialEq, Debug, Copy, Clone)]
+#[derive(Eq, PartialEq, Debug, Clone)]
 enum Token {
     Num(usize),
     Plus,
     Multiply,
-    OpenBracket,
-    CloseBracket,
+    Brackets(Vec<Token>),
 }
 
 #[cfg(test)]
