@@ -2,14 +2,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day07() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2020/day07/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2020/day07/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2020/day07/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2020/day07/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -88,29 +82,14 @@ mod day07_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            4,
-            part_a(fs::read_to_string("input/2020/day07/test.txt").unwrap())
-        );
-        assert_eq!(
-            32,
-            part_b(fs::read_to_string("input/2020/day07/test.txt").unwrap())
-        );
-        assert_eq!(
-            126,
-            part_b(fs::read_to_string("input/2020/day07/test_2.txt").unwrap())
-        );
+        assert_eq!(4, part_a(fs::read_to_string("input/2020/day07/test.txt").unwrap()));
+        assert_eq!(32, part_b(fs::read_to_string("input/2020/day07/test.txt").unwrap()));
+        assert_eq!(126, part_b(fs::read_to_string("input/2020/day07/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            179,
-            part_a(fs::read_to_string("input/2020/day07/input.txt").unwrap())
-        );
-        assert_eq!(
-            18925,
-            part_b(fs::read_to_string("input/2020/day07/input.txt").unwrap())
-        );
+        assert_eq!(179, part_a(fs::read_to_string("input/2020/day07/input.txt").unwrap()));
+        assert_eq!(18925, part_b(fs::read_to_string("input/2020/day07/input.txt").unwrap()));
     }
 }

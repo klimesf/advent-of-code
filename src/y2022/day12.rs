@@ -102,11 +102,7 @@ fn is_within_range(from: char, to: char) -> bool {
     let from_u = from as u32;
     let to_u = to as u32;
 
-    return if from_u > to_u {
-        from_u - to_u == 1
-    } else {
-        true
-    };
+    return if from_u > to_u { from_u - to_u == 1 } else { true };
 }
 
 #[cfg(test)]

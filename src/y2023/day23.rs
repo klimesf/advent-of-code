@@ -2,14 +2,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day23() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day23/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day23/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day23/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day23/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -140,9 +134,7 @@ fn part_b(input: String) -> usize {
             }
             if r == end.0 && c == end.1 {
                 map.entry(*crossroad).or_insert(vec![]).push((r, c, dist));
-                map.entry(end)
-                    .or_insert(vec![])
-                    .push((crossroad.0, crossroad.1, dist));
+                map.entry(end).or_insert(vec![]).push((crossroad.0, crossroad.1, dist));
                 continue;
             }
             if crossroads.contains(&(r, c)) {
@@ -193,25 +185,13 @@ mod day23_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            94,
-            part_a(fs::read_to_string("input/2023/day23/test.txt").unwrap())
-        );
-        assert_eq!(
-            154,
-            part_b(fs::read_to_string("input/2023/day23/test.txt").unwrap())
-        );
+        assert_eq!(94, part_a(fs::read_to_string("input/2023/day23/test.txt").unwrap()));
+        assert_eq!(154, part_b(fs::read_to_string("input/2023/day23/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            2186,
-            part_a(fs::read_to_string("input/2023/day23/input.txt").unwrap())
-        );
-        assert_eq!(
-            6802,
-            part_b(fs::read_to_string("input/2023/day23/input.txt").unwrap())
-        );
+        assert_eq!(2186, part_a(fs::read_to_string("input/2023/day23/input.txt").unwrap()));
+        assert_eq!(6802, part_b(fs::read_to_string("input/2023/day23/input.txt").unwrap()));
     }
 }

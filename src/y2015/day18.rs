@@ -1,20 +1,8 @@
 use std::fs;
 
 pub(crate) fn day18() {
-    println!(
-        "{}",
-        part_a(
-            fs::read_to_string("input/2015/day18/input.txt").unwrap(),
-            100
-        )
-    );
-    println!(
-        "{}",
-        part_b(
-            fs::read_to_string("input/2015/day18/input.txt").unwrap(),
-            100
-        )
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day18/input.txt").unwrap(), 100));
+    println!("{}", part_b(fs::read_to_string("input/2015/day18/input.txt").unwrap(), 100));
 }
 
 fn part_a(input: String, steps: usize) -> usize {
@@ -57,10 +45,7 @@ fn part_a(input: String, steps: usize) -> usize {
         lights = new_lights;
     }
 
-    lights
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '#').count())
-        .sum()
+    lights.iter().map(|row| row.iter().filter(|c| **c == '#').count()).sum()
 }
 
 fn part_b(input: String, steps: usize) -> usize {
@@ -75,11 +60,7 @@ fn part_b(input: String, steps: usize) -> usize {
         let mut new_lights = lights.clone();
         for r in 0..=size {
             for c in 0..=size {
-                if (r == 0 && c == 0)
-                    || (r == 0 && c == size)
-                    || (r == size && c == 0)
-                    || (r == size && c == size)
-                {
+                if (r == 0 && c == 0) || (r == 0 && c == size) || (r == size && c == 0) || (r == size && c == size) {
                     new_lights[r][c] = '#';
                     continue;
                 }
@@ -116,10 +97,7 @@ fn part_b(input: String, steps: usize) -> usize {
         lights = new_lights;
     }
 
-    lights
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '#').count())
-        .sum()
+    lights.iter().map(|row| row.iter().filter(|c| **c == '#').count()).sum()
 }
 
 #[cfg(test)]
@@ -130,31 +108,13 @@ mod day18_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            4,
-            part_a(fs::read_to_string("input/2015/day18/test.txt").unwrap(), 4)
-        );
-        assert_eq!(
-            17,
-            part_b(fs::read_to_string("input/2015/day18/test.txt").unwrap(), 5)
-        );
+        assert_eq!(4, part_a(fs::read_to_string("input/2015/day18/test.txt").unwrap(), 4));
+        assert_eq!(17, part_b(fs::read_to_string("input/2015/day18/test.txt").unwrap(), 5));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            814,
-            part_a(
-                fs::read_to_string("input/2015/day18/input.txt").unwrap(),
-                100
-            )
-        );
-        assert_eq!(
-            924,
-            part_b(
-                fs::read_to_string("input/2015/day18/input.txt").unwrap(),
-                100
-            )
-        );
+        assert_eq!(814, part_a(fs::read_to_string("input/2015/day18/input.txt").unwrap(), 100));
+        assert_eq!(924, part_b(fs::read_to_string("input/2015/day18/input.txt").unwrap(), 100));
     }
 }

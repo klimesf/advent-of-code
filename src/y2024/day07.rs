@@ -3,12 +3,8 @@ use rayon::iter::ParallelIterator;
 use std::fs;
 
 pub fn day07(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day07/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day07/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day07/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day07/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -66,9 +62,7 @@ fn part_b(input: String) -> usize {
                 if pos >= digits.len() {
                     continue;
                 }
-                let n = (0..)
-                    .take_while(|digit| 10_usize.pow(*digit) <= digits[pos])
-                    .count();
+                let n = (0..).take_while(|digit| 10_usize.pow(*digit) <= digits[pos]).count();
 
                 stack.push((sum + digits[pos], pos + 1));
                 stack.push((sum * digits[pos], pos + 1));
@@ -87,25 +81,13 @@ mod day07_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            3749,
-            part_a(fs::read_to_string("input/2024/day07/test.txt").unwrap())
-        );
-        assert_eq!(
-            11387 - 3749,
-            part_b(fs::read_to_string("input/2024/day07/test2.txt").unwrap())
-        );
+        assert_eq!(3749, part_a(fs::read_to_string("input/2024/day07/test.txt").unwrap()));
+        assert_eq!(11387 - 3749, part_b(fs::read_to_string("input/2024/day07/test2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            20665830408335,
-            part_a(fs::read_to_string("input/2024/day07/input.txt").unwrap())
-        );
-        assert_eq!(
-            354060705047464,
-            part_b(fs::read_to_string("input/2024/day07/input.txt").unwrap())
-        );
+        assert_eq!(20665830408335, part_a(fs::read_to_string("input/2024/day07/input.txt").unwrap()));
+        assert_eq!(354060705047464, part_b(fs::read_to_string("input/2024/day07/input.txt").unwrap()));
     }
 }

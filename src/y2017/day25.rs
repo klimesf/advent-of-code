@@ -20,38 +20,21 @@ fn parse(input: &str) -> (i32, HashMap<&str, ((i32, i32, &str), (i32, i32, &str)
         let g = re.captures(lines[0]).unwrap();
         let name = g.get(1).unwrap().as_str();
 
-        let zero_write = if lines[2].contains("the value 1") {
-            1
-        } else {
-            0
-        };
+        let zero_write = if lines[2].contains("the value 1") { 1 } else { 0 };
         let zero_move = if lines[3].contains("left") { -1 } else { 1 };
         let zero_next = re.captures(lines[4]).unwrap().get(1).unwrap().as_str();
 
-        let one_write = if lines[6].contains("the value 1") {
-            1
-        } else {
-            0
-        };
+        let one_write = if lines[6].contains("the value 1") { 1 } else { 0 };
         let one_move = if lines[7].contains("left") { -1 } else { 1 };
         let one_next = re.captures(lines[8]).unwrap().get(1).unwrap().as_str();
 
-        states.insert(
-            name,
-            (
-                (zero_write, zero_move, zero_next),
-                (one_write, one_move, one_next),
-            ),
-        );
+        states.insert(name, ((zero_write, zero_move, zero_next), (one_write, one_move, one_next)));
     }
 
     (steps.parse::<i32>().unwrap(), states)
 }
 
-fn turing_machine(
-    steps: i32,
-    states: &HashMap<&str, ((i32, i32, &str), (i32, i32, &str))>,
-) -> usize {
+fn turing_machine(steps: i32, states: &HashMap<&str, ((i32, i32, &str), (i32, i32, &str))>) -> usize {
     let mut tape: HashMap<i32, i32> = HashMap::new();
     let mut state = states.get("A").unwrap();
     let mut pos = 0;

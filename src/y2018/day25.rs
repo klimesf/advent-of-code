@@ -3,20 +3,13 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day25() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day25/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day25/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
     let stars: Vec<Vec<i32>> = input
         .lines()
-        .map(|line| {
-            line.splitn(4, ",")
-                .map(|n| n.parse::<i32>().unwrap())
-                .collect()
-        })
+        .map(|line| line.splitn(4, ",").map(|n| n.parse::<i32>().unwrap()).collect())
         .collect();
 
     let mut graph: HashMap<usize, Vec<usize>> = HashMap::new();
@@ -73,29 +66,14 @@ mod day25_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            2,
-            part_a(fs::read_to_string("input/2018/day25/test_2.txt").unwrap())
-        );
-        assert_eq!(
-            3,
-            part_a(fs::read_to_string("input/2018/day25/test_3.txt").unwrap())
-        );
-        assert_eq!(
-            4,
-            part_a(fs::read_to_string("input/2018/day25/test_4.txt").unwrap())
-        );
-        assert_eq!(
-            8,
-            part_a(fs::read_to_string("input/2018/day25/test_8.txt").unwrap())
-        );
+        assert_eq!(2, part_a(fs::read_to_string("input/2018/day25/test_2.txt").unwrap()));
+        assert_eq!(3, part_a(fs::read_to_string("input/2018/day25/test_3.txt").unwrap()));
+        assert_eq!(4, part_a(fs::read_to_string("input/2018/day25/test_4.txt").unwrap()));
+        assert_eq!(8, part_a(fs::read_to_string("input/2018/day25/test_8.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            394,
-            part_a(fs::read_to_string("input/2018/day25/input.txt").unwrap())
-        );
+        assert_eq!(394, part_a(fs::read_to_string("input/2018/day25/input.txt").unwrap()));
     }
 }

@@ -39,10 +39,7 @@ pub(crate) fn day12() {
         generation += 1;
         cut_off(&mut population);
         if !visited.insert(pop_to_str(&population)) {
-            println!(
-                "The cycle starts to repeat after {} generations",
-                generation
-            );
+            println!("The cycle starts to repeat after {} generations", generation);
             start = sum_pop(&population);
             break;
         }
@@ -51,22 +48,13 @@ pub(crate) fn day12() {
     generation += 1;
 
     let inc = (end - start) as i64;
-    println!(
-        "Afterwards, each new generation adds {} to the pot flower sum",
-        inc
-    );
+    println!("Afterwards, each new generation adds {} to the pot flower sum", inc);
 
     let res = end as i64 + (50000000000 - generation) * inc;
-    println!(
-        "After 50000000000 generations, the indexes of the pots with flower sum up to {}",
-        res
-    );
+    println!("After 50000000000 generations, the indexes of the pots with flower sum up to {}", res);
 }
 
-fn calc_new_pop(
-    population: &HashMap<i32, char>,
-    rules: &HashMap<String, char>,
-) -> HashMap<i32, char> {
+fn calc_new_pop(population: &HashMap<i32, char>, rules: &HashMap<String, char>) -> HashMap<i32, char> {
     let mut new_pop = HashMap::new();
     let from = *population.keys().min().unwrap();
     let to = *population.keys().max().unwrap();

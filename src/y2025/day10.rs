@@ -5,12 +5,8 @@ use std::fs;
 use z3::{ast::Int, Optimize, SatResult};
 
 pub fn day10(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2025/day10/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2025/day10/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2025/day10/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2025/day10/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -20,9 +16,7 @@ fn part_a(input: String) -> usize {
         .map(|line| {
             let parts = line.split_whitespace().collect::<Vec<&str>>();
 
-            let target_chars = parts[0][1..parts[0].len() - 1]
-                .chars()
-                .collect::<Vec<char>>();
+            let target_chars = parts[0][1..parts[0].len() - 1].chars().collect::<Vec<char>>();
             let mut target = 0;
             for i in 0..target_chars.len() {
                 if target_chars[i] != '#' {
@@ -80,8 +74,7 @@ fn part_b(input: String) -> usize {
                 })
                 .collect::<Vec<Vec<usize>>>();
 
-            let joltage_str =
-                parts[parts.len() - 1][1..parts[parts.len() - 1].len() - 1].to_string();
+            let joltage_str = parts[parts.len() - 1][1..parts[parts.len() - 1].len() - 1].to_string();
             let joltage = joltage_str
                 .split(",")
                 .map(|part| part.parse::<usize>().unwrap())
@@ -161,25 +154,13 @@ mod day10_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            7,
-            part_a(fs::read_to_string("input/2025/day10/test.txt").unwrap())
-        );
-        assert_eq!(
-            33,
-            part_b(fs::read_to_string("input/2025/day10/test.txt").unwrap())
-        );
+        assert_eq!(7, part_a(fs::read_to_string("input/2025/day10/test.txt").unwrap()));
+        assert_eq!(33, part_b(fs::read_to_string("input/2025/day10/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            498,
-            part_a(fs::read_to_string("input/2025/day10/input.txt").unwrap())
-        );
-        assert_eq!(
-            17133,
-            part_b(fs::read_to_string("input/2025/day10/input.txt").unwrap())
-        );
+        assert_eq!(498, part_a(fs::read_to_string("input/2025/day10/input.txt").unwrap()));
+        assert_eq!(17133, part_b(fs::read_to_string("input/2025/day10/input.txt").unwrap()));
     }
 }

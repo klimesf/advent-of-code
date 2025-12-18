@@ -21,17 +21,9 @@ pub(crate) fn day04() {
     );
 
     let best_minute = find_best_minute(most_sleeping);
-    println!(
-        "The best minute is {} with {} days asleep",
-        best_minute.0, best_minute.1
-    );
+    println!("The best minute is {} with {} days asleep", best_minute.0, best_minute.1);
 
-    println!(
-        "{} x {} = {}",
-        most_sleeping.0,
-        best_minute.0,
-        most_sleeping.0 * best_minute.0
-    );
+    println!("{} x {} = {}", most_sleeping.0, best_minute.0, most_sleeping.0 * best_minute.0);
 
     let resident_sleeper = sleep_log
         .iter()
@@ -79,14 +71,7 @@ fn build_sleep_log(raw_log: &mut Vec<&str>) -> HashMap<usize, Vec<[bool; 60]>> {
                     log.push(current_log);
                     current_log = [false; 60];
                 }
-                current_guard = re_2
-                    .captures(g)
-                    .unwrap()
-                    .get(1)
-                    .unwrap()
-                    .as_str()
-                    .parse()
-                    .unwrap();
+                current_guard = re_2.captures(g).unwrap().get(1).unwrap().as_str().parse().unwrap();
             }
         }
     }

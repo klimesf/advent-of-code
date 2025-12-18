@@ -178,29 +178,14 @@ mod day10_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            8,
-            solve(fs::read_to_string("input/2023/day10/test.txt").unwrap()).0
-        );
-        assert_eq!(
-            4,
-            solve(fs::read_to_string("input/2023/day10/test_b.txt").unwrap()).1
-        );
-        assert_eq!(
-            8,
-            solve(fs::read_to_string("input/2023/day10/test_c.txt").unwrap()).1
-        );
-        assert_eq!(
-            10,
-            solve(fs::read_to_string("input/2023/day10/test_d.txt").unwrap()).1
-        );
+        assert_eq!(8, solve(fs::read_to_string("input/2023/day10/test.txt").unwrap()).0);
+        assert_eq!(4, solve(fs::read_to_string("input/2023/day10/test_b.txt").unwrap()).1);
+        assert_eq!(8, solve(fs::read_to_string("input/2023/day10/test_c.txt").unwrap()).1);
+        assert_eq!(10, solve(fs::read_to_string("input/2023/day10/test_d.txt").unwrap()).1);
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (6820, 337),
-            solve(fs::read_to_string("input/2023/day10/input.txt").unwrap())
-        );
+        assert_eq!((6820, 337), solve(fs::read_to_string("input/2023/day10/input.txt").unwrap()));
     }
 }

@@ -3,14 +3,8 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day17() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day17/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day17/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day17/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day17/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> u32 {
@@ -133,25 +127,13 @@ mod day17_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            102,
-            part_a(fs::read_to_string("input/2023/day17/test.txt").unwrap())
-        );
-        assert_eq!(
-            94,
-            part_b(fs::read_to_string("input/2023/day17/test.txt").unwrap())
-        );
+        assert_eq!(102, part_a(fs::read_to_string("input/2023/day17/test.txt").unwrap()));
+        assert_eq!(94, part_b(fs::read_to_string("input/2023/day17/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            686,
-            part_a(fs::read_to_string("input/2023/day17/input.txt").unwrap())
-        );
-        assert_eq!(
-            801,
-            part_b(fs::read_to_string("input/2023/day17/input.txt").unwrap())
-        );
+        assert_eq!(686, part_a(fs::read_to_string("input/2023/day17/input.txt").unwrap()));
+        assert_eq!(801, part_b(fs::read_to_string("input/2023/day17/input.txt").unwrap()));
     }
 }

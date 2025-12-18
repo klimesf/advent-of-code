@@ -65,10 +65,7 @@ fn part_a(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize,
         });
         carts = new_carts;
     }
-    println!(
-        "First collision happens at {},{}",
-        first_collision.0, first_collision.1
-    );
+    println!("First collision happens at {},{}", first_collision.0, first_collision.1);
 }
 
 fn part_b(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize, char, usize)>) {
@@ -118,16 +115,10 @@ fn part_b(map: &mut HashMap<(usize, usize), char>, mut carts: Vec<(usize, usize,
         });
         carts = new_new_carts;
     }
-    println!(
-        "Last remaining cart ends up at {},{}",
-        last_cart.0, last_cart.1
-    );
+    println!("Last remaining cart ends up at {},{}", last_cart.0, last_cart.1);
 }
 
-fn eval_cart(
-    cart: &(usize, usize, char, usize),
-    map: &HashMap<(usize, usize), char>,
-) -> (usize, usize, char, usize) {
+fn eval_cart(cart: &(usize, usize, char, usize), map: &HashMap<(usize, usize), char>) -> (usize, usize, char, usize) {
     let new_pos = match cart.2 {
         '>' => (cart.0 + 1, cart.1),
         '<' => (cart.0 - 1, cart.1),

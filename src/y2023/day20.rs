@@ -3,14 +3,8 @@ use std::collections::{HashMap, VecDeque};
 use std::fs;
 
 pub(crate) fn day20() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -149,10 +143,7 @@ fn part_b(input: String) -> i64 {
             if key == "kk" && !high {
                 lcms.insert("kk", ans);
             }
-            if lcms.contains_key("vt")
-                && lcms.contains_key("sk")
-                && lcms.contains_key("xc")
-                && lcms.contains_key("kk")
+            if lcms.contains_key("vt") && lcms.contains_key("sk") && lcms.contains_key("xc") && lcms.contains_key("kk")
             {
                 let vt = *lcms.get("vt").unwrap();
                 let sk = *lcms.get("sk").unwrap();
@@ -211,25 +202,13 @@ mod day20_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            32000000,
-            part_a(fs::read_to_string("input/2023/day20/test.txt").unwrap())
-        );
-        assert_eq!(
-            11687500,
-            part_a(fs::read_to_string("input/2023/day20/test_2.txt").unwrap())
-        );
+        assert_eq!(32000000, part_a(fs::read_to_string("input/2023/day20/test.txt").unwrap()));
+        assert_eq!(11687500, part_a(fs::read_to_string("input/2023/day20/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            818649769,
-            part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap())
-        );
-        assert_eq!(
-            246313604784977,
-            part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap())
-        );
+        assert_eq!(818649769, part_a(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
+        assert_eq!(246313604784977, part_b(fs::read_to_string("input/2023/day20/input.txt").unwrap()));
     }
 }

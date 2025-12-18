@@ -3,12 +3,8 @@ use std::collections::HashSet;
 use std::fs;
 
 pub fn day15(print: fn(i32)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day15/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day15/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i32 {
@@ -177,33 +173,15 @@ mod day15_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            2028,
-            part_a(fs::read_to_string("input/2024/day15/test.txt").unwrap())
-        );
-        assert_eq!(
-            10092,
-            part_a(fs::read_to_string("input/2024/day15/test_2.txt").unwrap())
-        );
-        assert_eq!(
-            618,
-            part_b(fs::read_to_string("input/2024/day15/test_3.txt").unwrap())
-        );
-        assert_eq!(
-            9021,
-            part_b(fs::read_to_string("input/2024/day15/test_2.txt").unwrap())
-        );
+        assert_eq!(2028, part_a(fs::read_to_string("input/2024/day15/test.txt").unwrap()));
+        assert_eq!(10092, part_a(fs::read_to_string("input/2024/day15/test_2.txt").unwrap()));
+        assert_eq!(618, part_b(fs::read_to_string("input/2024/day15/test_3.txt").unwrap()));
+        assert_eq!(9021, part_b(fs::read_to_string("input/2024/day15/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1492518,
-            part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap())
-        );
-        assert_eq!(
-            1512860,
-            part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap())
-        );
+        assert_eq!(1492518, part_a(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
+        assert_eq!(1512860, part_b(fs::read_to_string("input/2024/day15/input.txt").unwrap()));
     }
 }

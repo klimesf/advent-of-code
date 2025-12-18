@@ -4,21 +4,8 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 
 pub fn day18(print: fn(String)) {
-    print(format!(
-        "{}",
-        part_a(
-            fs::read_to_string("input/2024/day18/input.txt").unwrap(),
-            70,
-            1024
-        )
-    ));
-    print(format!(
-        "{:?}",
-        part_b(
-            fs::read_to_string("input/2024/day18/input.txt").unwrap(),
-            70
-        )
-    ));
+    print(format!("{}", part_a(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70, 1024)));
+    print(format!("{:?}", part_b(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70)));
 }
 
 fn part_a(input: String, dim: usize, sim: usize) -> usize {
@@ -193,11 +180,7 @@ impl PartialOrd for Pos {
     }
 }
 
-fn union(
-    a: (usize, usize),
-    b: (usize, usize),
-    parents: &mut HashMap<(usize, usize), (usize, usize)>,
-) {
+fn union(a: (usize, usize), b: (usize, usize), parents: &mut HashMap<(usize, usize), (usize, usize)>) {
     let parent_a = find(a, parents);
     let parent_b = find(b, parents);
     parents.insert(parent_a, parent_b);
@@ -220,36 +203,13 @@ mod day18_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            22,
-            part_a(
-                fs::read_to_string("input/2024/day18/test.txt").unwrap(),
-                6,
-                12
-            )
-        );
-        assert_eq!(
-            (6, 1),
-            part_b(fs::read_to_string("input/2024/day18/test.txt").unwrap(), 6)
-        );
+        assert_eq!(22, part_a(fs::read_to_string("input/2024/day18/test.txt").unwrap(), 6, 12));
+        assert_eq!((6, 1), part_b(fs::read_to_string("input/2024/day18/test.txt").unwrap(), 6));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            374,
-            part_a(
-                fs::read_to_string("input/2024/day18/input.txt").unwrap(),
-                70,
-                1024
-            )
-        );
-        assert_eq!(
-            (30, 12),
-            part_b(
-                fs::read_to_string("input/2024/day18/input.txt").unwrap(),
-                70
-            )
-        );
+        assert_eq!(374, part_a(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70, 1024));
+        assert_eq!((30, 12), part_b(fs::read_to_string("input/2024/day18/input.txt").unwrap(), 70));
     }
 }

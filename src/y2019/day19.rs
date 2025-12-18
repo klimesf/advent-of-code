@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day19() {
     let input = fs::read_to_string("input/2019/day19/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     part_a(&code);
     part_b(&code);
@@ -25,10 +21,7 @@ fn part_a(code: &Vec<i64>) {
             map[y as usize][x as usize] = val;
         }
     }
-    println!(
-        "There are {} points affected by the beam in 50x50 area",
-        total
-    );
+    println!("There are {} points affected by the beam in 50x50 area", total);
     for y in 0..50 {
         for x in 0..50 {
             match map[y][x] {

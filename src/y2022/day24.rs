@@ -21,23 +21,13 @@ pub(crate) fn day24() {
     blizzards
         .iter()
         .filter(|(_, _, c)| *c == '<' || *c == '>')
-        .for_each(|blizzard| {
-            blizzards_per_row
-                .entry(blizzard.0)
-                .or_insert(vec![])
-                .push(*blizzard)
-        });
+        .for_each(|blizzard| blizzards_per_row.entry(blizzard.0).or_insert(vec![]).push(*blizzard));
 
     let mut blizzards_per_col: HashMap<i32, Vec<(i32, i32, char)>> = HashMap::new();
     blizzards
         .iter()
         .filter(|(_, _, c)| *c == '^' || *c == 'v')
-        .for_each(|blizzard| {
-            blizzards_per_col
-                .entry(blizzard.1)
-                .or_insert(vec![])
-                .push(*blizzard)
-        });
+        .for_each(|blizzard| blizzards_per_col.entry(blizzard.1).or_insert(vec![]).push(*blizzard));
 
     let start_y = map[0]
         .iter()
@@ -54,16 +44,8 @@ pub(crate) fn day24() {
         .max()
         .unwrap() as i32;
 
-    let min_1 = find_shortest(
-        &map,
-        x_max,
-        y_max,
-        &blizzards_per_row,
-        &blizzards_per_col,
-        (0, start_y),
-        (x_max + 1, end_y),
-        0,
-    );
+    let min_1 =
+        find_shortest(&map, x_max, y_max, &blizzards_per_row, &blizzards_per_col, (0, start_y), (x_max + 1, end_y), 0);
     println!("{}", min_1);
 
     let min_2 = find_shortest(
@@ -169,14 +151,7 @@ fn manhattan_dist(from: (i32, i32), to: (i32, i32)) -> i32 {
     (from.0 - to.0).abs() + (from.1 - to.1).abs()
 }
 
-fn calc_new_blizzard(
-    x_max: i32,
-    y_max: i32,
-    time: i32,
-    bx: &i32,
-    by: &i32,
-    dir: &char,
-) -> (i32, i32) {
+fn calc_new_blizzard(x_max: i32, y_max: i32, time: i32, bx: &i32, by: &i32, dir: &char) -> (i32, i32) {
     let new_blizzard = match dir {
         '<' => (*bx, (*by - time - 1).rem_euclid(y_max) + 1),
         '>' => (*bx, (*by + time - 1).rem_euclid(y_max) + 1),

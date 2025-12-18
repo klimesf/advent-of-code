@@ -3,20 +3,8 @@ use std::fs;
 
 pub(crate) fn day04() {
     let input = fs::read_to_string("input/2017/day04/input.txt").unwrap();
-    println!(
-        "{}",
-        input
-            .lines()
-            .filter(|line| validate_no_duplicates(*line))
-            .count()
-    );
-    println!(
-        "{}",
-        input
-            .lines()
-            .filter(|line| validate_no_anagrams(*line))
-            .count()
-    );
+    println!("{}", input.lines().filter(|line| validate_no_duplicates(*line)).count());
+    println!("{}", input.lines().filter(|line| validate_no_anagrams(*line)).count());
 }
 
 fn validate_no_duplicates(passphrase: &str) -> bool {
@@ -58,19 +46,7 @@ mod day04_tests {
     #[test]
     fn input_works() {
         let input = fs::read_to_string("input/2017/day04/input.txt").unwrap();
-        assert_eq!(
-            325,
-            input
-                .lines()
-                .filter(|line| validate_no_duplicates(*line))
-                .count()
-        );
-        assert_eq!(
-            119,
-            input
-                .lines()
-                .filter(|line| validate_no_anagrams(*line))
-                .count()
-        );
+        assert_eq!(325, input.lines().filter(|line| validate_no_duplicates(*line)).count());
+        assert_eq!(119, input.lines().filter(|line| validate_no_anagrams(*line)).count());
     }
 }

@@ -4,11 +4,7 @@ use std::fs;
 
 pub(crate) fn day21() {
     let input = fs::read_to_string("input/2019/day21/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     part_a(&code);
     part_b(&code);
@@ -32,10 +28,7 @@ fn part_a(code: &Vec<i64>) {
     let mut intcode = intcode_instance(&code);
     intcode.run(&mut input);
 
-    println!(
-        "{}",
-        intcode.output.iter().map(|c| *c as u8 as char).join("")
-    );
+    println!("{}", intcode.output.iter().map(|c| *c as u8 as char).join(""));
     println!("{}", *intcode.output.last().unwrap() as i64);
 }
 
@@ -65,10 +58,7 @@ fn part_b(code: &Vec<i64>) {
     let mut intcode = intcode_instance(&code);
     intcode.run(&mut input);
 
-    println!(
-        "{}",
-        intcode.output.iter().map(|c| *c as u8 as char).join("")
-    );
+    println!("{}", intcode.output.iter().map(|c| *c as u8 as char).join(""));
     println!("{}", *intcode.output.last().unwrap() as i64);
 }
 

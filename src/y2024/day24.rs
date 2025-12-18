@@ -3,12 +3,8 @@ use std::collections::{HashMap, VecDeque};
 use std::fs;
 
 pub fn day24(print_usize: fn(usize), print_string: fn(String)) {
-    print_usize(part_a(
-        fs::read_to_string("input/2024/day24/input.txt").unwrap(),
-    ));
-    print_string(part_b(
-        fs::read_to_string("input/2024/day24/input.txt").unwrap(),
-    ));
+    print_usize(part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
+    print_string(part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -105,12 +101,7 @@ fn part_b(input: String) -> String {
     // z18 swap skf
     // nvr swap wkr
 
-    for pair in [
-        ["z07", "bjm"],
-        ["z13", "hsw"],
-        ["z18", "skf"],
-        ["nvr", "wkr"],
-    ] {
+    for pair in [["z07", "bjm"], ["z13", "hsw"], ["z18", "skf"], ["nvr", "wkr"]] {
         let mut swap_from = 0;
         let mut swap_from_instr = ("", "", "", "");
         for i in 0..instructions.len() {
@@ -200,22 +191,13 @@ mod day24_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            4,
-            part_a(fs::read_to_string("input/2024/day24/test.txt").unwrap())
-        );
-        assert_eq!(
-            2024,
-            part_a(fs::read_to_string("input/2024/day24/test_2.txt").unwrap())
-        );
+        assert_eq!(4, part_a(fs::read_to_string("input/2024/day24/test.txt").unwrap()));
+        assert_eq!(2024, part_a(fs::read_to_string("input/2024/day24/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            56729630917616,
-            part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap())
-        );
+        assert_eq!(56729630917616, part_a(fs::read_to_string("input/2024/day24/input.txt").unwrap()));
         assert_eq!(
             "bjm,hsw,nvr,skf,wkr,z07,z13,z18",
             part_b(fs::read_to_string("input/2024/day24/input.txt").unwrap())

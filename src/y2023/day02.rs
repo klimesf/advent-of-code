@@ -1,14 +1,8 @@
 use std::{cmp, fs};
 
 pub(crate) fn day02() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day02/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day02/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day02/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day02/input.txt").unwrap()));
 }
 
 fn part_a(games: String) -> i32 {
@@ -90,13 +84,7 @@ mod day02_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            2085,
-            part_a(fs::read_to_string("input/2023/day02/input.txt").unwrap())
-        );
-        assert_eq!(
-            79315,
-            part_b(fs::read_to_string("input/2023/day02/input.txt").unwrap())
-        );
+        assert_eq!(2085, part_a(fs::read_to_string("input/2023/day02/input.txt").unwrap()));
+        assert_eq!(79315, part_b(fs::read_to_string("input/2023/day02/input.txt").unwrap()));
     }
 }

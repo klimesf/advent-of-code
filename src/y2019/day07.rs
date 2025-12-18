@@ -7,11 +7,7 @@ use std::thread::JoinHandle;
 
 pub(crate) fn day07() {
     let input = fs::read_to_string("input/2019/day07/input.txt").unwrap();
-    let intcode: Vec<i32> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let intcode: Vec<i32> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     part_a(&intcode);
     part_b(&intcode);
@@ -60,11 +56,7 @@ fn part_b(intcode: &Vec<i32>) {
     println!("{}", max_e_output);
 }
 
-fn spawn_amp(
-    intcode: &Vec<i32>,
-    input: &BlockingQueue<i32>,
-    output: &BlockingQueue<i32>,
-) -> JoinHandle<()> {
+fn spawn_amp(intcode: &Vec<i32>, input: &BlockingQueue<i32>, output: &BlockingQueue<i32>) -> JoinHandle<()> {
     let intcode_clone = intcode.clone();
     let input_clone = input.clone();
     let output_clone = output.clone();
@@ -171,11 +163,7 @@ fn run_intcode(mut intcode: Vec<i32>, mut input: Vec<i32>) -> Vec<i32> {
     return output;
 }
 
-fn run_intcode_parallel(
-    mut intcode: Vec<i32>,
-    input: &BlockingQueue<i32>,
-    output: &BlockingQueue<i32>,
-) {
+fn run_intcode_parallel(mut intcode: Vec<i32>, input: &BlockingQueue<i32>, output: &BlockingQueue<i32>) {
     let mut instruction_ptr = 0;
 
     loop {

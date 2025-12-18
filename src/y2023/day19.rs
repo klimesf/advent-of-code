@@ -4,14 +4,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day19() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day19/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day19/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day19/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day19/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -89,20 +83,9 @@ fn part_b(input: String) -> usize {
     let (workflows_input, _) = input.split_once("\n\n").unwrap();
     let workflows = parse_workflows(workflows_input);
 
-    let mut stack: Vec<(
-        (usize, usize),
-        (usize, usize),
-        (usize, usize),
-        (usize, usize),
-        &str,
-        usize,
-    )> = vec![((1, 4000), (1, 4000), (1, 4000), (1, 4000), "in", 0)];
-    let mut accepted: Vec<(
-        (usize, usize),
-        (usize, usize),
-        (usize, usize),
-        (usize, usize),
-    )> = vec![];
+    let mut stack: Vec<((usize, usize), (usize, usize), (usize, usize), (usize, usize), &str, usize)> =
+        vec![((1, 4000), (1, 4000), (1, 4000), (1, 4000), "in", 0)];
+    let mut accepted: Vec<((usize, usize), (usize, usize), (usize, usize), (usize, usize))> = vec![];
     while let Some(range) = stack.pop() {
         let (x, m, a, s, wf_key, rule_key) = range;
         if wf_key == "A" {
@@ -238,25 +221,13 @@ mod day19_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            19114,
-            part_a(fs::read_to_string("input/2023/day19/test.txt").unwrap())
-        );
-        assert_eq!(
-            167409079868000,
-            part_b(fs::read_to_string("input/2023/day19/test.txt").unwrap())
-        );
+        assert_eq!(19114, part_a(fs::read_to_string("input/2023/day19/test.txt").unwrap()));
+        assert_eq!(167409079868000, part_b(fs::read_to_string("input/2023/day19/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            367602,
-            part_a(fs::read_to_string("input/2023/day19/input.txt").unwrap())
-        );
-        assert_eq!(
-            125317461667458,
-            part_b(fs::read_to_string("input/2023/day19/input.txt").unwrap())
-        );
+        assert_eq!(367602, part_a(fs::read_to_string("input/2023/day19/input.txt").unwrap()));
+        assert_eq!(125317461667458, part_b(fs::read_to_string("input/2023/day19/input.txt").unwrap()));
     }
 }

@@ -33,10 +33,7 @@ fn part_a(nums: Vec<i32>) {
 }
 
 fn part_b(input_nums: Vec<i32>) {
-    let nums: Vec<i64> = input_nums
-        .iter()
-        .map(|num| *num as i64 * 811589153)
-        .collect();
+    let nums: Vec<i64> = input_nums.iter().map(|num| *num as i64 * 811589153).collect();
     let mut positions: Vec<usize> = (0..nums.len()).collect();
 
     for _ in 0..10 {

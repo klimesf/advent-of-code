@@ -4,16 +4,9 @@ use std::fs;
 pub(crate) fn day24() {
     println!(
         "{}",
-        part_a(
-            fs::read_to_string("input/2023/day24/input.txt").unwrap(),
-            200000000000000.,
-            400000000000000.
-        )
+        part_a(fs::read_to_string("input/2023/day24/input.txt").unwrap(), 200000000000000., 400000000000000.)
     );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day24/input.txt").unwrap())
-    );
+    println!("{}", part_b(fs::read_to_string("input/2023/day24/input.txt").unwrap()));
 }
 
 fn part_a(input: String, search_min: f64, search_max: f64) -> usize {
@@ -21,14 +14,8 @@ fn part_a(input: String, search_min: f64, search_max: f64) -> usize {
         .lines()
         .map(|line| {
             let (pos, vel) = line.split_once(" @ ").unwrap();
-            let posa: Vec<f64> = pos
-                .split(", ")
-                .map(|s| s.trim().parse::<f64>().unwrap())
-                .collect();
-            let vela: Vec<f64> = vel
-                .split(", ")
-                .map(|s| s.trim().parse::<f64>().unwrap())
-                .collect();
+            let posa: Vec<f64> = pos.split(", ").map(|s| s.trim().parse::<f64>().unwrap()).collect();
+            let vela: Vec<f64> = vel.split(", ").map(|s| s.trim().parse::<f64>().unwrap()).collect();
             ((posa[0], posa[1], posa[2]), (vela[0], vela[1], vela[2]))
         })
         .collect();
@@ -119,41 +106,21 @@ mod day24_tests {
 
     #[test]
     fn find_equation_works() {
-        assert_eq!(
-            (1.5, -1., -3.5),
-            find_equation(((-1., -5., 0.), (6., 9., 0.)))
-        );
+        assert_eq!((1.5, -1., -3.5), find_equation(((-1., -5., 0.), (6., 9., 0.))));
     }
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            2,
-            part_a(
-                fs::read_to_string("input/2023/day24/test.txt").unwrap(),
-                7.,
-                27.
-            )
-        );
-        assert_eq!(
-            0,
-            part_b(fs::read_to_string("input/2023/day24/test.txt").unwrap())
-        );
+        assert_eq!(2, part_a(fs::read_to_string("input/2023/day24/test.txt").unwrap(), 7., 27.));
+        assert_eq!(0, part_b(fs::read_to_string("input/2023/day24/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
         assert_eq!(
             19976,
-            part_a(
-                fs::read_to_string("input/2023/day24/input.txt").unwrap(),
-                200000000000000.,
-                400000000000000.
-            )
+            part_a(fs::read_to_string("input/2023/day24/input.txt").unwrap(), 200000000000000., 400000000000000.)
         );
-        assert_eq!(
-            0,
-            part_b(fs::read_to_string("input/2023/day24/input.txt").unwrap())
-        );
+        assert_eq!(0, part_b(fs::read_to_string("input/2023/day24/input.txt").unwrap()));
     }
 }

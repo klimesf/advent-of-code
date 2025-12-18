@@ -1,10 +1,7 @@
 use std::fs;
 
 pub(crate) fn day08() {
-    println!(
-        "{}",
-        solve(fs::read_to_string("input/2016/day08/input.txt").unwrap())
-    );
+    println!("{}", solve(fs::read_to_string("input/2016/day08/input.txt").unwrap()));
 }
 
 fn solve(input: String) -> usize {
@@ -69,9 +66,6 @@ mod day08_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            116,
-            solve(fs::read_to_string("input/2016/day08/input.txt").unwrap())
-        );
+        assert_eq!(116, solve(fs::read_to_string("input/2016/day08/input.txt").unwrap()));
     }
 }

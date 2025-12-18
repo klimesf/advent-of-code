@@ -1,12 +1,8 @@
 use std::fs;
 
 pub fn day09(print: fn(i64)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day09/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day09/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day09/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day09/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i64 {
@@ -123,25 +119,13 @@ mod day09_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            1928,
-            part_a(fs::read_to_string("input/2024/day09/test.txt").unwrap())
-        );
-        assert_eq!(
-            2858,
-            part_b(fs::read_to_string("input/2024/day09/test.txt").unwrap())
-        );
+        assert_eq!(1928, part_a(fs::read_to_string("input/2024/day09/test.txt").unwrap()));
+        assert_eq!(2858, part_b(fs::read_to_string("input/2024/day09/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            6337367222422,
-            part_a(fs::read_to_string("input/2024/day09/input.txt").unwrap())
-        );
-        assert_eq!(
-            6361380647183,
-            part_b(fs::read_to_string("input/2024/day09/input.txt").unwrap())
-        );
+        assert_eq!(6337367222422, part_a(fs::read_to_string("input/2024/day09/input.txt").unwrap()));
+        assert_eq!(6361380647183, part_b(fs::read_to_string("input/2024/day09/input.txt").unwrap()));
     }
 }

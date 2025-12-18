@@ -56,15 +56,8 @@ pub(crate) fn day10() {
         }
     }
 
-    let (station, station_count) = &los
-        .iter()
-        .max_by(|(_, e1), (_, e2)| e1.len().cmp(&e2.len()))
-        .unwrap();
-    println!(
-        "Station at {:?} sees {} asteroids",
-        station,
-        station_count.len()
-    );
+    let (station, station_count) = &los.iter().max_by(|(_, e1), (_, e2)| e1.len().cmp(&e2.len())).unwrap();
+    println!("Station at {:?} sees {} asteroids", station, station_count.len());
     // --- Part B
 
     // Calculate angles between starting positions and the vector from station to each asteroid
@@ -110,11 +103,7 @@ fn clockwise_angle(b: Coord, a: Coord) -> f32 {
     // It gives only degrees up to PI, both positive and negative.
     // But we want it to calculate the whole angle clockwise
     // So we need to transform to the whole circle by adding 2*PI in case it's negative..
-    return if angle < (0 as f32) {
-        angle + PI + PI
-    } else {
-        angle
-    };
+    return if angle < (0 as f32) { angle + PI + PI } else { angle };
 }
 
 fn direction(mut x: i32, mut y: i32) -> (i32, i32) {

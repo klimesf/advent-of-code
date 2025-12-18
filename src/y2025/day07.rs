@@ -1,12 +1,8 @@
 use std::fs;
 
 pub fn day07(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2025/day07/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2025/day07/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2025/day07/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2025/day07/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -65,25 +61,13 @@ mod day07_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            21,
-            part_a(fs::read_to_string("input/2025/day07/test.txt").unwrap())
-        );
-        assert_eq!(
-            40,
-            part_b(fs::read_to_string("input/2025/day07/test.txt").unwrap())
-        );
+        assert_eq!(21, part_a(fs::read_to_string("input/2025/day07/test.txt").unwrap()));
+        assert_eq!(40, part_b(fs::read_to_string("input/2025/day07/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1605,
-            part_a(fs::read_to_string("input/2025/day07/input.txt").unwrap())
-        );
-        assert_eq!(
-            29893386035180,
-            part_b(fs::read_to_string("input/2025/day07/input.txt").unwrap())
-        );
+        assert_eq!(1605, part_a(fs::read_to_string("input/2025/day07/input.txt").unwrap()));
+        assert_eq!(29893386035180, part_b(fs::read_to_string("input/2025/day07/input.txt").unwrap()));
     }
 }

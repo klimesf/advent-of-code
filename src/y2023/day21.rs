@@ -2,20 +2,8 @@ use std::collections::HashSet;
 use std::fs;
 
 pub(crate) fn day21() {
-    println!(
-        "{}",
-        part_a(
-            fs::read_to_string("input/2023/day21/input.txt").unwrap(),
-            64
-        )
-    );
-    println!(
-        "{}",
-        part_b(
-            fs::read_to_string("input/2023/day21/input.txt").unwrap(),
-            26501365
-        )
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 64));
+    println!("{}", part_b(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 26501365));
 }
 
 fn part_a(input: String, max_steps: usize) -> usize {
@@ -56,10 +44,7 @@ fn part_a(input: String, max_steps: usize) -> usize {
         positions = new_positions
     }
 
-    positions
-        .iter()
-        .filter(|(r, c)| matrix[*r][*c] != '#')
-        .count()
+    positions.iter().filter(|(r, c)| matrix[*r][*c] != '#').count()
 }
 
 fn part_b(_input: String, max_steps: usize) -> usize {
@@ -136,10 +121,7 @@ mod day21_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            16,
-            part_a(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 6)
-        );
+        assert_eq!(16, part_a(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 6));
         assert_eq!(4, wrap(-1, 5));
         // assert_eq!(1594, part_b(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 50));
         // assert_eq!(6536, part_b(fs::read_to_string("input/2023/day21/test.txt").unwrap(), 100));
@@ -147,19 +129,7 @@ mod day21_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            3733,
-            part_a(
-                fs::read_to_string("input/2023/day21/input.txt").unwrap(),
-                64
-            )
-        );
-        assert_eq!(
-            617729401414635,
-            part_b(
-                fs::read_to_string("input/2023/day21/input.txt").unwrap(),
-                26501365
-            )
-        );
+        assert_eq!(3733, part_a(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 64));
+        assert_eq!(617729401414635, part_b(fs::read_to_string("input/2023/day21/input.txt").unwrap(), 26501365));
     }
 }

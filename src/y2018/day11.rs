@@ -39,10 +39,7 @@ pub(crate) fn day11() {
             };
         }
     }
-    println!(
-        "{},{} is the coord of 3x3 square with largest total power {}",
-        max_coord.0, max_coord.1, max
-    );
+    println!("{},{} is the coord of 3x3 square with largest total power {}", max_coord.0, max_coord.1, max);
 
     let mut max = i32::MIN;
     let mut max_coord = (0, 0, 0);

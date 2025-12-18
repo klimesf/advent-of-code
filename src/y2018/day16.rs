@@ -1,14 +1,8 @@
 use std::fs;
 
 pub(crate) fn day16() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -21,10 +15,7 @@ fn part_a(input: String) -> usize {
             .split(", ")
             .map(|s| s.parse::<usize>().unwrap())
             .collect();
-        let op: Vec<usize> = lines[1]
-            .split(" ")
-            .map(|s| s.parse::<usize>().unwrap())
-            .collect();
+        let op: Vec<usize> = lines[1].split(" ").map(|s| s.parse::<usize>().unwrap()).collect();
         let after: Vec<usize> = lines[2][9..19]
             .split(", ")
             .map(|s| s.parse::<usize>().unwrap())
@@ -38,8 +29,8 @@ fn part_a(input: String) -> usize {
         let mut matching = 0;
         let args = op[1..].iter().map(|n| *n).collect();
         for instr in [
-            "addr", "addi", "mulr", "muli", "banr", "bani", "borr", "bori", "setr", "seti", "gtir",
-            "gtri", "gtrr", "eqir", "eqri", "eqrr",
+            "addr", "addi", "mulr", "muli", "banr", "bani", "borr", "bori", "setr", "seti", "gtir", "gtri", "gtrr",
+            "eqir", "eqri", "eqrr",
         ] {
             let res = eval(instr, &args, &before);
             if res == after {
@@ -63,10 +54,7 @@ fn part_b(input: String) -> usize {
             .split(", ")
             .map(|s| s.parse::<usize>().unwrap())
             .collect();
-        let op: Vec<usize> = lines[1]
-            .split(" ")
-            .map(|s| s.parse::<usize>().unwrap())
-            .collect();
+        let op: Vec<usize> = lines[1].split(" ").map(|s| s.parse::<usize>().unwrap()).collect();
         let after: Vec<usize> = lines[2][9..19]
             .split(", ")
             .map(|s| s.parse::<usize>().unwrap())
@@ -130,10 +118,7 @@ fn part_b(input: String) -> usize {
     // Execute program
     let mut regs = vec![0; 4];
     input_b.lines().for_each(|line| {
-        let op: Vec<usize> = line
-            .split(" ")
-            .map(|s| s.parse::<usize>().unwrap())
-            .collect();
+        let op: Vec<usize> = line.split(" ").map(|s| s.parse::<usize>().unwrap()).collect();
         let args = op[1..].iter().map(|n| *n).collect();
         let instr = op_to_instr[op[0]];
         regs = eval(instr, &args, &regs);
@@ -175,13 +160,7 @@ mod day16_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            614,
-            part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap())
-        );
-        assert_eq!(
-            656,
-            part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap())
-        );
+        assert_eq!(614, part_a(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
+        assert_eq!(656, part_b(fs::read_to_string("input/2018/day16/input.txt").unwrap()));
     }
 }

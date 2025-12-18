@@ -78,11 +78,7 @@ fn flip(image: &Vec<Vec<char>>) -> Vec<Vec<char>> {
 }
 
 fn enhance(iterations: i32, rules: &Vec<(Vec<Vec<char>>, Vec<Vec<char>>)>) -> usize {
-    let mut image = vec![
-        vec!['.', '#', '.'],
-        vec!['.', '.', '#'],
-        vec!['#', '#', '#'],
-    ];
+    let mut image = vec![vec!['.', '#', '.'], vec!['.', '.', '#'], vec!['#', '#', '#']];
 
     for _ in 0..iterations {
         let inc: usize = if image.len() % 2 == 0 { 2 } else { 3 };
@@ -129,10 +125,7 @@ fn enhance(iterations: i32, rules: &Vec<(Vec<Vec<char>>, Vec<Vec<char>>)>) -> us
         image = new_image;
     }
 
-    image
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '#').count())
-        .sum()
+    image.iter().map(|row| row.iter().filter(|c| **c == '#').count()).sum()
 }
 
 #[cfg(test)]
@@ -155,26 +148,10 @@ mod day21_tests {
 
     #[test]
     fn rotate_len3_works() {
-        let original = vec![
-            vec!['.', '#', '.'],
-            vec!['.', '.', '#'],
-            vec!['#', '#', '#'],
-        ];
-        let rot_90 = vec![
-            vec!['#', '.', '.'],
-            vec!['#', '.', '#'],
-            vec!['#', '#', '.'],
-        ];
-        let rot_180 = vec![
-            vec!['#', '#', '#'],
-            vec!['#', '.', '.'],
-            vec!['.', '#', '.'],
-        ];
-        let rot_270 = vec![
-            vec!['.', '#', '#'],
-            vec!['#', '.', '#'],
-            vec!['.', '.', '#'],
-        ];
+        let original = vec![vec!['.', '#', '.'], vec!['.', '.', '#'], vec!['#', '#', '#']];
+        let rot_90 = vec![vec!['#', '.', '.'], vec!['#', '.', '#'], vec!['#', '#', '.']];
+        let rot_180 = vec![vec!['#', '#', '#'], vec!['#', '.', '.'], vec!['.', '#', '.']];
+        let rot_270 = vec![vec!['.', '#', '#'], vec!['#', '.', '#'], vec!['.', '.', '#']];
 
         assert_eq!(rot_90, rotate(&original));
         assert_eq!(rot_180, rotate(&rot_90));
@@ -191,16 +168,8 @@ mod day21_tests {
 
     #[test]
     fn flip_len3_works() {
-        let original = vec![
-            vec!['.', '.', '#'],
-            vec!['.', '#', '.'],
-            vec!['#', '.', '.'],
-        ];
-        let flipped = vec![
-            vec!['#', '.', '.'],
-            vec!['.', '#', '.'],
-            vec!['.', '.', '#'],
-        ];
+        let original = vec![vec!['.', '.', '#'], vec!['.', '#', '.'], vec!['#', '.', '.']];
+        let flipped = vec![vec!['#', '.', '.'], vec!['.', '#', '.'], vec!['.', '.', '#']];
         assert_eq!(flipped, flip(&original));
     }
 

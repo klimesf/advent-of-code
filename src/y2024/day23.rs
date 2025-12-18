@@ -3,12 +3,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub fn day23(print_usize: fn(usize), print_string: fn(String)) {
-    print_usize(part_a(
-        fs::read_to_string("input/2024/day23/input.txt").unwrap(),
-    ));
-    print_string(part_b(
-        fs::read_to_string("input/2024/day23/input.txt").unwrap(),
-    ));
+    print_usize(part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
+    print_string(part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -56,11 +52,7 @@ fn part_b(input: String) -> String {
         adjacency_list.entry(l).or_insert(vec![]).push(r);
         adjacency_list.entry(r).or_insert(vec![]).push(l);
     });
-    let keys = adjacency_list
-        .keys()
-        .cloned()
-        .sorted()
-        .collect::<Vec<&str>>();
+    let keys = adjacency_list.keys().cloned().sorted().collect::<Vec<&str>>();
 
     let mut max = usize::MIN;
     let mut max_clique = vec![];
@@ -91,22 +83,13 @@ mod day23_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            7,
-            part_a(fs::read_to_string("input/2024/day23/test.txt").unwrap())
-        );
-        assert_eq!(
-            "co,de,ka,ta",
-            part_b(fs::read_to_string("input/2024/day23/test.txt").unwrap())
-        );
+        assert_eq!(7, part_a(fs::read_to_string("input/2024/day23/test.txt").unwrap()));
+        assert_eq!("co,de,ka,ta", part_b(fs::read_to_string("input/2024/day23/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1304,
-            part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap())
-        );
+        assert_eq!(1304, part_a(fs::read_to_string("input/2024/day23/input.txt").unwrap()));
         assert_eq!(
             "ao,es,fe,if,in,io,ky,qq,rd,rn,rv,vc,vl",
             part_b(fs::read_to_string("input/2024/day23/input.txt").unwrap())

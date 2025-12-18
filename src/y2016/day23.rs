@@ -2,17 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day23() {
-    println!(
-        "{}",
-        solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7)
-    );
-    println!(
-        "{}",
-        solve(
-            fs::read_to_string("input/2016/day23/input.txt").unwrap(),
-            12
-        )
-    );
+    println!("{}", solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7));
+    println!("{}", solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 12));
 }
 
 fn solve(input: String, a_initial: i32) -> i32 {
@@ -116,24 +107,12 @@ mod day23_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            3,
-            solve(fs::read_to_string("input/2016/day23/test.txt").unwrap(), 7)
-        );
+        assert_eq!(3, solve(fs::read_to_string("input/2016/day23/test.txt").unwrap(), 7));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            14065,
-            solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7)
-        );
-        assert_eq!(
-            0,
-            solve(
-                fs::read_to_string("input/2016/day23/input.txt").unwrap(),
-                12
-            )
-        );
+        assert_eq!(14065, solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 7));
+        assert_eq!(0, solve(fs::read_to_string("input/2016/day23/input.txt").unwrap(), 12));
     }
 }

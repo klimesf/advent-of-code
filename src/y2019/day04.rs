@@ -6,11 +6,7 @@ pub(crate) fn day04() {
 fn part_a() {
     let mut ctr = 0;
     for pass_num in 134792..=675810 {
-        let pass: Vec<u32> = pass_num
-            .to_string()
-            .chars()
-            .map(|d| d.to_digit(10).unwrap())
-            .collect();
+        let pass: Vec<u32> = pass_num.to_string().chars().map(|d| d.to_digit(10).unwrap()).collect();
 
         let mut never_decreases = true;
         let mut doubles = false;
@@ -36,11 +32,7 @@ fn part_a() {
 fn part_b() {
     let mut ctr = 0;
     for pass_num in 134792..=675810 {
-        let pass: Vec<u32> = pass_num
-            .to_string()
-            .chars()
-            .map(|d| d.to_digit(10).unwrap())
-            .collect();
+        let pass: Vec<u32> = pass_num.to_string().chars().map(|d| d.to_digit(10).unwrap()).collect();
 
         let mut never_decreases = true;
         let mut doubles = false;

@@ -1,12 +1,8 @@
 use std::fs;
 
 pub fn day13(print: fn(i64)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day13/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day13/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i64 {
@@ -128,21 +124,12 @@ mod day13_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            480,
-            part_a(fs::read_to_string("input/2024/day13/test.txt").unwrap())
-        );
+        assert_eq!(480, part_a(fs::read_to_string("input/2024/day13/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            33481,
-            part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap())
-        );
-        assert_eq!(
-            92572057880885,
-            part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap())
-        );
+        assert_eq!(33481, part_a(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
+        assert_eq!(92572057880885, part_b(fs::read_to_string("input/2024/day13/input.txt").unwrap()));
     }
 }

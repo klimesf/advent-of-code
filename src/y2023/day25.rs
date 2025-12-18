@@ -3,10 +3,7 @@ use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::fs;
 
 pub(crate) fn day25() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day25/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day25/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i32 {
@@ -116,17 +113,11 @@ mod day25_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            54,
-            part_a(fs::read_to_string("input/2023/day25/test.txt").unwrap())
-        );
+        assert_eq!(54, part_a(fs::read_to_string("input/2023/day25/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            527790,
-            part_a(fs::read_to_string("input/2023/day25/input.txt").unwrap())
-        );
+        assert_eq!(527790, part_a(fs::read_to_string("input/2023/day25/input.txt").unwrap()));
     }
 }

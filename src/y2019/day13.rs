@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day13() {
     let input = fs::read_to_string("input/2019/day13/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
     part_a(&code);
     part_b(&code);
 }

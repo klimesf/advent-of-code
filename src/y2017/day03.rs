@@ -37,16 +37,7 @@ fn part_b(num: i32) -> i32 {
     let mut curr = 1;
     let mut ctr = [1, 1, 2, 2];
     let dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)];
-    let neighbors = [
-        (0, 1),
-        (0, -1),
-        (1, 0),
-        (-1, 0),
-        (1, 1),
-        (1, -1),
-        (-1, 1),
-        (-1, -1),
-    ];
+    let neighbors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)];
     let mut dir = 0;
     let mut memory: HashMap<(i32, i32), i32> = HashMap::new();
     memory.insert(pos, curr);

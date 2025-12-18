@@ -2,14 +2,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day19() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -103,33 +97,16 @@ mod day19_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            4,
-            part_a(fs::read_to_string("input/2015/day19/test.txt").unwrap())
-        );
-        assert_eq!(
-            7,
-            part_a(fs::read_to_string("input/2015/day19/test_b.txt").unwrap())
-        );
-        assert_eq!(
-            3,
-            part_b(fs::read_to_string("input/2015/day19/test.txt").unwrap())
-        );
-        assert_eq!(
-            6,
-            part_b(fs::read_to_string("input/2015/day19/test_b.txt").unwrap())
-        );
+        assert_eq!(4, part_a(fs::read_to_string("input/2015/day19/test.txt").unwrap()));
+        assert_eq!(7, part_a(fs::read_to_string("input/2015/day19/test_b.txt").unwrap()));
+        assert_eq!(3, part_b(fs::read_to_string("input/2015/day19/test.txt").unwrap()));
+        assert_eq!(6, part_b(fs::read_to_string("input/2015/day19/test_b.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            518,
-            part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap())
-        );
-        assert_eq!(
-            200,
-            part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap())
-        ); // TODO: dijkstra
+        assert_eq!(518, part_a(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
+        assert_eq!(200, part_b(fs::read_to_string("input/2015/day19/input.txt").unwrap()));
+        // TODO: dijkstra
     }
 }

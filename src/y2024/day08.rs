@@ -4,12 +4,8 @@ use std::fs;
 use std::ops::{Add, Sub};
 
 pub fn day08(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day08/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day08/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -20,15 +16,9 @@ fn part_a(input: String) -> usize {
 
     let mut antennae: HashMap<char, Vec<Point>> = HashMap::new();
     map.iter().enumerate().for_each(|(i, row)| {
-        row.iter()
-            .enumerate()
-            .filter(|(_, c)| **c != '.')
-            .for_each(|(j, c)| {
-                antennae
-                    .entry(*c)
-                    .or_insert(vec![])
-                    .push(Point(i as i32, j as i32));
-            })
+        row.iter().enumerate().filter(|(_, c)| **c != '.').for_each(|(j, c)| {
+            antennae.entry(*c).or_insert(vec![]).push(Point(i as i32, j as i32));
+        })
     });
 
     let mut antinodes: HashSet<Point> = HashSet::new();
@@ -58,15 +48,9 @@ fn part_b(input: String) -> usize {
 
     let mut antennae: HashMap<char, Vec<Point>> = HashMap::new();
     map.iter().enumerate().for_each(|(i, row)| {
-        row.iter()
-            .enumerate()
-            .filter(|(_, c)| **c != '.')
-            .for_each(|(j, c)| {
-                antennae
-                    .entry(*c)
-                    .or_insert(vec![])
-                    .push(Point(i as i32, j as i32));
-            })
+        row.iter().enumerate().filter(|(_, c)| **c != '.').for_each(|(j, c)| {
+            antennae.entry(*c).or_insert(vec![]).push(Point(i as i32, j as i32));
+        })
     });
 
     let mut antinodes: HashSet<Point> = HashSet::new();
@@ -135,25 +119,13 @@ mod day08_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            14,
-            part_a(fs::read_to_string("input/2024/day08/test.txt").unwrap())
-        );
-        assert_eq!(
-            34,
-            part_b(fs::read_to_string("input/2024/day08/test.txt").unwrap())
-        );
+        assert_eq!(14, part_a(fs::read_to_string("input/2024/day08/test.txt").unwrap()));
+        assert_eq!(34, part_b(fs::read_to_string("input/2024/day08/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            351,
-            part_a(fs::read_to_string("input/2024/day08/input.txt").unwrap())
-        );
-        assert_eq!(
-            1259,
-            part_b(fs::read_to_string("input/2024/day08/input.txt").unwrap())
-        );
+        assert_eq!(351, part_a(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
+        assert_eq!(1259, part_b(fs::read_to_string("input/2024/day08/input.txt").unwrap()));
     }
 }

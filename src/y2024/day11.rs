@@ -2,14 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub fn day11(print: fn(usize)) {
-    print(solve(
-        fs::read_to_string("input/2024/day11/input.txt").unwrap(),
-        25,
-    ));
-    print(solve(
-        fs::read_to_string("input/2024/day11/input.txt").unwrap(),
-        75,
-    ));
+    print(solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 25));
+    print(solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 75));
 }
 
 fn solve(input: String, blinks: usize) -> usize {
@@ -25,11 +19,7 @@ fn solve(input: String, blinks: usize) -> usize {
         .sum()
 }
 
-fn recursive_blink(
-    stone: usize,
-    blinks: usize,
-    cache: &mut HashMap<(usize, usize), usize>,
-) -> usize {
+fn recursive_blink(stone: usize, blinks: usize, cache: &mut HashMap<(usize, usize), usize>) -> usize {
     if blinks == 0 {
         return 1;
     }
@@ -44,9 +34,7 @@ fn recursive_blink(
         total += recursive_blink(1, blinks - 1, cache);
     } else {
         // don't use formatting into strings like some Kotlin bozo
-        let digits = (0..)
-            .take_while(|digit| 10_usize.pow(*digit) <= stone)
-            .count();
+        let digits = (0..).take_while(|digit| 10_usize.pow(*digit) <= stone).count();
 
         if digits % 2 == 0 {
             // Stone has an even number of digits, split into two
@@ -71,27 +59,12 @@ mod day11_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            55312,
-            solve(fs::read_to_string("input/2024/day11/test.txt").unwrap(), 25)
-        );
+        assert_eq!(55312, solve(fs::read_to_string("input/2024/day11/test.txt").unwrap(), 25));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            198089,
-            solve(
-                fs::read_to_string("input/2024/day11/input.txt").unwrap(),
-                25
-            )
-        );
-        assert_eq!(
-            236302670835517,
-            solve(
-                fs::read_to_string("input/2024/day11/input.txt").unwrap(),
-                75
-            )
-        );
+        assert_eq!(198089, solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 25));
+        assert_eq!(236302670835517, solve(fs::read_to_string("input/2024/day11/input.txt").unwrap(), 75));
     }
 }

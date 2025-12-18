@@ -2,14 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day04() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day04/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day04/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day04/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day04/input.txt").unwrap()));
 }
 
 fn part_a(cards: String) -> i32 {
@@ -84,25 +78,13 @@ mod day04_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            13,
-            part_a(fs::read_to_string("input/2023/day04/test.txt").unwrap())
-        );
-        assert_eq!(
-            30,
-            part_b(fs::read_to_string("input/2023/day04/test_b.txt").unwrap())
-        );
+        assert_eq!(13, part_a(fs::read_to_string("input/2023/day04/test.txt").unwrap()));
+        assert_eq!(30, part_b(fs::read_to_string("input/2023/day04/test_b.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            24175,
-            part_a(fs::read_to_string("input/2023/day04/input.txt").unwrap())
-        );
-        assert_eq!(
-            18846301,
-            part_b(fs::read_to_string("input/2023/day04/input.txt").unwrap())
-        );
+        assert_eq!(24175, part_a(fs::read_to_string("input/2023/day04/input.txt").unwrap()));
+        assert_eq!(18846301, part_b(fs::read_to_string("input/2023/day04/input.txt").unwrap()));
     }
 }

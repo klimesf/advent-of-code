@@ -5,14 +5,8 @@ use std::collections::HashSet;
 use std::fs;
 
 pub(crate) fn day18() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -115,11 +109,9 @@ fn part_b(input: String) -> i128 {
 
     // https://www.mathopenref.com/coordpolygonarea.html
     let mut ans = 0;
-    rect.iter()
-        .tuple_windows()
-        .for_each(|((x1, y1), (x2, y2))| {
-            ans += (x1 * y2) - (y1 * x2);
-        });
+    rect.iter().tuple_windows().for_each(|((x1, y1), (x2, y2))| {
+        ans += (x1 * y2) - (y1 * x2);
+    });
     (-ans / 2) + (sides / 2) + 1 // Add (0,0)
 }
 
@@ -131,25 +123,13 @@ mod day18_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            62,
-            part_a(fs::read_to_string("input/2023/day18/test.txt").unwrap())
-        );
-        assert_eq!(
-            952408144115,
-            part_b(fs::read_to_string("input/2023/day18/test.txt").unwrap())
-        );
+        assert_eq!(62, part_a(fs::read_to_string("input/2023/day18/test.txt").unwrap()));
+        assert_eq!(952408144115, part_b(fs::read_to_string("input/2023/day18/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            33491,
-            part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap())
-        );
-        assert_eq!(
-            87716969654406,
-            part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap())
-        );
+        assert_eq!(33491, part_a(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
+        assert_eq!(87716969654406, part_b(fs::read_to_string("input/2023/day18/input.txt").unwrap()));
     }
 }

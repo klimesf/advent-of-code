@@ -109,10 +109,7 @@ fn part_b(mut graph: HashMap<char, HashSet<char>>) {
                 .0;
             available_workers -= 1;
             let deadline = current_time.0 + duration(todo);
-            finished_at
-                .entry(deadline)
-                .or_insert_with(|| Vec::new())
-                .push(todo);
+            finished_at.entry(deadline).or_insert_with(|| Vec::new()).push(todo);
             time.push(Reverse(deadline));
             finished.insert(todo);
         }
@@ -122,10 +119,7 @@ fn part_b(mut graph: HashMap<char, HashSet<char>>) {
         }
     }
 
-    println!(
-        "It will take {} workers {} seconds",
-        TOTAL_WORKERS, final_time
-    );
+    println!("It will take {} workers {} seconds", TOTAL_WORKERS, final_time);
 }
 
 fn duration(task: char) -> usize {

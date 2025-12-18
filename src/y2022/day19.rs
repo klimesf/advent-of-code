@@ -80,8 +80,7 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build ore bot next
         if robot_ctr[0] < max_ore_cost {
-            let ore_available_in =
-                ((ore_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let ore_available_in = ((ore_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
             if minute + ore_available_in <= time {
                 branch_count += 1;
                 let mut res_clone = resource_ctr.clone();
@@ -97,8 +96,7 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build clay bot next
         if robot_ctr[1] < max_clay_cost {
-            let ore_available_in =
-                ((clay_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let ore_available_in = ((clay_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
             if minute + ore_available_in <= time {
                 branch_count += 1;
                 let mut res_clone = resource_ctr.clone();
@@ -114,10 +112,8 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build obsidian bot next
         if robot_ctr[0] > 0 && robot_ctr[1] > 0 {
-            let ore_available_in =
-                ((obsidian_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
-            let clay_available_in =
-                ((obsidian_cost.1 - resource_ctr[1] + robot_ctr[1] - 1) / robot_ctr[1]).max(0) + 1;
+            let ore_available_in = ((obsidian_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let clay_available_in = ((obsidian_cost.1 - resource_ctr[1] + robot_ctr[1] - 1) / robot_ctr[1]).max(0) + 1;
             let robot_available_in = ore_available_in.max(clay_available_in);
             if minute + robot_available_in <= time {
                 branch_count += 1;
@@ -134,10 +130,8 @@ fn solve(time: i32, ore_cost: Cost, clay_cost: Cost, obsidian_cost: Cost, geode_
 
         // Build geode bot next
         if robot_ctr[0] > 0 && robot_ctr[2] > 0 {
-            let ore_available_in =
-                ((geode_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
-            let obsidian_available_in =
-                ((geode_cost.2 - resource_ctr[2] + robot_ctr[2] - 1) / robot_ctr[2]).max(0) + 1;
+            let ore_available_in = ((geode_cost.0 - resource_ctr[0] + robot_ctr[0] - 1) / robot_ctr[0]).max(0) + 1;
+            let obsidian_available_in = ((geode_cost.2 - resource_ctr[2] + robot_ctr[2] - 1) / robot_ctr[2]).max(0) + 1;
             let robot_available_in = ore_available_in.max(obsidian_available_in);
             if minute + robot_available_in <= time {
                 branch_count += 1;

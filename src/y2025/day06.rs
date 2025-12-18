@@ -1,12 +1,8 @@
 use std::fs;
 
 pub fn day06(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2025/day06/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2025/day06/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2025/day06/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2025/day06/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -14,25 +10,23 @@ fn part_a(input: String) -> usize {
     let mut ans = 0;
     input.lines().for_each(|line| {
         if line.contains("*") {
-            line.split_whitespace()
-                .enumerate()
-                .for_each(|(col, c)| match c {
-                    "*" => {
-                        let mut tot = 1;
-                        for i in 0..rows.len() {
-                            tot *= rows[i][col];
-                        }
-                        ans += tot;
+            line.split_whitespace().enumerate().for_each(|(col, c)| match c {
+                "*" => {
+                    let mut tot = 1;
+                    for i in 0..rows.len() {
+                        tot *= rows[i][col];
                     }
-                    "+" => {
-                        let mut tot = 0;
-                        for i in 0..rows.len() {
-                            tot += rows[i][col];
-                        }
-                        ans += tot;
+                    ans += tot;
+                }
+                "+" => {
+                    let mut tot = 0;
+                    for i in 0..rows.len() {
+                        tot += rows[i][col];
                     }
-                    _ => panic!("invalid char {}", c),
-                })
+                    ans += tot;
+                }
+                _ => panic!("invalid char {}", c),
+            })
         } else {
             let row = line
                 .split_whitespace()
@@ -86,25 +80,13 @@ mod day06_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            4277556,
-            part_a(fs::read_to_string("input/2025/day06/test.txt").unwrap())
-        );
-        assert_eq!(
-            3263827,
-            part_b(fs::read_to_string("input/2025/day06/test.txt").unwrap())
-        );
+        assert_eq!(4277556, part_a(fs::read_to_string("input/2025/day06/test.txt").unwrap()));
+        assert_eq!(3263827, part_b(fs::read_to_string("input/2025/day06/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            3785892992137,
-            part_a(fs::read_to_string("input/2025/day06/input.txt").unwrap())
-        );
-        assert_eq!(
-            7669802156452,
-            part_b(fs::read_to_string("input/2025/day06/input.txt").unwrap())
-        );
+        assert_eq!(3785892992137, part_a(fs::read_to_string("input/2025/day06/input.txt").unwrap()));
+        assert_eq!(7669802156452, part_b(fs::read_to_string("input/2025/day06/input.txt").unwrap()));
     }
 }

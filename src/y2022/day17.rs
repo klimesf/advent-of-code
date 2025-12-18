@@ -104,8 +104,7 @@ fn insert_shape(h: usize, shape: &[u8; 4], rows: &mut Vec<u8>) {
 
 fn shift_left(h: usize, shape: &mut [u8; 4], rows: &Vec<u8>) {
     if (0..4).any(|i| {
-        !shape[i] | !0b10000000 != 0b11111111
-            || (h + i < rows.len() && !(shape[i] << 1) | !rows[h + i] != 0b11111111)
+        !shape[i] | !0b10000000 != 0b11111111 || (h + i < rows.len() && !(shape[i] << 1) | !rows[h + i] != 0b11111111)
     }) {
         return;
     }
@@ -116,8 +115,7 @@ fn shift_left(h: usize, shape: &mut [u8; 4], rows: &Vec<u8>) {
 
 fn shift_right(h: usize, shape: &mut [u8; 4], rows: &Vec<u8>) {
     if (0..4).any(|i| {
-        !shape[i] | !0b11 != 0b11111111
-            || (h + i < rows.len() && !(shape[i] >> 1) | !rows[h + i] != 0b11111111)
+        !shape[i] | !0b11 != 0b11111111 || (h + i < rows.len() && !(shape[i] >> 1) | !rows[h + i] != 0b11111111)
     }) {
         return;
     }
@@ -149,9 +147,7 @@ fn get_height(rows: &Vec<u8>) -> usize {
 
 #[cfg(test)]
 mod day17_tests {
-    use crate::y2022::day17::{
-        birdseye_view, can_move_down, get_height, shift_left, shift_right, tetrisize,
-    };
+    use crate::y2022::day17::{birdseye_view, can_move_down, get_height, shift_left, shift_right, tetrisize};
 
     #[test]
     fn shift_left_works() {
@@ -241,41 +237,23 @@ mod day17_tests {
     fn get_height_works() {
         assert_eq!(0, get_height(&vec![0b0; 8]));
         assert_eq!(0, get_height(&vec![0b1; 8])); // Rightmost bit is disregarded
-        assert_eq!(
-            2,
-            get_height(&vec![
-                0b10000, 0b11110000, 0b00000000, 0b00000000, 0b00000000
-            ])
-        );
-        assert_eq!(
-            5,
-            get_height(&vec![
-                0b10000, 0b11110000, 0b00000000, 0b00000000, 0b01000000
-            ])
-        );
+        assert_eq!(2, get_height(&vec![0b10000, 0b11110000, 0b00000000, 0b00000000, 0b00000000]));
+        assert_eq!(5, get_height(&vec![0b10000, 0b11110000, 0b00000000, 0b00000000, 0b01000000]));
     }
 
     #[test]
     fn birdseye_view_works() {
-        let rows = vec![
-            0b11111110, 0b11111110, 0b00010000, 0b10000010, 0b01000100, 0b00101000,
-        ];
+        let rows = vec![0b11111110, 0b11111110, 0b00010000, 0b10000010, 0b01000100, 0b00101000];
         assert_eq!([2, 1, 0, 3, 0, 1, 2], birdseye_view(5, &rows));
     }
 
     #[test]
     fn part_a_works() {
-        assert_eq!(
-            3068,
-            tetrisize(">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>", 2022)
-        );
+        assert_eq!(3068, tetrisize(">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>", 2022));
     }
 
     #[test]
     fn part_b_works() {
-        assert_eq!(
-            1514285714288,
-            tetrisize(">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>", 1000000000000)
-        );
+        assert_eq!(1514285714288, tetrisize(">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>", 1000000000000));
     }
 }

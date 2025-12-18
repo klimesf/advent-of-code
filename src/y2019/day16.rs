@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day16() {
     let input = fs::read_to_string("input/2019/day16/input.txt").unwrap();
-    let digits: Vec<i32> = input
-        .trim()
-        .chars()
-        .map(|c| c.to_digit(10).unwrap() as i32)
-        .collect();
+    let digits: Vec<i32> = input.trim().chars().map(|c| c.to_digit(10).unwrap() as i32).collect();
 
     part_a(digits.clone());
     part_b(digits.clone());

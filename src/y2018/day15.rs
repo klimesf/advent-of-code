@@ -4,14 +4,8 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day15() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -170,9 +164,7 @@ fn part_a(input: String) -> usize {
                     continue;
                 }
                 let target_reading_order = (target.r * map[0].len()) + target.c;
-                if target.hp < min_hp
-                    || target.hp == min_hp && target_reading_order < min_reading_order
-                {
+                if target.hp < min_hp || target.hp == min_hp && target_reading_order < min_reading_order {
                     selected_target = *j;
                     min_hp = target.hp;
                     min_reading_order = target_reading_order
@@ -247,9 +239,7 @@ fn part_b(input: String) -> usize {
                         .iter()
                         .map(|j| units[*j])
                         .map(|target| adjacent_reachable_fields(&map, target.r, target.c))
-                        .for_each(|fields| {
-                            fields.iter().for_each(|(r, c)| in_range.push((*r, *c)))
-                        });
+                        .for_each(|fields| fields.iter().for_each(|(r, c)| in_range.push((*r, *c))));
 
                     // Find reachable
                     let mut reachable = vec![];
@@ -368,9 +358,7 @@ fn part_b(input: String) -> usize {
                         continue;
                     }
                     let target_reading_order = (target.r * map[0].len()) + target.c;
-                    if target.hp < min_hp
-                        || target.hp == min_hp && target_reading_order < min_reading_order
-                    {
+                    if target.hp < min_hp || target.hp == min_hp && target_reading_order < min_reading_order {
                         selected_target = *j;
                         min_hp = target.hp;
                         min_reading_order = target_reading_order
@@ -534,45 +522,18 @@ mod day15_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            27828,
-            part_a(fs::read_to_string("input/2018/day15/test.txt").unwrap())
-        );
-        assert_eq!(
-            27730,
-            part_a(fs::read_to_string("input/2018/day15/test_27730.txt").unwrap())
-        );
-        assert_eq!(
-            36334,
-            part_a(fs::read_to_string("input/2018/day15/test_36334.txt").unwrap())
-        );
-        assert_eq!(
-            39514,
-            part_a(fs::read_to_string("input/2018/day15/test_39514.txt").unwrap())
-        );
-        assert_eq!(
-            27755,
-            part_a(fs::read_to_string("input/2018/day15/test_27755.txt").unwrap())
-        );
-        assert_eq!(
-            28944,
-            part_a(fs::read_to_string("input/2018/day15/test_28944.txt").unwrap())
-        );
-        assert_eq!(
-            18740,
-            part_a(fs::read_to_string("input/2018/day15/test_18740.txt").unwrap())
-        );
+        assert_eq!(27828, part_a(fs::read_to_string("input/2018/day15/test.txt").unwrap()));
+        assert_eq!(27730, part_a(fs::read_to_string("input/2018/day15/test_27730.txt").unwrap()));
+        assert_eq!(36334, part_a(fs::read_to_string("input/2018/day15/test_36334.txt").unwrap()));
+        assert_eq!(39514, part_a(fs::read_to_string("input/2018/day15/test_39514.txt").unwrap()));
+        assert_eq!(27755, part_a(fs::read_to_string("input/2018/day15/test_27755.txt").unwrap()));
+        assert_eq!(28944, part_a(fs::read_to_string("input/2018/day15/test_28944.txt").unwrap()));
+        assert_eq!(18740, part_a(fs::read_to_string("input/2018/day15/test_18740.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            250648,
-            part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap())
-        );
-        assert_eq!(
-            42224,
-            part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap())
-        );
+        assert_eq!(250648, part_a(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
+        assert_eq!(42224, part_b(fs::read_to_string("input/2018/day15/input.txt").unwrap()));
     }
 }

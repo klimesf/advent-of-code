@@ -71,19 +71,12 @@ fn parse_i64(g: Option<Match>) -> i64 {
 
 fn read_signals(filename: &str) -> Vec<(i64, i64, i64, i64)> {
     let input = fs::read_to_string(filename).unwrap();
-    let re = Regex::new(
-        r"^Sensor at x=([\-0-9]+), y=([\-0-9]+): closest beacon is at x=([\-0-9]+), y=([\-0-9]+)$",
-    )
-    .unwrap();
+    let re =
+        Regex::new(r"^Sensor at x=([\-0-9]+), y=([\-0-9]+): closest beacon is at x=([\-0-9]+), y=([\-0-9]+)$").unwrap();
     let mut signals = vec![];
     for line in input.lines().into_iter() {
         let g = re.captures(line).unwrap();
-        let signal = (
-            parse_i64(g.get(1)),
-            parse_i64(g.get(2)),
-            parse_i64(g.get(3)),
-            parse_i64(g.get(4)),
-        );
+        let signal = (parse_i64(g.get(1)), parse_i64(g.get(2)), parse_i64(g.get(3)), parse_i64(g.get(4)));
         signals.push(signal);
     }
     signals

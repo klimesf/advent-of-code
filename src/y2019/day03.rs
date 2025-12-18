@@ -19,10 +19,7 @@ pub(crate) fn day03() {
     let points_a_set: HashSet<(i32, i32)> = points_a.keys().cloned().collect();
     let points_b_set: HashSet<(i32, i32)> = points_b.keys().cloned().collect();
     let intersections = points_a_set.intersection(&points_b_set);
-    let closest_intersection_2 = intersections
-        .into_iter()
-        .map(|i| points_a[i] + points_b[i])
-        .min();
+    let closest_intersection_2 = intersections.into_iter().map(|i| points_a[i] + points_b[i]).min();
     println!("{}", closest_intersection_2.unwrap_or(0));
 }
 

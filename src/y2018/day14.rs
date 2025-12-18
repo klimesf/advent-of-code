@@ -119,17 +119,8 @@ mod day14_tests {
 
     #[test]
     fn contains_string_works() {
-        assert_eq!(
-            3,
-            contains_string(&vec![0, 0, 0, 0, 0, 1, 0], &"001".to_string())
-        );
-        assert_eq!(
-            3,
-            contains_string(&vec![0, 0, 0, 0, 0, 1], &"001".to_string())
-        );
-        assert_eq!(
-            0,
-            contains_string(&vec![0, 0, 0, 0, 0, 0, 0], &"001".to_string())
-        );
+        assert_eq!(3, contains_string(&vec![0, 0, 0, 0, 0, 1, 0], &"001".to_string()));
+        assert_eq!(3, contains_string(&vec![0, 0, 0, 0, 0, 1], &"001".to_string()));
+        assert_eq!(0, contains_string(&vec![0, 0, 0, 0, 0, 0, 0], &"001".to_string()));
     }
 }

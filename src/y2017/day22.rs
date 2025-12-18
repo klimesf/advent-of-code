@@ -51,8 +51,7 @@ enum Status {
 fn evolved_virus(start: (i32, i32), map: &HashSet<(i32, i32)>) -> usize {
     let mut dir = (-1, 0);
     let mut pos = start;
-    let mut statuses: HashMap<(i32, i32), Status> =
-        map.iter().map(|pos| (*pos, Status::Infected)).collect();
+    let mut statuses: HashMap<(i32, i32), Status> = map.iter().map(|pos| (*pos, Status::Infected)).collect();
     let mut ans = 0;
 
     for _ in 0..10000000 {

@@ -2,13 +2,8 @@ use itertools::Itertools;
 use std::fs;
 
 pub fn day17(print: fn(String)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day17/input.txt").unwrap(),
-    ));
-    print(format!(
-        "{}",
-        part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())
-    ));
+    print(part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
+    print(format!("{}", part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())));
 }
 
 fn part_a(input: String) -> String {
@@ -74,19 +69,11 @@ fn parse_input(input: String) -> (usize, usize, usize, Vec<usize>) {
     let reg_c = reg_c_s.parse::<usize>().unwrap();
 
     let (_, prog) = prog.split_once(": ").unwrap();
-    let program = prog
-        .split(',')
-        .map(|x| x.parse::<usize>().unwrap())
-        .collect_vec();
+    let program = prog.split(',').map(|x| x.parse::<usize>().unwrap()).collect_vec();
     (reg_a, reg_b, reg_c, program)
 }
 
-fn interpret(
-    mut reg_a: usize,
-    mut reg_b: usize,
-    mut reg_c: usize,
-    program: &Vec<usize>,
-) -> Vec<usize> {
+fn interpret(mut reg_a: usize, mut reg_b: usize, mut reg_c: usize, program: &Vec<usize>) -> Vec<usize> {
     let mut instruction_pointer = 0;
     let mut output = vec![];
     while instruction_pointer < program.len() {
@@ -168,21 +155,12 @@ mod day17_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            "4,6,3,5,6,3,5,2,1,0",
-            part_a(fs::read_to_string("input/2024/day17/test.txt").unwrap())
-        );
+        assert_eq!("4,6,3,5,6,3,5,2,1,0", part_a(fs::read_to_string("input/2024/day17/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            "1,5,0,1,7,4,1,0,3",
-            part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap())
-        );
-        assert_eq!(
-            47910079998866,
-            part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap())
-        );
+        assert_eq!("1,5,0,1,7,4,1,0,3", part_a(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
+        assert_eq!(47910079998866, part_b(fs::read_to_string("input/2024/day17/input.txt").unwrap()));
     }
 }

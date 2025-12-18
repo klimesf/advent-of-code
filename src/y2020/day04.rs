@@ -2,14 +2,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day04() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2020/day04/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2020/day04/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2020/day04/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2020/day04/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -80,9 +74,7 @@ fn part_b(input: String) -> usize {
             }
 
             let hcl = passport["hcl"];
-            if !hcl[0..1].chars().all(|c| c == '#')
-                || !hcl[1..].chars().all(|c| c.is_ascii_hexdigit())
-            {
+            if !hcl[0..1].chars().all(|c| c == '#') || !hcl[1..].chars().all(|c| c.is_ascii_hexdigit()) {
                 return false;
             }
 
@@ -109,25 +101,13 @@ mod day04_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            2,
-            part_a(fs::read_to_string("input/2020/day04/test.txt").unwrap())
-        );
-        assert_eq!(
-            2,
-            part_b(fs::read_to_string("input/2020/day04/test.txt").unwrap())
-        );
+        assert_eq!(2, part_a(fs::read_to_string("input/2020/day04/test.txt").unwrap()));
+        assert_eq!(2, part_b(fs::read_to_string("input/2020/day04/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            254,
-            part_a(fs::read_to_string("input/2020/day04/input.txt").unwrap())
-        );
-        assert_eq!(
-            184,
-            part_b(fs::read_to_string("input/2020/day04/input.txt").unwrap())
-        );
+        assert_eq!(254, part_a(fs::read_to_string("input/2020/day04/input.txt").unwrap()));
+        assert_eq!(184, part_b(fs::read_to_string("input/2020/day04/input.txt").unwrap()));
     }
 }

@@ -7,11 +7,7 @@ pub(crate) fn day10() {
 }
 
 fn part_a(list_len: usize, input: &str) -> usize {
-    let lengths = input
-        .trim()
-        .split(",")
-        .map(|i| i.parse::<usize>().unwrap())
-        .collect();
+    let lengths = input.trim().split(",").map(|i| i.parse::<usize>().unwrap()).collect();
     let mut list: Vec<usize> = (0..list_len).collect();
     knot_hash_iteration(0, 0, &mut list, &lengths);
     list[0] * list[1]
@@ -42,12 +38,7 @@ pub(crate) fn knot_hash(input: &str) -> String {
     hash
 }
 
-fn knot_hash_iteration(
-    mut pos: usize,
-    mut skip: usize,
-    list: &mut Vec<usize>,
-    lengths: &Vec<usize>,
-) -> (usize, usize) {
+fn knot_hash_iteration(mut pos: usize, mut skip: usize, list: &mut Vec<usize>, lengths: &Vec<usize>) -> (usize, usize) {
     let list_len = list.len();
     for len in lengths {
         for i in 0..(len / 2) {

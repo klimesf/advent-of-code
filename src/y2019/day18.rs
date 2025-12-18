@@ -101,10 +101,7 @@ fn part_b() {
     }
 
     let (vertices, edges) = create_graph(&map);
-    let key_cnt = vertices
-        .iter()
-        .filter(|(c, _, _)| *c >= 'a' && *c <= 'z')
-        .count();
+    let key_cnt = vertices.iter().filter(|(c, _, _)| *c >= 'a' && *c <= 'z').count();
 
     let mut prio_queue = PriorityQueue::new();
     prio_queue.push((('1', '2', '3', '4'), 0, 0), Reverse(0));
@@ -131,11 +128,7 @@ fn part_b() {
         while !possible_moves.is_empty() {
             let ((from, from_dist), _) = possible_moves.pop().unwrap();
 
-            if !has_key(keys, from.0)
-                || !has_key(keys, from.1)
-                || !has_key(keys, from.2)
-                || !has_key(keys, from.3)
-            {
+            if !has_key(keys, from.0) || !has_key(keys, from.1) || !has_key(keys, from.2) || !has_key(keys, from.3) {
                 next_moves.insert((from, from_dist));
                 continue;
             }
@@ -173,10 +166,7 @@ fn part_b() {
 
         add_moves_to_queue_b(&mut prio_queue, &mut visited, &keys, &next_moves);
     }
-    println!(
-        "It takes at least {} steps to collect all keys by 4 robots",
-        min
-    );
+    println!("It takes at least {} steps to collect all keys by 4 robots", min);
 }
 
 fn add_moves_to_queue_b(
@@ -201,12 +191,7 @@ fn add_moves_to_queue_b(
     }
 }
 
-fn create_graph(
-    map: &Vec<Vec<char>>,
-) -> (
-    Vec<(char, usize, usize)>,
-    HashMap<char, Vec<(char, usize, usize)>>,
-) {
+fn create_graph(map: &Vec<Vec<char>>) -> (Vec<(char, usize, usize)>, HashMap<char, Vec<(char, usize, usize)>>) {
     // Find vertices
     let mut vertices = vec![];
     for y in 0..map.len() {
@@ -239,28 +224,16 @@ fn create_graph(
                 keys = add_key(keys, (to as u8 + 32) as char);
             }
 
-            if x > 0
-                && map[y][x - 1] != '#'
-                && *dist.entry((x - 1, y)).or_insert(usize::MAX) > d + 1
-            {
+            if x > 0 && map[y][x - 1] != '#' && *dist.entry((x - 1, y)).or_insert(usize::MAX) > d + 1 {
                 to_visit.push((x - 1, y, d + 1, keys));
             }
-            if x < map[y].len() - 1
-                && map[y][x + 1] != '#'
-                && *dist.entry((x + 1, y)).or_insert(usize::MAX) > d + 1
-            {
+            if x < map[y].len() - 1 && map[y][x + 1] != '#' && *dist.entry((x + 1, y)).or_insert(usize::MAX) > d + 1 {
                 to_visit.push((x + 1, y, d + 1, keys));
             }
-            if y > 0
-                && map[y - 1][x] != '#'
-                && *dist.entry((x, y - 1)).or_insert(usize::MAX) > d + 1
-            {
+            if y > 0 && map[y - 1][x] != '#' && *dist.entry((x, y - 1)).or_insert(usize::MAX) > d + 1 {
                 to_visit.push((x, y - 1, d + 1, keys));
             }
-            if y < map.len() - 1
-                && map[y + 1][x] != '#'
-                && *dist.entry((x, y + 1)).or_insert(usize::MAX) > d + 1
-            {
+            if y < map.len() - 1 && map[y + 1][x] != '#' && *dist.entry((x, y + 1)).or_insert(usize::MAX) > d + 1 {
                 to_visit.push((x, y + 1, d + 1, keys));
             }
         }

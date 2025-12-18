@@ -104,16 +104,8 @@ impl Grid<u8> {
             .flatten()
             .collect();
         let x_len = input.lines().count() as i32;
-        let y_len = if x_len > 0 {
-            input.len() as i32 / x_len
-        } else {
-            0
-        };
-        Grid {
-            x_len,
-            y_len,
-            items,
-        }
+        let y_len = if x_len > 0 { input.len() as i32 / x_len } else { 0 };
+        Grid { x_len, y_len, items }
     }
 
     #[inline]

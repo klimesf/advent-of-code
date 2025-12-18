@@ -3,14 +3,13 @@ use std::fs;
 
 pub(crate) fn day18() {
     let input = fs::read_to_string("input/2022/day18/input.txt").unwrap();
-    let droplets: HashSet<(i32, i32, i32)> =
-        HashSet::from_iter(input.lines().into_iter().map(|line| {
-            let coords: Vec<&str> = line.split(",").collect();
-            let x = coords[0].parse::<i32>().unwrap();
-            let y = coords[1].parse::<i32>().unwrap();
-            let z = coords[2].parse::<i32>().unwrap();
-            (x, y, z)
-        }));
+    let droplets: HashSet<(i32, i32, i32)> = HashSet::from_iter(input.lines().into_iter().map(|line| {
+        let coords: Vec<&str> = line.split(",").collect();
+        let x = coords[0].parse::<i32>().unwrap();
+        let y = coords[1].parse::<i32>().unwrap();
+        let z = coords[2].parse::<i32>().unwrap();
+        (x, y, z)
+    }));
 
     let dirs = vec![
         (-1, 0, 0), // Left

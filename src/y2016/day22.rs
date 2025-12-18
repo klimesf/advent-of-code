@@ -5,21 +5,19 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day22() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2016/day22/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2016/day22/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2016/day22/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2016/day22/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
     let mut devices: Vec<(usize, usize, usize, usize, usize)> = vec![];
     input.lines().for_each(|line| {
-        if line.starts_with("root") || line.starts_with("Filesystem") { return; }
-        let re = Regex::new("^/dev/grid/node\\-x([0-9]+)\\-y([0-9]+)\\s+([0-9]+)T\\s+([0-9]+)T\\s+([0-9]+)T\\s+[0-9]+%$").unwrap();
+        if line.starts_with("root") || line.starts_with("Filesystem") {
+            return;
+        }
+        let re =
+            Regex::new("^/dev/grid/node\\-x([0-9]+)\\-y([0-9]+)\\s+([0-9]+)T\\s+([0-9]+)T\\s+([0-9]+)T\\s+[0-9]+%$")
+                .unwrap();
         let caps = re.captures(line).unwrap();
 
         devices.push((
@@ -55,19 +53,30 @@ fn part_b(input: String) -> usize {
     let mut x_max = 0;
     let mut y_max = 0;
     input.lines().for_each(|line| {
-        if line.starts_with("root") || line.starts_with("Filesystem") { return; }
-        let re = Regex::new("^/dev/grid/node\\-x([0-9]+)\\-y([0-9]+)\\s+([0-9]+)T\\s+([0-9]+)T\\s+([0-9]+)T\\s+[0-9]+%$").unwrap();
+        if line.starts_with("root") || line.starts_with("Filesystem") {
+            return;
+        }
+        let re =
+            Regex::new("^/dev/grid/node\\-x([0-9]+)\\-y([0-9]+)\\s+([0-9]+)T\\s+([0-9]+)T\\s+([0-9]+)T\\s+[0-9]+%$")
+                .unwrap();
         let caps = re.captures(line).unwrap();
 
         let x = parse_usize(caps.get(1));
-        if x > x_max { x_max = x }
+        if x > x_max {
+            x_max = x
+        }
         let y = parse_usize(caps.get(2));
-        if y > x_max { y_max = y }
-        devices.insert((x, y), (
-            parse_usize(caps.get(3)), // size
-            parse_usize(caps.get(4)), // used
-            parse_usize(caps.get(5)), // avail
-        ));
+        if y > x_max {
+            y_max = y
+        }
+        devices.insert(
+            (x, y),
+            (
+                parse_usize(caps.get(3)), // size
+                parse_usize(caps.get(4)), // used
+                parse_usize(caps.get(5)), // avail
+            ),
+        );
     });
 
     // Find used=0 (empty device)
@@ -184,21 +193,12 @@ mod day22_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            7,
-            part_b(fs::read_to_string("input/2016/day22/test.txt").unwrap())
-        );
+        assert_eq!(7, part_b(fs::read_to_string("input/2016/day22/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            981,
-            part_a(fs::read_to_string("input/2016/day22/input.txt").unwrap())
-        );
-        assert_eq!(
-            233,
-            part_b(fs::read_to_string("input/2016/day22/input.txt").unwrap())
-        );
+        assert_eq!(981, part_a(fs::read_to_string("input/2016/day22/input.txt").unwrap()));
+        assert_eq!(233, part_b(fs::read_to_string("input/2016/day22/input.txt").unwrap()));
     }
 }

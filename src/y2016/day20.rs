@@ -1,17 +1,8 @@
 use std::fs;
 
 pub(crate) fn day20() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(
-            fs::read_to_string("input/2016/day20/input.txt").unwrap(),
-            4294967295
-        )
-    );
+    println!("{}", part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2016/day20/input.txt").unwrap(), 4294967295));
 }
 
 fn part_a(input: String) -> usize {
@@ -19,10 +10,7 @@ fn part_a(input: String) -> usize {
         .lines()
         .map(|line| {
             let (start, end) = line.split_once("-").unwrap();
-            (
-                start.parse::<usize>().unwrap(),
-                end.parse::<usize>().unwrap(),
-            )
+            (start.parse::<usize>().unwrap(), end.parse::<usize>().unwrap())
         })
         .collect();
 
@@ -49,10 +37,7 @@ fn part_b(input: String, range: usize) -> usize {
         .lines()
         .map(|line| {
             let (start, end) = line.split_once("-").unwrap();
-            (
-                start.parse::<usize>().unwrap(),
-                end.parse::<usize>().unwrap(),
-            )
+            (start.parse::<usize>().unwrap(), end.parse::<usize>().unwrap())
         })
         .collect();
 
@@ -86,28 +71,13 @@ mod day20_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            3,
-            part_a(fs::read_to_string("input/2016/day20/test.txt").unwrap())
-        );
-        assert_eq!(
-            2,
-            part_b(fs::read_to_string("input/2016/day20/test.txt").unwrap(), 9)
-        );
+        assert_eq!(3, part_a(fs::read_to_string("input/2016/day20/test.txt").unwrap()));
+        assert_eq!(2, part_b(fs::read_to_string("input/2016/day20/test.txt").unwrap(), 9));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            19449262,
-            part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap())
-        );
-        assert_eq!(
-            119,
-            part_b(
-                fs::read_to_string("input/2016/day20/input.txt").unwrap(),
-                4294967295
-            )
-        );
+        assert_eq!(19449262, part_a(fs::read_to_string("input/2016/day20/input.txt").unwrap()));
+        assert_eq!(119, part_b(fs::read_to_string("input/2016/day20/input.txt").unwrap(), 4294967295));
     }
 }

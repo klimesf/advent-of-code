@@ -1,9 +1,7 @@
 use std::fs;
 
 pub fn day12(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2025/day12/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2025/day12/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -25,16 +23,9 @@ fn part_a(input: String) -> usize {
         .map(|line| {
             let (l, r) = line.split_once(": ").unwrap();
             let (ll, rr) = l.split_once("x").unwrap();
-            let pos = r
-                .split_whitespace()
-                .map(|c| c.parse::<usize>().unwrap())
-                .collect();
+            let pos = r.split_whitespace().map(|c| c.parse::<usize>().unwrap()).collect();
 
-            (
-                ll.parse::<usize>().unwrap(),
-                rr.parse::<usize>().unwrap(),
-                pos,
-            )
+            (ll.parse::<usize>().unwrap(), rr.parse::<usize>().unwrap(), pos)
         })
         .collect();
 
@@ -163,17 +154,11 @@ mod day12_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            2,
-            part_a(fs::read_to_string("input/2025/day12/test.txt").unwrap())
-        );
+        assert_eq!(2, part_a(fs::read_to_string("input/2025/day12/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            521,
-            part_a(fs::read_to_string("input/2025/day12/input.txt").unwrap())
-        );
+        assert_eq!(521, part_a(fs::read_to_string("input/2025/day12/input.txt").unwrap()));
     }
 }

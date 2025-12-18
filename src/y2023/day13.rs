@@ -1,14 +1,8 @@
 use std::fs;
 
 pub(crate) fn day13() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i32 {
@@ -105,8 +99,7 @@ fn find_reflection(matrix: &Vec<Vec<char>>) -> Vec<(i32, bool)> {
 
         while up >= 0
             && down < matrix.len() as i32
-            && (0..matrix[up as usize].len())
-                .all(|z| matrix[up as usize][z] == matrix[down as usize][z])
+            && (0..matrix[up as usize].len()).all(|z| matrix[up as usize][z] == matrix[down as usize][z])
         {
             up -= 1;
             down += 1;
@@ -128,25 +121,13 @@ mod day13_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            405,
-            part_a(fs::read_to_string("input/2023/day13/test.txt").unwrap())
-        );
-        assert_eq!(
-            400,
-            part_b(fs::read_to_string("input/2023/day13/test.txt").unwrap())
-        );
+        assert_eq!(405, part_a(fs::read_to_string("input/2023/day13/test.txt").unwrap()));
+        assert_eq!(400, part_b(fs::read_to_string("input/2023/day13/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            28895,
-            part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap())
-        );
-        assert_eq!(
-            31603,
-            part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap())
-        );
+        assert_eq!(28895, part_a(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
+        assert_eq!(31603, part_b(fs::read_to_string("input/2023/day13/input.txt").unwrap()));
     }
 }

@@ -1,14 +1,8 @@
 use std::fs;
 
 pub(crate) fn day19() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day19/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day19/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day19/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day19/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -19,10 +13,7 @@ fn part_a(input: String) -> usize {
         .lines()
         .map(|line| {
             let instr = line[0..4].to_string();
-            let args = line[5..]
-                .split(" ")
-                .map(|n| n.parse::<usize>().unwrap())
-                .collect();
+            let args = line[5..].split(" ").map(|n| n.parse::<usize>().unwrap()).collect();
             (instr, args)
         })
         .collect();
@@ -84,21 +75,12 @@ mod day19_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            6,
-            part_a(fs::read_to_string("input/2018/day19/test.txt").unwrap())
-        );
+        assert_eq!(6, part_a(fs::read_to_string("input/2018/day19/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            912,
-            part_a(fs::read_to_string("input/2018/day19/input.txt").unwrap())
-        );
-        assert_eq!(
-            10576224,
-            part_b(fs::read_to_string("input/2018/day19/input.txt").unwrap())
-        );
+        assert_eq!(912, part_a(fs::read_to_string("input/2018/day19/input.txt").unwrap()));
+        assert_eq!(10576224, part_b(fs::read_to_string("input/2018/day19/input.txt").unwrap()));
     }
 }

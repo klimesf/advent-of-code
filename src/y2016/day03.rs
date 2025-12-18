@@ -1,14 +1,8 @@
 use std::fs;
 
 pub(crate) fn day03() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -61,13 +55,7 @@ mod day03_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            917,
-            part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap())
-        );
-        assert_eq!(
-            1649,
-            part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap())
-        );
+        assert_eq!(917, part_a(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
+        assert_eq!(1649, part_b(fs::read_to_string("input/2016/day03/input.txt").unwrap()));
     }
 }

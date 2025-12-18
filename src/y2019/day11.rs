@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day11() {
     let input = fs::read_to_string("input/2019/day11/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
     let mut intcode = intcode_instance(&code);
 
     let mut painted_areas: HashMap<(i32, i32), i64> = HashMap::new();
@@ -47,12 +43,7 @@ pub(crate) fn day11() {
         }
     };
 
-    intcode.run(
-        &mut painted_areas,
-        &mut robot_position,
-        get_area,
-        accept_instr,
-    );
+    intcode.run(&mut painted_areas, &mut robot_position, get_area, accept_instr);
     println!("{}", painted_areas.len());
 
     for x in (-5..1).rev() {

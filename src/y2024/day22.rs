@@ -3,19 +3,12 @@ use rayon::iter::ParallelIterator;
 use std::fs;
 
 pub fn day22(print_usize: fn(usize), print_i16: fn(i16)) {
-    print_usize(part_a(
-        fs::read_to_string("input/2024/day22/input.txt").unwrap(),
-    ));
-    print_i16(part_b(
-        fs::read_to_string("input/2024/day22/input.txt").unwrap(),
-    ));
+    print_usize(part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
+    print_i16(part_b(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
-    let secrets = input
-        .lines()
-        .map(|l| l.parse().unwrap())
-        .collect::<Vec<usize>>();
+    let secrets = input.lines().map(|l| l.parse().unwrap()).collect::<Vec<usize>>();
 
     let mut ans = 0;
     for secret in &secrets {
@@ -39,10 +32,7 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> i16 {
-    let secrets = input
-        .lines()
-        .map(|l| l.parse().unwrap())
-        .collect::<Vec<i32>>();
+    let secrets = input.lines().map(|l| l.parse().unwrap()).collect::<Vec<i32>>();
 
     let vals: Vec<(usize, i16)> = secrets
         .par_iter()
@@ -113,25 +103,13 @@ mod day22_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            37327623,
-            part_a(fs::read_to_string("input/2024/day22/test.txt").unwrap())
-        );
-        assert_eq!(
-            23,
-            part_b(fs::read_to_string("input/2024/day22/test_2.txt").unwrap())
-        );
+        assert_eq!(37327623, part_a(fs::read_to_string("input/2024/day22/test.txt").unwrap()));
+        assert_eq!(23, part_b(fs::read_to_string("input/2024/day22/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            17612566393,
-            part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap())
-        );
-        assert_eq!(
-            1968,
-            part_b(fs::read_to_string("input/2024/day22/input.txt").unwrap())
-        );
+        assert_eq!(17612566393, part_a(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
+        assert_eq!(1968, part_b(fs::read_to_string("input/2024/day22/input.txt").unwrap()));
     }
 }

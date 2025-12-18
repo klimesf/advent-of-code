@@ -3,10 +3,7 @@ use std::fs;
 pub(crate) fn day25() {
     let input = fs::read_to_string("input/2022/day25/input.txt").unwrap();
     let numbers: Vec<&str> = input.lines().collect();
-    let ans = numbers
-        .iter()
-        .map(|number| snafu_to_decimal(number))
-        .sum::<i64>();
+    let ans = numbers.iter().map(|number| snafu_to_decimal(number)).sum::<i64>();
     println!("{}", ans);
     println!("{}", decimal_to_snafu(ans));
 }

@@ -3,14 +3,8 @@ use regex::Regex;
 use std::fs;
 
 pub(crate) fn day15() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2015/day15/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2015/day15/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day15/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2015/day15/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i64 {
@@ -76,10 +70,8 @@ fn part_b(input: String) -> i64 {
             for k in 0..=(100 - i - j) {
                 for l in 0..=(100 - i - j - k) {
                     let mut score = 1;
-                    let calories = i * ingredients[0][4]
-                        + j * ingredients[1][4]
-                        + k * ingredients[2][4]
-                        + l * ingredients[3][4];
+                    let calories =
+                        i * ingredients[0][4] + j * ingredients[1][4] + k * ingredients[2][4] + l * ingredients[3][4];
                     if calories != 500 {
                         continue;
                     }
@@ -113,13 +105,7 @@ mod day15_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            222870,
-            part_a(fs::read_to_string("input/2015/day15/input.txt").unwrap())
-        );
-        assert_eq!(
-            117936,
-            part_b(fs::read_to_string("input/2015/day15/input.txt").unwrap())
-        );
+        assert_eq!(222870, part_a(fs::read_to_string("input/2015/day15/input.txt").unwrap()));
+        assert_eq!(117936, part_b(fs::read_to_string("input/2015/day15/input.txt").unwrap()));
     }
 }

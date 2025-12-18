@@ -21,13 +21,10 @@ fn parse(input: &str) -> HashMap<i64, (usize, usize)> {
 fn find_strongest(components: &HashMap<i64, (usize, usize)>) -> usize {
     let mut available = components.keys().sum();
     let mut duplicates = HashSet::new();
-    components
-        .iter()
-        .filter(|(_, (a, b))| a == b)
-        .for_each(|(k, (a, _))| {
-            available -= k;
-            duplicates.insert(a);
-        });
+    components.iter().filter(|(_, (a, b))| a == b).for_each(|(k, (a, _))| {
+        available -= k;
+        duplicates.insert(a);
+    });
 
     let mut stack: Vec<(usize, usize, i64)> = vec![];
     stack.push((0, 0, available));
@@ -57,13 +54,10 @@ fn find_strongest(components: &HashMap<i64, (usize, usize)>) -> usize {
 fn find_longest(components: &HashMap<i64, (usize, usize)>) -> usize {
     let mut available = components.keys().sum();
     let mut duplicates = HashSet::new();
-    components
-        .iter()
-        .filter(|(_, (a, b))| a == b)
-        .for_each(|(k, (a, _))| {
-            available -= k;
-            duplicates.insert(a);
-        });
+    components.iter().filter(|(_, (a, b))| a == b).for_each(|(k, (a, _))| {
+        available -= k;
+        duplicates.insert(a);
+    });
 
     let mut stack: Vec<(usize, usize, usize, i64)> = vec![];
     stack.push((0, 0, 0, available));

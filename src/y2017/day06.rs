@@ -3,10 +3,7 @@ use std::fs;
 
 pub(crate) fn day06() {
     let input = fs::read_to_string("input/2017/day06/input.txt").unwrap();
-    let banks = input
-        .split_whitespace()
-        .map(|line| line.parse().unwrap())
-        .collect();
+    let banks = input.split_whitespace().map(|line| line.parse().unwrap()).collect();
     let (part_a, part_b) = redistribute(banks);
     println!("{}", part_a);
     println!("{}", part_b);
@@ -54,10 +51,7 @@ mod day06_tests {
     #[test]
     fn input_works() {
         let input = fs::read_to_string("input/2017/day06/input.txt").unwrap();
-        let banks = input
-            .split_whitespace()
-            .map(|line| line.parse().unwrap())
-            .collect();
+        let banks = input.split_whitespace().map(|line| line.parse().unwrap()).collect();
         let (part_a, part_b) = redistribute(banks);
         assert_eq!(6681, part_a);
         assert_eq!(2392, part_b);

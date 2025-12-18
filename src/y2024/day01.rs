@@ -2,12 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub fn day01(print: fn(u32)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day01/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day01/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day01/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day01/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> u32 {
@@ -61,25 +57,13 @@ mod day01_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            11,
-            part_a(fs::read_to_string("input/2024/day01/test.txt").unwrap())
-        );
-        assert_eq!(
-            31,
-            part_b(fs::read_to_string("input/2024/day01/test.txt").unwrap())
-        );
+        assert_eq!(11, part_a(fs::read_to_string("input/2024/day01/test.txt").unwrap()));
+        assert_eq!(31, part_b(fs::read_to_string("input/2024/day01/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            2164381,
-            part_a(fs::read_to_string("input/2024/day01/input.txt").unwrap())
-        );
-        assert_eq!(
-            20719933,
-            part_b(fs::read_to_string("input/2024/day01/input.txt").unwrap())
-        );
+        assert_eq!(2164381, part_a(fs::read_to_string("input/2024/day01/input.txt").unwrap()));
+        assert_eq!(20719933, part_b(fs::read_to_string("input/2024/day01/input.txt").unwrap()));
     }
 }

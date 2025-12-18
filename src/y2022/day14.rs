@@ -58,11 +58,7 @@ fn build_map() -> HashSet<(i32, i32)> {
     map
 }
 
-fn spawn_sand_a(
-    spawn_point: (i32, i32),
-    map: &mut HashSet<(i32, i32)>,
-    edge_of_abyss: i32,
-) -> bool {
+fn spawn_sand_a(spawn_point: (i32, i32), map: &mut HashSet<(i32, i32)>, edge_of_abyss: i32) -> bool {
     let mut pos = spawn_point;
     loop {
         while !map.contains(&(pos.0, pos.1 + 1)) {

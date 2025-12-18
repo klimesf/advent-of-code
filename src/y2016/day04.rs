@@ -4,14 +4,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day04() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2016/day04/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2016/day04/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2016/day04/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2016/day04/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i32 {
@@ -32,15 +26,7 @@ fn part_a(input: String) -> i32 {
 
             let mut check = String::new();
             ctr.iter()
-                .sorted_by(
-                    |(ca, sa), (cb, sb)| {
-                        if sa == sb {
-                            ca.cmp(cb)
-                        } else {
-                            sb.cmp(sa)
-                        }
-                    },
-                )
+                .sorted_by(|(ca, sa), (cb, sb)| if sa == sb { ca.cmp(cb) } else { sb.cmp(sa) })
                 .take(5)
                 .for_each(|(c, _)| check.push(*c));
 
@@ -91,22 +77,13 @@ mod day04_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            1514,
-            part_a(fs::read_to_string("input/2016/day04/test.txt").unwrap())
-        );
+        assert_eq!(1514, part_a(fs::read_to_string("input/2016/day04/test.txt").unwrap()));
         assert_eq!("very encrypted name", decrypt("qzmt-zixmtkozy-ivhz", 343));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            278221,
-            part_a(fs::read_to_string("input/2016/day04/input.txt").unwrap())
-        );
-        assert_eq!(
-            267,
-            part_b(fs::read_to_string("input/2016/day04/input.txt").unwrap())
-        );
+        assert_eq!(278221, part_a(fs::read_to_string("input/2016/day04/input.txt").unwrap()));
+        assert_eq!(267, part_b(fs::read_to_string("input/2016/day04/input.txt").unwrap()));
     }
 }

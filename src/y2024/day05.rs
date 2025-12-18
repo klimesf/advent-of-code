@@ -14,12 +14,7 @@ fn solve(input: String) -> (usize, usize) {
     rules_input
         .lines()
         .map(|line| line.split_once("|").unwrap())
-        .map(|(rule, output)| {
-            (
-                rule.parse::<usize>().unwrap(),
-                output.parse::<usize>().unwrap(),
-            )
-        })
+        .map(|(rule, output)| (rule.parse::<usize>().unwrap(), output.parse::<usize>().unwrap()))
         .for_each(|(before, after)| {
             rules.entry(before).or_insert_with(Vec::new).push(after);
         });
@@ -111,17 +106,11 @@ mod day05_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            (143, 123),
-            solve(fs::read_to_string("input/2024/day05/test.txt").unwrap())
-        );
+        assert_eq!((143, 123), solve(fs::read_to_string("input/2024/day05/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (6242, 5169),
-            solve(fs::read_to_string("input/2024/day05/input.txt").unwrap())
-        );
+        assert_eq!((6242, 5169), solve(fs::read_to_string("input/2024/day05/input.txt").unwrap()));
     }
 }

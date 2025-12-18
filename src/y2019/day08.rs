@@ -2,11 +2,7 @@ use std::fs;
 
 pub(crate) fn day08() {
     let input = fs::read_to_string("input/2019/day08/input.txt").unwrap();
-    let image: Vec<u32> = input
-        .trim()
-        .chars()
-        .map(|c| c.to_digit(10).unwrap())
-        .collect();
+    let image: Vec<u32> = input.trim().chars().map(|c| c.to_digit(10).unwrap()).collect();
     let layers: Vec<&[u32]> = image.chunks(25 * 6).collect();
 
     part_a(&layers);

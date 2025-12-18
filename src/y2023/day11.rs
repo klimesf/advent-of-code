@@ -1,17 +1,8 @@
 use std::fs;
 
 pub(crate) fn day11() {
-    println!(
-        "{}",
-        solve(fs::read_to_string("input/2023/day11/input.txt").unwrap(), 1)
-    );
-    println!(
-        "{}",
-        solve(
-            fs::read_to_string("input/2023/day11/input.txt").unwrap(),
-            1000000
-        )
-    );
+    println!("{}", solve(fs::read_to_string("input/2023/day11/input.txt").unwrap(), 1));
+    println!("{}", solve(fs::read_to_string("input/2023/day11/input.txt").unwrap(), 1000000));
 }
 
 fn solve(input: String, mut m: usize) -> usize {
@@ -74,35 +65,14 @@ mod day11_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            374,
-            solve(fs::read_to_string("input/2023/day11/test.txt").unwrap(), 1)
-        );
-        assert_eq!(
-            1030,
-            solve(fs::read_to_string("input/2023/day11/test.txt").unwrap(), 10)
-        );
-        assert_eq!(
-            8410,
-            solve(
-                fs::read_to_string("input/2023/day11/test.txt").unwrap(),
-                100
-            )
-        );
+        assert_eq!(374, solve(fs::read_to_string("input/2023/day11/test.txt").unwrap(), 1));
+        assert_eq!(1030, solve(fs::read_to_string("input/2023/day11/test.txt").unwrap(), 10));
+        assert_eq!(8410, solve(fs::read_to_string("input/2023/day11/test.txt").unwrap(), 100));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            9233514,
-            solve(fs::read_to_string("input/2023/day11/input.txt").unwrap(), 1)
-        );
-        assert_eq!(
-            363293506944,
-            solve(
-                fs::read_to_string("input/2023/day11/input.txt").unwrap(),
-                1000000
-            )
-        );
+        assert_eq!(9233514, solve(fs::read_to_string("input/2023/day11/input.txt").unwrap(), 1));
+        assert_eq!(363293506944, solve(fs::read_to_string("input/2023/day11/input.txt").unwrap(), 1000000));
     }
 }

@@ -2,14 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day12() {
-    println!(
-        "{}",
-        solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 0)
-    );
-    println!(
-        "{}",
-        solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 1)
-    );
+    println!("{}", solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 0));
+    println!("{}", solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 1));
 }
 
 fn solve(input: String, c_val: i32) -> i32 {
@@ -79,21 +73,12 @@ mod day12_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            42,
-            solve(fs::read_to_string("input/2016/day12/test.txt").unwrap(), 0)
-        );
+        assert_eq!(42, solve(fs::read_to_string("input/2016/day12/test.txt").unwrap(), 0));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            318083,
-            solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 0)
-        );
-        assert_eq!(
-            9227737,
-            solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 1)
-        );
+        assert_eq!(318083, solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 0));
+        assert_eq!(9227737, solve(fs::read_to_string("input/2016/day12/input.txt").unwrap(), 1));
     }
 }

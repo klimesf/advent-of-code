@@ -2,11 +2,7 @@ use std::fs;
 
 pub(crate) fn day02() {
     let input = fs::read_to_string("input/2019/day02/input.txt").unwrap();
-    let intcode: Vec<usize> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let intcode: Vec<usize> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     part_a(intcode.clone());
     part_b(intcode.clone());

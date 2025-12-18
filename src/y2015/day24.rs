@@ -2,29 +2,16 @@ use itertools::Itertools;
 use std::fs;
 
 pub(crate) fn day24() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2015/day24/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2015/day24/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day24/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2015/day24/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
-    let items: Vec<usize> = input
-        .lines()
-        .map(|line| line.parse::<usize>().unwrap())
-        .collect();
+    let items: Vec<usize> = input.lines().map(|line| line.parse::<usize>().unwrap()).collect();
 
     for group_a_size in 1..items.len() {
         for group_a in items.iter().combinations(group_a_size) {
-            let remaining: Vec<usize> = items
-                .iter()
-                .filter(|n| !group_a.contains(n))
-                .map(|n| *n)
-                .collect();
+            let remaining: Vec<usize> = items.iter().filter(|n| !group_a.contains(n)).map(|n| *n).collect();
             let sum = group_a.iter().map(|n| **n).sum();
 
             if sum != remaining.iter().sum::<usize>() / 2 {
@@ -41,18 +28,11 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> usize {
-    let items: Vec<usize> = input
-        .lines()
-        .map(|line| line.parse::<usize>().unwrap())
-        .collect();
+    let items: Vec<usize> = input.lines().map(|line| line.parse::<usize>().unwrap()).collect();
 
     for group_a_size in 1..items.len() {
         for group_a in items.iter().combinations(group_a_size) {
-            let remaining: Vec<usize> = items
-                .iter()
-                .filter(|n| !group_a.contains(n))
-                .map(|n| *n)
-                .collect();
+            let remaining: Vec<usize> = items.iter().filter(|n| !group_a.contains(n)).map(|n| *n).collect();
             let sum = group_a.iter().map(|n| **n).sum();
 
             if sum != remaining.iter().sum::<usize>() / 3 {
@@ -129,25 +109,13 @@ mod day24_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            99,
-            part_a(fs::read_to_string("input/2015/day24/test.txt").unwrap())
-        );
-        assert_eq!(
-            44,
-            part_b(fs::read_to_string("input/2015/day24/test.txt").unwrap())
-        );
+        assert_eq!(99, part_a(fs::read_to_string("input/2015/day24/test.txt").unwrap()));
+        assert_eq!(44, part_b(fs::read_to_string("input/2015/day24/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            10439961859,
-            part_a(fs::read_to_string("input/2015/day24/input.txt").unwrap())
-        );
-        assert_eq!(
-            72050269,
-            part_b(fs::read_to_string("input/2015/day24/input.txt").unwrap())
-        );
+        assert_eq!(10439961859, part_a(fs::read_to_string("input/2015/day24/input.txt").unwrap()));
+        assert_eq!(72050269, part_b(fs::read_to_string("input/2015/day24/input.txt").unwrap()));
     }
 }

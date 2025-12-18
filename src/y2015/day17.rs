@@ -2,20 +2,8 @@ use itertools::Itertools;
 use std::fs;
 
 pub(crate) fn day17() {
-    println!(
-        "{}",
-        part_a(
-            fs::read_to_string("input/2015/day17/input.txt").unwrap(),
-            150
-        )
-    );
-    println!(
-        "{}",
-        part_b(
-            fs::read_to_string("input/2015/day17/input.txt").unwrap(),
-            150
-        )
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day17/input.txt").unwrap(), 150));
+    println!("{}", part_b(fs::read_to_string("input/2015/day17/input.txt").unwrap(), 150));
 }
 
 fn part_a(input: String, liters: usize) -> usize {
@@ -57,31 +45,13 @@ mod day17_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            4,
-            part_a(fs::read_to_string("input/2015/day17/test.txt").unwrap(), 25)
-        );
-        assert_eq!(
-            3,
-            part_b(fs::read_to_string("input/2015/day17/test.txt").unwrap(), 25)
-        );
+        assert_eq!(4, part_a(fs::read_to_string("input/2015/day17/test.txt").unwrap(), 25));
+        assert_eq!(3, part_b(fs::read_to_string("input/2015/day17/test.txt").unwrap(), 25));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1638,
-            part_a(
-                fs::read_to_string("input/2015/day17/input.txt").unwrap(),
-                150
-            )
-        );
-        assert_eq!(
-            17,
-            part_b(
-                fs::read_to_string("input/2015/day17/input.txt").unwrap(),
-                150
-            )
-        );
+        assert_eq!(1638, part_a(fs::read_to_string("input/2015/day17/input.txt").unwrap(), 150));
+        assert_eq!(17, part_b(fs::read_to_string("input/2015/day17/input.txt").unwrap(), 150));
     }
 }

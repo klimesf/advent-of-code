@@ -30,12 +30,7 @@ fn part_a(coords: &Vec<(usize, usize)>) {
             coords
                 .iter()
                 .enumerate()
-                .map(|(c, (cx, cy))| {
-                    (
-                        c,
-                        (*cx as i32 - x as i32).abs() + (*cy as i32 - y as i32).abs(),
-                    )
-                })
+                .map(|(c, (cx, cy))| (c, (*cx as i32 - x as i32).abs() + (*cy as i32 - y as i32).abs()))
                 .for_each(|(c, dist)| {
                     if dist < min {
                         min = dist;
@@ -86,8 +81,5 @@ fn part_b(coords: &Vec<(usize, usize)>) {
         }
     }
 
-    println!(
-        "There are {} points with distance from all locations < 10000",
-        ctr
-    );
+    println!("There are {} points with distance from all locations < 10000", ctr);
 }

@@ -2,10 +2,7 @@ use std::fs;
 
 pub(crate) fn day05() {
     let input = fs::read_to_string("input/2017/day05/input.txt").unwrap();
-    let instructions: Vec<i32> = input
-        .lines()
-        .map(|line| line.parse::<i32>().unwrap())
-        .collect();
+    let instructions: Vec<i32> = input.lines().map(|line| line.parse::<i32>().unwrap()).collect();
     println!("{}", part_a(instructions.clone()));
     println!("{}", part_b(instructions))
 }
@@ -50,10 +47,7 @@ mod day05_tests {
     #[test]
     fn test_works() {
         let input = fs::read_to_string("input/2017/day05/test.txt").unwrap();
-        let instructions: Vec<i32> = input
-            .lines()
-            .map(|line| line.parse::<i32>().unwrap())
-            .collect();
+        let instructions: Vec<i32> = input.lines().map(|line| line.parse::<i32>().unwrap()).collect();
         assert_eq!(5, part_a(instructions.clone()));
         assert_eq!(10, part_b(instructions));
     }
@@ -61,10 +55,7 @@ mod day05_tests {
     #[test]
     fn input_works() {
         let input = fs::read_to_string("input/2017/day05/input.txt").unwrap();
-        let instructions: Vec<i32> = input
-            .lines()
-            .map(|line| line.parse::<i32>().unwrap())
-            .collect();
+        let instructions: Vec<i32> = input.lines().map(|line| line.parse::<i32>().unwrap()).collect();
         assert_eq!(356945, part_a(instructions.clone()));
         assert_eq!(28372145, part_b(instructions));
     }

@@ -22,14 +22,10 @@ fn part_a(password: &str) -> String {
         let hash: Vec<char> = format!("{:x}", md5::compute(format!("{}{}", password, pos.steps)))
             .chars()
             .collect();
-        let up_open =
-            hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
-        let down_open =
-            hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
-        let left_open =
-            hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
-        let right_open =
-            hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
+        let up_open = hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
+        let down_open = hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
+        let left_open = hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
+        let right_open = hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
 
         if pos.r > 0 && up_open {
             stack.push(Pos {
@@ -84,14 +80,10 @@ fn part_b(password: &str) -> usize {
         let hash: Vec<char> = format!("{:x}", md5::compute(format!("{}{}", password, pos.steps)))
             .chars()
             .collect();
-        let up_open =
-            hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
-        let down_open =
-            hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
-        let left_open =
-            hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
-        let right_open =
-            hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
+        let up_open = hash[0] == 'b' || hash[0] == 'c' || hash[0] == 'd' || hash[0] == 'e' || hash[0] == 'f';
+        let down_open = hash[1] == 'b' || hash[1] == 'c' || hash[1] == 'd' || hash[1] == 'e' || hash[1] == 'f';
+        let left_open = hash[2] == 'b' || hash[2] == 'c' || hash[2] == 'd' || hash[2] == 'e' || hash[2] == 'f';
+        let right_open = hash[3] == 'b' || hash[3] == 'c' || hash[3] == 'd' || hash[3] == 'e' || hash[3] == 'f';
 
         if pos.r > 0 && up_open {
             stack.push(Pos {

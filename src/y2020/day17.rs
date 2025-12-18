@@ -2,26 +2,17 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day17() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2020/day17/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2020/day17/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2020/day17/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2020/day17/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
     let mut state = HashSet::new();
 
     input.lines().enumerate().for_each(|(x, line)| {
-        line.chars()
-            .enumerate()
-            .filter(|(_, c)| *c == '#')
-            .for_each(|(y, _)| {
-                state.insert((x as isize, y as isize, 1));
-            })
+        line.chars().enumerate().filter(|(_, c)| *c == '#').for_each(|(y, _)| {
+            state.insert((x as isize, y as isize, 1));
+        })
     });
 
     for _ in 0..6 {
@@ -60,12 +51,9 @@ fn part_b(input: String) -> usize {
     let mut state = HashSet::new();
 
     input.lines().enumerate().for_each(|(x, line)| {
-        line.chars()
-            .enumerate()
-            .filter(|(_, c)| *c == '#')
-            .for_each(|(y, _)| {
-                state.insert((x as isize, y as isize, 1, 1));
-            })
+        line.chars().enumerate().filter(|(_, c)| *c == '#').for_each(|(y, _)| {
+            state.insert((x as isize, y as isize, 1, 1));
+        })
     });
 
     for _ in 0..6 {
@@ -80,9 +68,7 @@ fn part_b(input: String) -> usize {
                             if dx == 0 && dy == 0 && dz == 0 && dw == 0 {
                                 continue;
                             }
-                            *neighbor_count
-                                .entry((x + dx, y + dy, z + dz, w + dw))
-                                .or_insert(0) += 1;
+                            *neighbor_count.entry((x + dx, y + dy, z + dz, w + dw)).or_insert(0) += 1;
                         }
                     }
                 }
@@ -112,25 +98,13 @@ mod day17_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            112,
-            part_a(fs::read_to_string("input/2020/day17/test.txt").unwrap())
-        );
-        assert_eq!(
-            848,
-            part_b(fs::read_to_string("input/2020/day17/test.txt").unwrap())
-        );
+        assert_eq!(112, part_a(fs::read_to_string("input/2020/day17/test.txt").unwrap()));
+        assert_eq!(848, part_b(fs::read_to_string("input/2020/day17/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            232,
-            part_a(fs::read_to_string("input/2020/day17/input.txt").unwrap())
-        );
-        assert_eq!(
-            1620,
-            part_b(fs::read_to_string("input/2020/day17/input.txt").unwrap())
-        );
+        assert_eq!(232, part_a(fs::read_to_string("input/2020/day17/input.txt").unwrap()));
+        assert_eq!(1620, part_b(fs::read_to_string("input/2020/day17/input.txt").unwrap()));
     }
 }

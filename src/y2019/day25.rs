@@ -4,11 +4,7 @@ use std::fs;
 
 pub(crate) fn day25() {
     let input = fs::read_to_string("input/2019/day25/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     let items = [
         "dark matter",
@@ -43,10 +39,7 @@ pub(crate) fn day25() {
             s.push(intcode.output[i]);
         }
         if !s.contains("Security Checkpoint") {
-            println!(
-                "{}",
-                intcode.output.iter().map(|c| *c as u8 as char).join("")
-            );
+            println!("{}", intcode.output.iter().map(|c| *c as u8 as char).join(""));
             break;
         }
     }
@@ -66,44 +59,30 @@ fn path_to_pressure_room(input: &mut VecDeque<i64>) {
     //                                                                       STABLES (hyperc)
 
     "north\n".chars().for_each(|c| input.push_back(c as i64));
-    "take tambourine\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take tambourine\n".chars().for_each(|c| input.push_back(c as i64));
     "east\n".chars().for_each(|c| input.push_back(c as i64));
-    "take astrolabe\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take astrolabe\n".chars().for_each(|c| input.push_back(c as i64));
     "east\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
-    "take klein bottle\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take klein bottle\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
-    "take easter egg\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take easter egg\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
-    "take shell\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take shell\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
-    "take hypercube\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take hypercube\n".chars().for_each(|c| input.push_back(c as i64));
     "inv\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
-    "take dark matter\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take dark matter\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     //"take giant electromagnet\n".chars().for_each(|c| input.push_back(c as i64));
     "north\n".chars().for_each(|c| input.push_back(c as i64));
@@ -115,9 +94,7 @@ fn path_to_pressure_room(input: &mut VecDeque<i64>) {
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
     "west\n".chars().for_each(|c| input.push_back(c as i64));
-    "take coin\n"
-        .chars()
-        .for_each(|c| input.push_back(c as i64));
+    "take coin\n".chars().for_each(|c| input.push_back(c as i64));
     "south\n".chars().for_each(|c| input.push_back(c as i64));
     "inv\n".chars().for_each(|c| input.push_back(c as i64));
 }

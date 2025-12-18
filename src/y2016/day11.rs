@@ -5,10 +5,7 @@ pub(crate) fn day11() {
     let floors_a = vec![
         (vec!["thulium"], vec!["thulium", "plutonium", "strontium"]),
         (vec!["plutonium", "strontium"], vec![]),
-        (
-            vec!["promethium", "ruthenium"],
-            vec!["promethium", "ruthenium"],
-        ),
+        (vec!["promethium", "ruthenium"], vec!["promethium", "ruthenium"]),
         (vec![], vec![]),
     ];
 
@@ -20,10 +17,7 @@ pub(crate) fn day11() {
             vec!["thulium", "plutonium", "strontium", "elerium", "dilithium"],
         ),
         (vec!["plutonium", "strontium"], vec![]),
-        (
-            vec!["promethium", "ruthenium"],
-            vec!["promethium", "ruthenium"],
-        ),
+        (vec!["promethium", "ruthenium"], vec!["promethium", "ruthenium"]),
         (vec![], vec![]),
     ];
     println!("{}", solve(floors_b));
@@ -277,10 +271,7 @@ mod day11_tests {
         let floors_a = vec![
             (vec!["thulium"], vec!["thulium", "plutonium", "strontium"]),
             (vec!["plutonium", "strontium"], vec![]),
-            (
-                vec!["promethium", "ruthenium"],
-                vec!["promethium", "ruthenium"],
-            ),
+            (vec!["promethium", "ruthenium"], vec!["promethium", "ruthenium"]),
             (vec![], vec![]),
         ];
 
@@ -292,10 +283,7 @@ mod day11_tests {
                 vec!["thulium", "plutonium", "strontium", "elerium", "dilithium"],
             ),
             (vec!["plutonium", "strontium"], vec![]),
-            (
-                vec!["promethium", "ruthenium"],
-                vec!["promethium", "ruthenium"],
-            ),
+            (vec!["promethium", "ruthenium"], vec!["promethium", "ruthenium"]),
             (vec![], vec![]),
         ];
         assert_eq!(55, solve(floors_b));

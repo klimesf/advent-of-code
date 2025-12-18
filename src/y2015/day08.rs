@@ -1,28 +1,16 @@
 use std::fs;
 
 pub(crate) fn day08() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
-    input
-        .lines()
-        .map(|line| line.len() - in_memory_len(line))
-        .sum()
+    input.lines().map(|line| line.len() - in_memory_len(line)).sum()
 }
 
 fn part_b(input: String) -> usize {
-    input
-        .lines()
-        .map(|line| escaped_len(line) - line.len())
-        .sum()
+    input.lines().map(|line| escaped_len(line) - line.len()).sum()
 }
 
 fn in_memory_len(s: &str) -> usize {
@@ -102,25 +90,13 @@ mod day08_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            12,
-            part_a(fs::read_to_string("input/2015/day08/test.txt").unwrap())
-        );
-        assert_eq!(
-            19,
-            part_b(fs::read_to_string("input/2015/day08/test.txt").unwrap())
-        );
+        assert_eq!(12, part_a(fs::read_to_string("input/2015/day08/test.txt").unwrap()));
+        assert_eq!(19, part_b(fs::read_to_string("input/2015/day08/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1333,
-            part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap())
-        );
-        assert_eq!(
-            2046,
-            part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap())
-        );
+        assert_eq!(1333, part_a(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
+        assert_eq!(2046, part_b(fs::read_to_string("input/2015/day08/input.txt").unwrap()));
     }
 }

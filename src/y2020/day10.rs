@@ -2,21 +2,12 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day10() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2020/day10/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2020/day10/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2020/day10/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2020/day10/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
-    let mut adapters = input
-        .lines()
-        .map(|line| line.parse().unwrap())
-        .collect::<Vec<usize>>();
+    let mut adapters = input.lines().map(|line| line.parse().unwrap()).collect::<Vec<usize>>();
 
     adapters.push(0); // Start output
     adapters.sort();
@@ -37,10 +28,7 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> usize {
-    let mut adapters = input
-        .lines()
-        .map(|line| line.parse().unwrap())
-        .collect::<Vec<usize>>();
+    let mut adapters = input.lines().map(|line| line.parse().unwrap()).collect::<Vec<usize>>();
 
     adapters.push(0); // Start output
     adapters.sort();
@@ -50,11 +38,7 @@ fn part_b(input: String) -> usize {
     recursive_arrange(0, &adapters, &mut cache)
 }
 
-fn recursive_arrange(
-    pos: usize,
-    adapters: &Vec<usize>,
-    cache: &mut HashMap<usize, usize>,
-) -> usize {
+fn recursive_arrange(pos: usize, adapters: &Vec<usize>, cache: &mut HashMap<usize, usize>) -> usize {
     if pos == adapters.len() - 1 {
         return 1;
     }
@@ -85,33 +69,15 @@ mod day10_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            7 * 5,
-            part_a(fs::read_to_string("input/2020/day10/test.txt").unwrap())
-        );
-        assert_eq!(
-            22 * 10,
-            part_a(fs::read_to_string("input/2020/day10/test_2.txt").unwrap())
-        );
-        assert_eq!(
-            8,
-            part_b(fs::read_to_string("input/2020/day10/test.txt").unwrap())
-        );
-        assert_eq!(
-            19208,
-            part_b(fs::read_to_string("input/2020/day10/test_2.txt").unwrap())
-        );
+        assert_eq!(7 * 5, part_a(fs::read_to_string("input/2020/day10/test.txt").unwrap()));
+        assert_eq!(22 * 10, part_a(fs::read_to_string("input/2020/day10/test_2.txt").unwrap()));
+        assert_eq!(8, part_b(fs::read_to_string("input/2020/day10/test.txt").unwrap()));
+        assert_eq!(19208, part_b(fs::read_to_string("input/2020/day10/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            2046,
-            part_a(fs::read_to_string("input/2020/day10/input.txt").unwrap())
-        );
-        assert_eq!(
-            1157018619904,
-            part_b(fs::read_to_string("input/2020/day10/input.txt").unwrap())
-        );
+        assert_eq!(2046, part_a(fs::read_to_string("input/2020/day10/input.txt").unwrap()));
+        assert_eq!(1157018619904, part_b(fs::read_to_string("input/2020/day10/input.txt").unwrap()));
     }
 }

@@ -1,10 +1,7 @@
 use std::fs;
 
 pub(crate) fn day09() {
-    let ans = solve(
-        fs::read_to_string("input/2020/day09/input.txt").unwrap(),
-        25,
-    );
+    let ans = solve(fs::read_to_string("input/2020/day09/input.txt").unwrap(), 25);
     println!("{}", ans.0);
     println!("{}", ans.1);
 }
@@ -60,20 +57,11 @@ mod day09_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            (127, 62),
-            solve(fs::read_to_string("input/2020/day09/test.txt").unwrap(), 5)
-        );
+        assert_eq!((127, 62), solve(fs::read_to_string("input/2020/day09/test.txt").unwrap(), 5));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (375054920, 54142584),
-            solve(
-                fs::read_to_string("input/2020/day09/input.txt").unwrap(),
-                25
-            )
-        );
+        assert_eq!((375054920, 54142584), solve(fs::read_to_string("input/2020/day09/input.txt").unwrap(), 25));
     }
 }

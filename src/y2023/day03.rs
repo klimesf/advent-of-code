@@ -78,9 +78,6 @@ mod day03_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (539713, 84159075),
-            solve(fs::read_to_string("input/2023/day03/input.txt").unwrap())
-        );
+        assert_eq!((539713, 84159075), solve(fs::read_to_string("input/2023/day03/input.txt").unwrap()));
     }
 }

@@ -83,9 +83,7 @@ impl ListTree {
 
     fn append_leaf(children: &mut Vec<ListTree>, buffer: &mut Vec<char>) {
         if !buffer.is_empty() {
-            children.push(Self::Leaf(
-                buffer.iter().collect::<String>().parse::<u32>().unwrap(),
-            ));
+            children.push(Self::Leaf(buffer.iter().collect::<String>().parse::<u32>().unwrap()));
             buffer.clear();
         }
     }
@@ -182,10 +180,7 @@ mod day13_tests {
 
     #[test]
     fn is_ordered_works_8() {
-        assert_eq!(
-            false,
-            is_ordered("[1,[2,[3,[4,[5,6,7]]]],8,9]", "[1,[2,[3,[4,[5,6,0]]]],8,9]")
-        );
+        assert_eq!(false, is_ordered("[1,[2,[3,[4,[5,6,7]]]],8,9]", "[1,[2,[3,[4,[5,6,0]]]],8,9]"));
     }
 
     #[test]

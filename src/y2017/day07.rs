@@ -64,32 +64,20 @@ fn topological_sort_rec<'a>(
     sort.push(name);
 }
 
-fn part_b(
-    sort: Vec<&str>,
-    adjacency_list: &HashMap<&str, Vec<&str>>,
-    weights: &HashMap<&str, i32>,
-) -> i32 {
+fn part_b(sort: Vec<&str>, adjacency_list: &HashMap<&str, Vec<&str>>, weights: &HashMap<&str, i32>) -> i32 {
     let mut balance: HashMap<&str, i32> = HashMap::new();
     for name in sort {
         // If we go in the topological sort order, we are guaranteed not to get unwrap on None in the balance map
         let mut weight_sum = 0;
         let mut weight_map = HashMap::new();
-        adjacency_list
-            .get(name)
-            .unwrap()
-            .iter()
-            .for_each(|neighbor| {
-                let w = *balance.get(neighbor).unwrap();
-                weight_map.entry(w).or_insert(vec![]).push(*neighbor);
-                weight_sum += w;
-            });
+        adjacency_list.get(name).unwrap().iter().for_each(|neighbor| {
+            let w = *balance.get(neighbor).unwrap();
+            weight_map.entry(w).or_insert(vec![]).push(*neighbor);
+            weight_sum += w;
+        });
 
         if weight_map.len() > 1 {
-            let (unbalanced_w_sum, unbalanced_n) = weight_map
-                .iter()
-                .filter(|(_, c)| c.len() == 1)
-                .last()
-                .unwrap();
+            let (unbalanced_w_sum, unbalanced_n) = weight_map.iter().filter(|(_, c)| c.len() == 1).last().unwrap();
             let balanced_w_sum = weight_map
                 .iter()
                 .filter(|(_, c)| c.len() > 1)

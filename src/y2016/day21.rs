@@ -4,20 +4,8 @@ use regex::Regex;
 use std::fs;
 
 pub(crate) fn day21() {
-    println!(
-        "{}",
-        part_a(
-            fs::read_to_string("input/2016/day21/input.txt").unwrap(),
-            "abcdefgh"
-        )
-    );
-    println!(
-        "{}",
-        part_b(
-            fs::read_to_string("input/2016/day21/input.txt").unwrap(),
-            "fbgdceah"
-        )
-    );
+    println!("{}", part_a(fs::read_to_string("input/2016/day21/input.txt").unwrap(), "abcdefgh"));
+    println!("{}", part_b(fs::read_to_string("input/2016/day21/input.txt").unwrap(), "fbgdceah"));
 }
 
 fn part_a(input: String, input_pass: &str) -> String {
@@ -284,37 +272,13 @@ mod day21_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            "decab",
-            part_a(
-                fs::read_to_string("input/2016/day21/test.txt").unwrap(),
-                "abcde"
-            )
-        );
-        assert_eq!(
-            "abcde",
-            part_b(
-                fs::read_to_string("input/2016/day21/test.txt").unwrap(),
-                "decab"
-            )
-        );
+        assert_eq!("decab", part_a(fs::read_to_string("input/2016/day21/test.txt").unwrap(), "abcde"));
+        assert_eq!("abcde", part_b(fs::read_to_string("input/2016/day21/test.txt").unwrap(), "decab"));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            "bgfacdeh",
-            part_a(
-                fs::read_to_string("input/2016/day21/input.txt").unwrap(),
-                "abcdefgh"
-            )
-        );
-        assert_eq!(
-            "bdgheacf",
-            part_b(
-                fs::read_to_string("input/2016/day21/input.txt").unwrap(),
-                "fbgdceah"
-            )
-        );
+        assert_eq!("bgfacdeh", part_a(fs::read_to_string("input/2016/day21/input.txt").unwrap(), "abcdefgh"));
+        assert_eq!("bdgheacf", part_b(fs::read_to_string("input/2016/day21/input.txt").unwrap(), "fbgdceah"));
     }
 }

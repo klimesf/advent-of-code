@@ -139,10 +139,7 @@ fn load_input() -> Vec<Monkey> {
         counter: 0,
     });
     monkeys.push(Monkey {
-        items: vec![85, 62, 82, 86, 70, 65, 83, 76]
-            .into_iter()
-            .rev()
-            .collect(),
+        items: vec![85, 62, 82, 86, 70, 65, 83, 76].into_iter().rev().collect(),
         operation: Box::new(|old| old + 8),
         test: 5,
         if_true: 3,

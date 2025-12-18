@@ -2,22 +2,14 @@ use std::collections::{HashMap, VecDeque};
 use std::fs;
 
 pub(crate) fn day07() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2015/day07/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2015/day07/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day07/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2015/day07/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> u16 {
     let mut wires: HashMap<String, u16> = HashMap::new();
     let mut instructions = VecDeque::new();
-    input
-        .lines()
-        .for_each(|line| instructions.push_back(line.to_string()));
+    input.lines().for_each(|line| instructions.push_back(line.to_string()));
 
     wire_it_up(&mut wires, &mut instructions)
 }
@@ -108,25 +100,13 @@ mod day07_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            0,
-            part_a(fs::read_to_string("input/2015/day07/test.txt").unwrap())
-        );
-        assert_eq!(
-            0,
-            part_b(fs::read_to_string("input/2015/day07/test.txt").unwrap())
-        );
+        assert_eq!(0, part_a(fs::read_to_string("input/2015/day07/test.txt").unwrap()));
+        assert_eq!(0, part_b(fs::read_to_string("input/2015/day07/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            16076,
-            part_a(fs::read_to_string("input/2015/day07/input.txt").unwrap())
-        );
-        assert_eq!(
-            2797,
-            part_b(fs::read_to_string("input/2015/day07/input.txt").unwrap())
-        );
+        assert_eq!(16076, part_a(fs::read_to_string("input/2015/day07/input.txt").unwrap()));
+        assert_eq!(2797, part_b(fs::read_to_string("input/2015/day07/input.txt").unwrap()));
     }
 }

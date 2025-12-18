@@ -5,10 +5,7 @@ pub(crate) fn day05() {
     let input = fs::read_to_string("input/2018/day05/input.txt").unwrap();
 
     let len_after_reacting = react_polymer(input.clone());
-    println!(
-        "{} units remain after fully reacting the polymer",
-        len_after_reacting
-    );
+    println!("{} units remain after fully reacting the polymer", len_after_reacting);
 
     let shortest = ('a'..'z')
         .map(|c| {
@@ -19,10 +16,7 @@ pub(crate) fn day05() {
         })
         .min()
         .unwrap();
-    println!(
-        "{} is the shortest polymer we can produce by omitting units",
-        shortest
-    );
+    println!("{} is the shortest polymer we can produce by omitting units", shortest);
 }
 
 fn react_polymer(input: String) -> usize {

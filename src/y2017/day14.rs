@@ -36,9 +36,7 @@ fn parse(input: &str) -> Vec<Vec<bool>> {
 }
 
 fn count_used(data: &Vec<Vec<bool>>) -> usize {
-    data.iter()
-        .map(|row| row.iter().filter(|c| **c).count())
-        .sum()
+    data.iter().map(|row| row.iter().filter(|c| **c).count()).sum()
 }
 
 fn count_regions(data: &Vec<Vec<bool>>) -> usize {

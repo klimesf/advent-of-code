@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day17() {
     let input = fs::read_to_string("input/2019/day17/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     part_a(code.clone());
     part_b(code.clone());
@@ -22,10 +18,7 @@ fn part_a(code: Vec<i64>) {
     let intersections = get_intersections(&map);
     print_screen(&map, &intersections);
     println!("{:?}", intersections);
-    println!(
-        "Total intersection score is: {}",
-        intersections.iter().map(|(y, x)| y * x).sum::<usize>()
-    );
+    println!("Total intersection score is: {}", intersections.iter().map(|(y, x)| y * x).sum::<usize>());
 }
 
 fn part_b(mut code: Vec<i64>) {
@@ -36,20 +29,17 @@ fn part_b(mut code: Vec<i64>) {
 
     // Add main movement routine A,C,A,C,A,B,C,B,A,B\n
     [
-        'A', ',', 'C', ',', 'A', ',', 'C', ',', 'A', ',', 'B', ',', 'C', ',', 'B', ',', 'A', ',',
-        'B', '\n',
+        'A', ',', 'C', ',', 'A', ',', 'C', ',', 'A', ',', 'B', ',', 'C', ',', 'B', ',', 'A', ',', 'B', '\n',
     ]
     .iter()
     .map(|c| *c as i64)
     .for_each(|c| input.push(c));
 
     // Add movement function A L10,L12,R6,\n
-    [
-        'L', ',', '1', '0', ',', 'L', ',', '1', '2', ',', 'R', ',', '6', '\n',
-    ]
-    .iter()
-    .map(|c| *c as i64)
-    .for_each(|c| input.push(c));
+    ['L', ',', '1', '0', ',', 'L', ',', '1', '2', ',', 'R', ',', '6', '\n']
+        .iter()
+        .map(|c| *c as i64)
+        .for_each(|c| input.push(c));
 
     // Add movement function B L,10,R,10,R,6,L,4\n
     [
@@ -68,16 +58,10 @@ fn part_b(mut code: Vec<i64>) {
     .for_each(|c| input.push(c));
 
     // Continuous stream
-    ['n', '\n']
-        .iter()
-        .map(|c| *c as i64)
-        .for_each(|c| input.push(c));
+    ['n', '\n'].iter().map(|c| *c as i64).for_each(|c| input.push(c));
 
     println!("Passing this sequence to intcode:");
-    input
-        .iter()
-        .map(|i| *i as u8 as char)
-        .for_each(|c| print!("{}", c));
+    input.iter().map(|i| *i as u8 as char).for_each(|c| print!("{}", c));
     println!();
     input.reverse();
 

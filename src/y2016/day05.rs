@@ -35,14 +35,7 @@ fn part_b(door_id: &str) -> String {
 
     format!(
         "{}{}{}{}{}{}{}{}",
-        password[0],
-        password[1],
-        password[2],
-        password[3],
-        password[4],
-        password[5],
-        password[6],
-        password[7]
+        password[0], password[1], password[2], password[3], password[4], password[5], password[6], password[7]
     )
 }
 

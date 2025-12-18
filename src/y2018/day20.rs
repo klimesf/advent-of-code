@@ -12,19 +12,11 @@ fn solve(input: String) -> (usize, usize) {
     let mut graph = HashMap::new();
     let mut positions = HashSet::new();
     positions.insert((0, 0));
-    gen_map(
-        input[1..input.len() - 1].to_string(),
-        &positions,
-        &mut graph,
-    );
+    gen_map(input[1..input.len() - 1].to_string(), &positions, &mut graph);
 
     let mut stack = BinaryHeap::new();
     let mut distances: HashMap<(i32, i32), usize> = HashMap::new();
-    stack.push(Pos {
-        r: 0,
-        c: 0,
-        dist: 0,
-    });
+    stack.push(Pos { r: 0, c: 0, dist: 0 });
 
     while let Some(pos) = stack.pop() {
         if distances.contains_key(&(pos.r, pos.c)) {
@@ -207,22 +199,10 @@ mod day20_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            10,
-            solve(fs::read_to_string("input/2018/day20/test_10.txt").unwrap()).0
-        );
-        assert_eq!(
-            18,
-            solve(fs::read_to_string("input/2018/day20/test_18.txt").unwrap()).0
-        );
-        assert_eq!(
-            23,
-            solve(fs::read_to_string("input/2018/day20/test_23.txt").unwrap()).0
-        );
-        assert_eq!(
-            31,
-            solve(fs::read_to_string("input/2018/day20/test_31.txt").unwrap()).0
-        );
+        assert_eq!(10, solve(fs::read_to_string("input/2018/day20/test_10.txt").unwrap()).0);
+        assert_eq!(18, solve(fs::read_to_string("input/2018/day20/test_18.txt").unwrap()).0);
+        assert_eq!(23, solve(fs::read_to_string("input/2018/day20/test_23.txt").unwrap()).0);
+        assert_eq!(31, solve(fs::read_to_string("input/2018/day20/test_31.txt").unwrap()).0);
     }
 
     #[test]

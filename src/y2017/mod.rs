@@ -183,9 +183,7 @@ pub(crate) fn y2017() {
         measure!(day24());
     }
 
-    if args.contains(&"all".to_string())
-        || args.contains(&"day25".to_string())
-        || args.contains(&"latest".to_string())
+    if args.contains(&"all".to_string()) || args.contains(&"day25".to_string()) || args.contains(&"latest".to_string())
     {
         println!("{}", format!("--- day25:").underline().green());
         measure!(day25());

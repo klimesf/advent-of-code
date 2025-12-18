@@ -7,9 +7,7 @@ pub(crate) fn day16() {
     let mut pressures: HashMap<&str, i32> = HashMap::new();
     let mut adjacency_list: HashMap<&str, Vec<&str>> = HashMap::new();
 
-    let re =
-        Regex::new(r"^Valve ([A-Z]+) has flow rate=([0-9]+); tunnels? leads? to valves? (.+)$")
-            .unwrap();
+    let re = Regex::new(r"^Valve ([A-Z]+) has flow rate=([0-9]+); tunnels? leads? to valves? (.+)$").unwrap();
     for line in input.lines().into_iter() {
         let g = re.captures(line).unwrap();
         let from = g.get(1).unwrap().as_str();

@@ -3,14 +3,8 @@ use std::{cmp, fs};
 use itertools::Itertools;
 
 pub(crate) fn day05() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day05/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day05/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day05/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day05/input.txt").unwrap()));
 }
 
 fn parse_input(input: String) -> (Vec<i64>, Vec<Vec<(i64, i64, i64)>>) {
@@ -39,10 +33,7 @@ fn parse_input(input: String) -> (Vec<i64>, Vec<Vec<(i64, i64, i64)>>) {
         }
 
         // parse numbers
-        let nums: Vec<i64> = line
-            .split_whitespace()
-            .map(|n| n.parse::<i64>().unwrap())
-            .collect();
+        let nums: Vec<i64> = line.split_whitespace().map(|n| n.parse::<i64>().unwrap()).collect();
         let destination_start = nums[0];
         let source_start = nums[1];
         let source_end = nums[1] + nums[2];
@@ -102,10 +93,8 @@ fn part_b(input: String) -> i64 {
                         continue;
                     }
 
-                    new_ranges.push((
-                        start + (destination_start - source_start),
-                        end + (destination_start - source_start),
-                    ));
+                    new_ranges
+                        .push((start + (destination_start - source_start), end + (destination_start - source_start)));
 
                     if range_start < start {
                         next_to_match.push((*range_start, start - 1));
@@ -139,25 +128,13 @@ mod day05_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            35,
-            part_a(fs::read_to_string("input/2023/day05/test.txt").unwrap())
-        );
-        assert_eq!(
-            46,
-            part_b(fs::read_to_string("input/2023/day05/test.txt").unwrap())
-        );
+        assert_eq!(35, part_a(fs::read_to_string("input/2023/day05/test.txt").unwrap()));
+        assert_eq!(46, part_b(fs::read_to_string("input/2023/day05/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            484023871,
-            part_a(fs::read_to_string("input/2023/day05/input.txt").unwrap())
-        );
-        assert_eq!(
-            46294175,
-            part_b(fs::read_to_string("input/2023/day05/input.txt").unwrap())
-        );
+        assert_eq!(484023871, part_a(fs::read_to_string("input/2023/day05/input.txt").unwrap()));
+        assert_eq!(46294175, part_b(fs::read_to_string("input/2023/day05/input.txt").unwrap()));
     }
 }

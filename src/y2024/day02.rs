@@ -1,22 +1,15 @@
 use std::fs;
 
 pub fn day02(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day02/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day02/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day02/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day02/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
     input
         .lines()
         .filter(|line| {
-            let nums: Vec<u32> = line
-                .split(" ")
-                .map(|num| num.parse::<u32>().unwrap())
-                .collect();
+            let nums: Vec<u32> = line.split(" ").map(|num| num.parse::<u32>().unwrap()).collect();
             is_correct(nums)
         })
         .count()
@@ -26,21 +19,14 @@ fn part_b(input: String) -> usize {
     input
         .lines()
         .filter(|line| {
-            let nums: Vec<u32> = line
-                .split(" ")
-                .map(|num| num.parse::<u32>().unwrap())
-                .collect();
+            let nums: Vec<u32> = line.split(" ").map(|num| num.parse::<u32>().unwrap()).collect();
 
             if is_correct(nums.clone()) {
                 return true;
             }
 
             for i in 0..nums.len() {
-                let new_nums = nums[..i]
-                    .iter()
-                    .chain(nums[(i + 1)..].iter())
-                    .cloned()
-                    .collect();
+                let new_nums = nums[..i].iter().chain(nums[(i + 1)..].iter()).cloned().collect();
                 if is_correct(new_nums) {
                     return true;
                 }
@@ -82,25 +68,13 @@ mod day02_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            2,
-            part_a(fs::read_to_string("input/2024/day02/test.txt").unwrap())
-        );
-        assert_eq!(
-            4,
-            part_b(fs::read_to_string("input/2024/day02/test.txt").unwrap())
-        );
+        assert_eq!(2, part_a(fs::read_to_string("input/2024/day02/test.txt").unwrap()));
+        assert_eq!(4, part_b(fs::read_to_string("input/2024/day02/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            269,
-            part_a(fs::read_to_string("input/2024/day02/input.txt").unwrap())
-        );
-        assert_eq!(
-            337,
-            part_b(fs::read_to_string("input/2024/day02/input.txt").unwrap())
-        );
+        assert_eq!(269, part_a(fs::read_to_string("input/2024/day02/input.txt").unwrap()));
+        assert_eq!(337, part_b(fs::read_to_string("input/2024/day02/input.txt").unwrap()));
     }
 }

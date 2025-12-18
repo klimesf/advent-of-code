@@ -1,14 +1,8 @@
 use std::fs;
 
 pub(crate) fn day01() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2023/day01/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2023/day01/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2023/day01/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2023/day01/input.txt").unwrap()));
 }
 
 fn part_a(elves: String) -> u32 {
@@ -94,13 +88,7 @@ mod day01_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            54990,
-            part_a(fs::read_to_string("input/2023/day01/input.txt").unwrap())
-        );
-        assert_eq!(
-            54473,
-            part_b(fs::read_to_string("input/2023/day01/input.txt").unwrap())
-        );
+        assert_eq!(54990, part_a(fs::read_to_string("input/2023/day01/input.txt").unwrap()));
+        assert_eq!(54473, part_b(fs::read_to_string("input/2023/day01/input.txt").unwrap()));
     }
 }

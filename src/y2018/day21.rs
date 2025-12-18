@@ -2,14 +2,8 @@ use std::collections::HashSet;
 use std::fs;
 
 pub(crate) fn day21() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day21/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day21/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day21/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day21/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -20,10 +14,7 @@ fn part_a(input: String) -> usize {
         .lines()
         .map(|line| {
             let instr = line[0..4].to_string();
-            let args = line[5..]
-                .split(" ")
-                .map(|n| n.parse::<usize>().unwrap())
-                .collect();
+            let args = line[5..].split(" ").map(|n| n.parse::<usize>().unwrap()).collect();
             (instr, args)
         })
         .collect();
@@ -53,10 +44,7 @@ fn part_b(input: String) -> usize {
         .lines()
         .map(|line| {
             let instr = line[0..4].to_string();
-            let args = line[5..]
-                .split(" ")
-                .map(|n| n.parse::<usize>().unwrap())
-                .collect();
+            let args = line[5..].split(" ").map(|n| n.parse::<usize>().unwrap()).collect();
             (instr, args)
         })
         .collect();
@@ -118,13 +106,7 @@ mod day21_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            6619857,
-            part_a(fs::read_to_string("input/2018/day21/input.txt").unwrap())
-        );
-        assert_eq!(
-            0,
-            part_b(fs::read_to_string("input/2018/day21/input.txt").unwrap())
-        );
+        assert_eq!(6619857, part_a(fs::read_to_string("input/2018/day21/input.txt").unwrap()));
+        assert_eq!(0, part_b(fs::read_to_string("input/2018/day21/input.txt").unwrap()));
     }
 }

@@ -22,10 +22,7 @@ fn solve(disk_len: usize, initial: &str) -> String {
 fn dragon_curve(a: Vec<char>) -> Vec<char> {
     let mut b = a.clone();
     b.reverse();
-    b = b
-        .iter()
-        .map(|c| if *c == '1' { '0' } else { '1' })
-        .collect();
+    b = b.iter().map(|c| if *c == '1' { '0' } else { '1' }).collect();
 
     let mut ans = vec![];
     for i in 0..a.len() {

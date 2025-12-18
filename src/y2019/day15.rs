@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day15() {
     let input = fs::read_to_string("input/2019/day15/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
     let mut intcode = intcode_instance(&code);
 
     // Part A - walk the whole map in search for the oxygen point, use modified dijsktra to count the shortest
@@ -100,19 +96,9 @@ pub(crate) fn day15() {
             } // We haven't sent any instruction yet
         }
     };
-    intcode.run(
-        &mut pos,
-        &mut dir,
-        &mut dist,
-        &mut map,
-        &mut exhausted,
-        &mut input,
-    );
+    intcode.run(&mut pos, &mut dir, &mut dist, &mut map, &mut exhausted, &mut input);
 
-    println!(
-        "It takes {} commands to reach the oxygen systems",
-        map.get(&oxygen_system_pos).unwrap()
-    );
+    println!("It takes {} commands to reach the oxygen systems", map.get(&oxygen_system_pos).unwrap());
     map.insert(oxygen_system_pos, -2); // Mark for printing
     print_map(&map);
 
@@ -147,10 +133,7 @@ pub(crate) fn day15() {
         to_visit = neighbors;
         minutes += 1;
     }
-    println!(
-        "It takes {} minutes to fill the area with oxygen",
-        minutes - 1
-    );
+    println!("It takes {} minutes to fill the area with oxygen", minutes - 1);
 }
 
 fn add_dir_to_pos(dir: &i32, pos: &(i32, i32)) -> (i32, i32) {
@@ -241,11 +224,7 @@ impl IntcodeProcessor {
                 }
                 3 => {
                     let a = self.memory[&(self.instruction_ptr + 1)];
-                    self.mem_write(
-                        a_mode,
-                        a,
-                        input(pos, dir, dist, map, exhausted, &self.output),
-                    );
+                    self.mem_write(a_mode, a, input(pos, dir, dist, map, exhausted, &self.output));
                     self.instruction_ptr += 2;
                 }
                 4 => {

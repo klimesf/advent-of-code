@@ -3,12 +3,8 @@ use regex::Regex;
 use std::fs;
 
 pub fn day03(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day03/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day03/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -66,25 +62,13 @@ mod day03_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            161,
-            part_a(fs::read_to_string("input/2024/day03/test.txt").unwrap())
-        );
-        assert_eq!(
-            48,
-            part_b(fs::read_to_string("input/2024/day03/test2.txt").unwrap())
-        );
+        assert_eq!(161, part_a(fs::read_to_string("input/2024/day03/test.txt").unwrap()));
+        assert_eq!(48, part_b(fs::read_to_string("input/2024/day03/test2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            185797128,
-            part_a(fs::read_to_string("input/2024/day03/input.txt").unwrap())
-        );
-        assert_eq!(
-            89798695,
-            part_b(fs::read_to_string("input/2024/day03/input.txt").unwrap())
-        );
+        assert_eq!(185797128, part_a(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
+        assert_eq!(89798695, part_b(fs::read_to_string("input/2024/day03/input.txt").unwrap()));
     }
 }

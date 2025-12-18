@@ -14,8 +14,7 @@ pub(crate) fn day08() {
 }
 
 fn parse(input: &str) -> Vec<(&str, &str, i32, &str, &str, i32)> {
-    let re =
-        Regex::new(r"^(.+) (inc|dec) ([\-0-9]+) if (.+) (==|>|<|>=|<=|!=) ([\-0-9]+)$").unwrap();
+    let re = Regex::new(r"^(.+) (inc|dec) ([\-0-9]+) if (.+) (==|>|<|>=|<=|!=) ([\-0-9]+)$").unwrap();
     input
         .lines()
         .map(|line| {
@@ -26,14 +25,7 @@ fn parse(input: &str) -> Vec<(&str, &str, i32, &str, &str, i32)> {
             let condition_left = g.get(4).unwrap().as_str();
             let condition = g.get(5).unwrap().as_str();
             let condition_right = parse_i32(g.get(6));
-            (
-                target,
-                operand,
-                argument,
-                condition_left,
-                condition,
-                condition_right,
-            )
+            (target, operand, argument, condition_left, condition, condition_right)
         })
         .collect()
 }

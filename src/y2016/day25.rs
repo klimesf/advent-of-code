@@ -2,10 +2,7 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day25() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i64 {
@@ -105,9 +102,6 @@ mod day25_tests {
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            0,
-            part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap())
-        );
+        assert_eq!(0, part_a(fs::read_to_string("input/2016/day25/input.txt").unwrap()));
     }
 }

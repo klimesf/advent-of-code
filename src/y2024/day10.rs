@@ -76,17 +76,11 @@ mod day10_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            (36, 81),
-            solve(fs::read_to_string("input/2024/day10/test.txt").unwrap())
-        );
+        assert_eq!((36, 81), solve(fs::read_to_string("input/2024/day10/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (552, 1225),
-            solve(fs::read_to_string("input/2024/day10/input.txt").unwrap())
-        );
+        assert_eq!((552, 1225), solve(fs::read_to_string("input/2024/day10/input.txt").unwrap()));
     }
 }

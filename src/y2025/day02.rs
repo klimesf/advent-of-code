@@ -2,12 +2,8 @@ use std::collections::HashSet;
 use std::fs;
 
 pub fn day02(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2025/day02/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2025/day02/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2025/day02/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2025/day02/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -81,25 +77,13 @@ mod day02_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            1227775554,
-            part_a(fs::read_to_string("input/2025/day02/test.txt").unwrap())
-        );
-        assert_eq!(
-            4174379265,
-            part_b(fs::read_to_string("input/2025/day02/test.txt").unwrap())
-        );
+        assert_eq!(1227775554, part_a(fs::read_to_string("input/2025/day02/test.txt").unwrap()));
+        assert_eq!(4174379265, part_b(fs::read_to_string("input/2025/day02/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            19219508902,
-            part_a(fs::read_to_string("input/2025/day02/input.txt").unwrap())
-        );
-        assert_eq!(
-            27180728081,
-            part_b(fs::read_to_string("input/2025/day02/input.txt").unwrap())
-        );
+        assert_eq!(19219508902, part_a(fs::read_to_string("input/2025/day02/input.txt").unwrap()));
+        assert_eq!(27180728081, part_b(fs::read_to_string("input/2025/day02/input.txt").unwrap()));
     }
 }

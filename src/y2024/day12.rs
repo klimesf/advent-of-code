@@ -2,12 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub fn day12(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day12/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day12/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -68,11 +64,7 @@ fn part_b(input: String) -> usize {
     let mut sides = HashMap::new();
     for i in 0..=map.len() {
         for j in 0..=map[0].len() {
-            let up_left = if i == 0 || j == 0 {
-                -1
-            } else {
-                regions[i - 1][j - 1]
-            };
+            let up_left = if i == 0 || j == 0 { -1 } else { regions[i - 1][j - 1] };
             let up = if i == 0 || j == map[0].len() {
                 -1
             } else {
@@ -211,33 +203,15 @@ mod day12_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            140,
-            part_a(fs::read_to_string("input/2024/day12/test.txt").unwrap())
-        );
-        assert_eq!(
-            772,
-            part_a(fs::read_to_string("input/2024/day12/test_2.txt").unwrap())
-        );
-        assert_eq!(
-            80,
-            part_b(fs::read_to_string("input/2024/day12/test.txt").unwrap())
-        );
-        assert_eq!(
-            436,
-            part_b(fs::read_to_string("input/2024/day12/test_2.txt").unwrap())
-        );
+        assert_eq!(140, part_a(fs::read_to_string("input/2024/day12/test.txt").unwrap()));
+        assert_eq!(772, part_a(fs::read_to_string("input/2024/day12/test_2.txt").unwrap()));
+        assert_eq!(80, part_b(fs::read_to_string("input/2024/day12/test.txt").unwrap()));
+        assert_eq!(436, part_b(fs::read_to_string("input/2024/day12/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1431440,
-            part_a(fs::read_to_string("input/2024/day12/input.txt").unwrap())
-        );
-        assert_eq!(
-            869070,
-            part_b(fs::read_to_string("input/2024/day12/input.txt").unwrap())
-        );
+        assert_eq!(1431440, part_a(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
+        assert_eq!(869070, part_b(fs::read_to_string("input/2024/day12/input.txt").unwrap()));
     }
 }

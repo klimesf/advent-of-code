@@ -4,12 +4,8 @@ use std::collections::{BinaryHeap, HashSet};
 use std::fs;
 
 pub fn day16(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day16/input.txt").unwrap(),
-    ));
-    print(part_b(
-        fs::read_to_string("input/2024/day16/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
+    print(part_b(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -314,9 +310,7 @@ fn part_b(input: String) -> usize {
             let diff = if dir == pos.dir { 1 } else { 1001 };
             match dir {
                 0 => {
-                    if pos.dist >= diff
-                        && distances[(pos.x + 1) as usize][pos.y as usize][dir] == pos.dist - diff
-                    {
+                    if pos.dist >= diff && distances[(pos.x + 1) as usize][pos.y as usize][dir] == pos.dist - diff {
                         stack.push(Pos {
                             x: pos.x + 1,
                             y: pos.y,
@@ -326,9 +320,7 @@ fn part_b(input: String) -> usize {
                     }
                 }
                 1 => {
-                    if pos.dist >= diff
-                        && distances[pos.x as usize][(pos.y - 1) as usize][dir] == pos.dist - diff
-                    {
+                    if pos.dist >= diff && distances[pos.x as usize][(pos.y - 1) as usize][dir] == pos.dist - diff {
                         stack.push(Pos {
                             x: pos.x,
                             y: pos.y - 1,
@@ -338,9 +330,7 @@ fn part_b(input: String) -> usize {
                     }
                 }
                 2 => {
-                    if pos.dist >= diff
-                        && distances[(pos.x - 1) as usize][pos.y as usize][dir] == pos.dist - diff
-                    {
+                    if pos.dist >= diff && distances[(pos.x - 1) as usize][pos.y as usize][dir] == pos.dist - diff {
                         stack.push(Pos {
                             x: pos.x - 1,
                             y: pos.y,
@@ -350,9 +340,7 @@ fn part_b(input: String) -> usize {
                     }
                 }
                 3 => {
-                    if pos.dist >= diff
-                        && distances[pos.x as usize][(pos.y + 1) as usize][dir] == pos.dist - diff
-                    {
+                    if pos.dist >= diff && distances[pos.x as usize][(pos.y + 1) as usize][dir] == pos.dist - diff {
                         stack.push(Pos {
                             x: pos.x,
                             y: pos.y + 1,
@@ -404,29 +392,14 @@ mod day16_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            7036,
-            part_a(fs::read_to_string("input/2024/day16/test.txt").unwrap())
-        );
-        assert_eq!(
-            45,
-            part_b(fs::read_to_string("input/2024/day16/test.txt").unwrap())
-        );
-        assert_eq!(
-            64,
-            part_b(fs::read_to_string("input/2024/day16/test_2.txt").unwrap())
-        );
+        assert_eq!(7036, part_a(fs::read_to_string("input/2024/day16/test.txt").unwrap()));
+        assert_eq!(45, part_b(fs::read_to_string("input/2024/day16/test.txt").unwrap()));
+        assert_eq!(64, part_b(fs::read_to_string("input/2024/day16/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            83444,
-            part_a(fs::read_to_string("input/2024/day16/input.txt").unwrap())
-        );
-        assert_eq!(
-            483,
-            part_b(fs::read_to_string("input/2024/day16/input.txt").unwrap())
-        );
+        assert_eq!(83444, part_a(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
+        assert_eq!(483, part_b(fs::read_to_string("input/2024/day16/input.txt").unwrap()));
     }
 }

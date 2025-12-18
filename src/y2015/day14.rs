@@ -5,42 +5,39 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day14() {
-    println!(
-        "{}",
-        part_a(
-            fs::read_to_string("input/2015/day14/input.txt").unwrap(),
-            2503
-        )
-    );
-    println!(
-        "{}",
-        part_b(
-            fs::read_to_string("input/2015/day14/input.txt").unwrap(),
-            2503
-        )
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
+    println!("{}", part_b(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
 }
 
 fn part_a(input: String, total_time: usize) -> usize {
-    input.lines().map(|line| {
-        let re = Regex::new("^(.+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds\\.$").unwrap();
-        let caps = re.captures(line).unwrap();
+    input
+        .lines()
+        .map(|line| {
+            let re = Regex::new(
+                "^(.+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds\\.$",
+            )
+            .unwrap();
+            let caps = re.captures(line).unwrap();
 
-        let speed = parse_usize(caps.get(2));
-        let move_time = parse_usize(caps.get(3));
-        let rest_time = parse_usize(caps.get(4));
+            let speed = parse_usize(caps.get(2));
+            let move_time = parse_usize(caps.get(3));
+            let rest_time = parse_usize(caps.get(4));
 
-        let full_cycles = total_time / (move_time + rest_time);
-        let last_cycle = (total_time - (full_cycles * (move_time + rest_time))).min(move_time) * speed;
+            let full_cycles = total_time / (move_time + rest_time);
+            let last_cycle = (total_time - (full_cycles * (move_time + rest_time))).min(move_time) * speed;
 
-        (full_cycles * speed * move_time) + last_cycle
-    }).max().unwrap()
+            (full_cycles * speed * move_time) + last_cycle
+        })
+        .max()
+        .unwrap()
 }
 
 fn part_b(input: String, total_time: usize) -> usize {
     let mut reindeers = vec![];
     input.lines().for_each(|line| {
-        let re = Regex::new("^(.+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds\\.$").unwrap();
+        let re =
+            Regex::new("^(.+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds\\.$")
+                .unwrap();
         let caps = re.captures(line).unwrap();
 
         let reindeer = caps.get(1).unwrap().as_str();
@@ -88,37 +85,13 @@ mod day14_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            1120,
-            part_a(
-                fs::read_to_string("input/2015/day14/test.txt").unwrap(),
-                1000
-            )
-        );
-        assert_eq!(
-            689,
-            part_b(
-                fs::read_to_string("input/2015/day14/test.txt").unwrap(),
-                1000
-            )
-        );
+        assert_eq!(1120, part_a(fs::read_to_string("input/2015/day14/test.txt").unwrap(), 1000));
+        assert_eq!(689, part_b(fs::read_to_string("input/2015/day14/test.txt").unwrap(), 1000));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            2655,
-            part_a(
-                fs::read_to_string("input/2015/day14/input.txt").unwrap(),
-                2503
-            )
-        );
-        assert_eq!(
-            1059,
-            part_b(
-                fs::read_to_string("input/2015/day14/input.txt").unwrap(),
-                2503
-            )
-        );
+        assert_eq!(2655, part_a(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
+        assert_eq!(1059, part_b(fs::read_to_string("input/2015/day14/input.txt").unwrap(), 2503));
     }
 }

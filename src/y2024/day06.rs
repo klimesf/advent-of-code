@@ -34,11 +34,7 @@ fn solve(input: String) -> (usize, usize) {
     loop {
         visited.insert((pos.0 as usize, pos.1 as usize));
         let next_pos = (pos.0 + DIRS[dir].0, pos.1 + DIRS[dir].1);
-        if next_pos.0 < 0
-            || next_pos.0 >= map.len() as i32
-            || next_pos.1 < 0
-            || next_pos.1 >= map[0].len() as i32
-        {
+        if next_pos.0 < 0 || next_pos.0 >= map.len() as i32 || next_pos.1 < 0 || next_pos.1 >= map[0].len() as i32 {
             break;
         }
         if map[next_pos.0 as usize][next_pos.1 as usize] == '#' {
@@ -102,17 +98,11 @@ mod day06_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            (41, 6),
-            solve(fs::read_to_string("input/2024/day06/test.txt").unwrap())
-        );
+        assert_eq!((41, 6), solve(fs::read_to_string("input/2024/day06/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (4722, 1602),
-            solve(fs::read_to_string("input/2024/day06/input.txt").unwrap())
-        );
+        assert_eq!((4722, 1602), solve(fs::read_to_string("input/2024/day06/input.txt").unwrap()));
     }
 }

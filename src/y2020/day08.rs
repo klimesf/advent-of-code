@@ -1,14 +1,8 @@
 use std::fs;
 
 pub(crate) fn day08() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2020/day08/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2020/day08/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2020/day08/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2020/day08/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> isize {
@@ -106,25 +100,13 @@ mod day08_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            5,
-            part_a(fs::read_to_string("input/2020/day08/test.txt").unwrap())
-        );
-        assert_eq!(
-            8,
-            part_b(fs::read_to_string("input/2020/day08/test.txt").unwrap())
-        );
+        assert_eq!(5, part_a(fs::read_to_string("input/2020/day08/test.txt").unwrap()));
+        assert_eq!(8, part_b(fs::read_to_string("input/2020/day08/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            1521,
-            part_a(fs::read_to_string("input/2020/day08/input.txt").unwrap())
-        );
-        assert_eq!(
-            1016,
-            part_b(fs::read_to_string("input/2020/day08/input.txt").unwrap())
-        );
+        assert_eq!(1521, part_a(fs::read_to_string("input/2020/day08/input.txt").unwrap()));
+        assert_eq!(1016, part_b(fs::read_to_string("input/2020/day08/input.txt").unwrap()));
     }
 }

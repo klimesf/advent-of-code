@@ -5,11 +5,7 @@ type Grid = Vec<Vec<char>>;
 
 pub(crate) fn day24() {
     let input = fs::read_to_string("input/2019/day24/input.txt").unwrap();
-    let map: Grid = input
-        .trim()
-        .split("\n")
-        .map(|r| r.chars().collect())
-        .collect();
+    let map: Grid = input.trim().split("\n").map(|r| r.chars().collect()).collect();
 
     part_a(&map);
     part_b(&map);
@@ -36,11 +32,7 @@ fn part_b(map: &Grid) {
     for _c in 0..iterations {
         state = calc_new_state_multidim(&state);
     }
-    println!(
-        "After {} minutes, there are {} bugs present",
-        iterations,
-        count_bugs(&state)
-    );
+    println!("After {} minutes, there are {} bugs present", iterations, count_bugs(&state));
 }
 
 fn calc_biodiversity(bugs: &Grid) -> u128 {
@@ -271,14 +263,7 @@ fn _print_state(dim_bugs: &HashMap<i32, Grid>) {
         println!("Dim {}:", dim);
         for y in 0..5 {
             for x in 0..5 {
-                print!(
-                    "{}",
-                    if x == 2 && y == 2 {
-                        '?'
-                    } else {
-                        dim_bugs[&dim][y][x]
-                    }
-                );
+                print!("{}", if x == 2 && y == 2 { '?' } else { dim_bugs[&dim][y][x] });
             }
             println!();
         }

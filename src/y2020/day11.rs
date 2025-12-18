@@ -1,17 +1,9 @@
-use crate::utils::grid::{
-    Grid, DOWN, DOWN_LEFT, DOWN_RIGHT, LEFT, P, RIGHT, UP, UP_LEFT, UP_RIGHT,
-};
+use crate::utils::grid::{Grid, DOWN, DOWN_LEFT, DOWN_RIGHT, LEFT, P, RIGHT, UP, UP_LEFT, UP_RIGHT};
 use std::fs;
 
 pub(crate) fn day11() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2020/day11/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2020/day11/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2020/day11/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2020/day11/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -26,9 +18,7 @@ fn part_a(input: String) -> usize {
                 let p = P::new(x, y);
 
                 let mut occupied = 0;
-                for dir in [
-                    UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT,
-                ] {
+                for dir in [UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT] {
                     let pos = p + dir;
                     if !map.contains(&pos) {
                         continue;
@@ -78,9 +68,7 @@ fn part_b(input: String) -> usize {
                 let p = P::new(x, y);
 
                 let mut occupied = 0;
-                for dir in [
-                    UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT,
-                ] {
+                for dir in [UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT] {
                     let mut pos = p + dir;
                     loop {
                         if !map.contains(&pos) {
@@ -134,25 +122,13 @@ mod day11_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            37,
-            part_a(fs::read_to_string("input/2020/day11/test.txt").unwrap())
-        );
-        assert_eq!(
-            26,
-            part_b(fs::read_to_string("input/2020/day11/test.txt").unwrap())
-        );
+        assert_eq!(37, part_a(fs::read_to_string("input/2020/day11/test.txt").unwrap()));
+        assert_eq!(26, part_b(fs::read_to_string("input/2020/day11/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            2438,
-            part_a(fs::read_to_string("input/2020/day11/input.txt").unwrap())
-        );
-        assert_eq!(
-            2174,
-            part_b(fs::read_to_string("input/2020/day11/input.txt").unwrap())
-        );
+        assert_eq!(2438, part_a(fs::read_to_string("input/2020/day11/input.txt").unwrap()));
+        assert_eq!(2174, part_b(fs::read_to_string("input/2020/day11/input.txt").unwrap()));
     }
 }

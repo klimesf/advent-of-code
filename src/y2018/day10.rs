@@ -18,8 +18,7 @@ pub(crate) fn day10() {
 }
 
 fn parse_row(s: &str) -> Star {
-    let re = Regex::new(r"^position=<([\s\d\-]+),([\s\d\-]+)> velocity=<([\s\d\-]+),([\s\d\-]+)>$")
-        .unwrap();
+    let re = Regex::new(r"^position=<([\s\d\-]+),([\s\d\-]+)> velocity=<([\s\d\-]+),([\s\d\-]+)>$").unwrap();
     let c = re.captures(s).unwrap();
     (
         c.get(1).unwrap().as_str().trim().parse::<i32>().unwrap(),
@@ -63,14 +62,8 @@ mod day10_tests {
 
     #[test]
     fn parse_row_works() {
-        assert_eq!(
-            (9, 1, 0, 2),
-            parse_row("position=< 9,  1> velocity=< 0,  2>")
-        );
-        assert_eq!(
-            (-6, 10, 2, -2),
-            parse_row("position=<-6, 10> velocity=< 2, -2>")
-        );
+        assert_eq!((9, 1, 0, 2), parse_row("position=< 9,  1> velocity=< 0,  2>"));
+        assert_eq!((-6, 10, 2, -2), parse_row("position=<-6, 10> velocity=< 2, -2>"));
     }
 
     #[test]

@@ -2,14 +2,8 @@ use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day18() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day18/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day18/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day18/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day18/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -19,14 +13,8 @@ fn part_a(input: String) -> usize {
         state = get_new_state(&state);
     }
 
-    let wooded: usize = state
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '|').count())
-        .sum();
-    let lumbers: usize = state
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '#').count())
-        .sum();
+    let wooded: usize = state.iter().map(|row| row.iter().filter(|c| **c == '|').count()).sum();
+    let lumbers: usize = state.iter().map(|row| row.iter().filter(|c| **c == '#').count()).sum();
     wooded * lumbers
 }
 
@@ -52,14 +40,8 @@ fn part_b(input: String) -> usize {
         state = get_new_state(&state);
     }
 
-    let wooded: usize = state
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '|').count())
-        .sum();
-    let lumbers: usize = state
-        .iter()
-        .map(|row| row.iter().filter(|c| **c == '#').count())
-        .sum();
+    let wooded: usize = state.iter().map(|row| row.iter().filter(|c| **c == '|').count()).sum();
+    let lumbers: usize = state.iter().map(|row| row.iter().filter(|c| **c == '#').count()).sum();
     wooded * lumbers
 }
 
@@ -137,21 +119,12 @@ mod day18_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            1147,
-            part_a(fs::read_to_string("input/2018/day18/test.txt").unwrap())
-        );
+        assert_eq!(1147, part_a(fs::read_to_string("input/2018/day18/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            638400,
-            part_a(fs::read_to_string("input/2018/day18/input.txt").unwrap())
-        );
-        assert_eq!(
-            195952,
-            part_b(fs::read_to_string("input/2018/day18/input.txt").unwrap())
-        );
+        assert_eq!(638400, part_a(fs::read_to_string("input/2018/day18/input.txt").unwrap()));
+        assert_eq!(195952, part_b(fs::read_to_string("input/2018/day18/input.txt").unwrap()));
     }
 }

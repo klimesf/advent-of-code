@@ -3,11 +3,7 @@ use std::fs;
 
 pub(crate) fn day23() {
     let input = fs::read_to_string("input/2019/day23/input.txt").unwrap();
-    let code: Vec<i64> = input
-        .trim()
-        .split(',')
-        .map(|c| c.parse().unwrap())
-        .collect();
+    let code: Vec<i64> = input.trim().split(',').map(|c| c.parse().unwrap()).collect();
 
     part_a(&code);
     part_b(&code);
@@ -43,41 +39,30 @@ fn part_a(code: &Vec<i64>) {
         };
     };
 
-    let output_callback = |from: i64,
-                           outputs: &mut HashMap<i64, Vec<i64>>,
-                           inputs: &mut HashMap<i64, VecDeque<i64>>,
-                           value: i64| {
-        let output = outputs.get_mut(&from).unwrap();
-        output.push(value);
+    let output_callback =
+        |from: i64, outputs: &mut HashMap<i64, Vec<i64>>, inputs: &mut HashMap<i64, VecDeque<i64>>, value: i64| {
+            let output = outputs.get_mut(&from).unwrap();
+            output.push(value);
 
-        if output.len() == 3 {
-            let y = output.pop().unwrap();
-            let x = output.pop().unwrap();
-            let to = output.pop().unwrap();
+            if output.len() == 3 {
+                let y = output.pop().unwrap();
+                let x = output.pop().unwrap();
+                let to = output.pop().unwrap();
 
-            //println!("Sending packet ({}, {}) to {}", x, y, to);
+                //println!("Sending packet ({}, {}) to {}", x, y, to);
 
-            let input = inputs.get_mut(&to).unwrap();
-            input.push_back(x);
-            input.push_back(y);
-        }
-    };
+                let input = inputs.get_mut(&to).unwrap();
+                input.push_back(x);
+                input.push_back(y);
+            }
+        };
 
     while inputs.get(&255).unwrap().len() < 2 && !all_finished(&computers) {
         for i in 0..50 {
-            computers[i].step(
-                i as i64,
-                &mut inputs,
-                &mut outputs,
-                &input_callback,
-                &output_callback,
-            );
+            computers[i].step(i as i64, &mut inputs, &mut outputs, &input_callback, &output_callback);
         }
     }
-    println!(
-        "The first y packet sent to 255 is {:?}",
-        inputs.get(&255).unwrap()[1]
-    );
+    println!("The first y packet sent to 255 is {:?}", inputs.get(&255).unwrap()[1]);
 }
 
 fn part_b(code: &Vec<i64>) {
@@ -110,37 +95,29 @@ fn part_b(code: &Vec<i64>) {
         };
     };
 
-    let output_callback = |from: i64,
-                           outputs: &mut HashMap<i64, Vec<i64>>,
-                           inputs: &mut HashMap<i64, VecDeque<i64>>,
-                           value: i64| {
-        let output = outputs.get_mut(&from).unwrap();
-        output.push(value);
+    let output_callback =
+        |from: i64, outputs: &mut HashMap<i64, Vec<i64>>, inputs: &mut HashMap<i64, VecDeque<i64>>, value: i64| {
+            let output = outputs.get_mut(&from).unwrap();
+            output.push(value);
 
-        if output.len() == 3 {
-            let y = output.pop().unwrap();
-            let x = output.pop().unwrap();
-            let to = output.pop().unwrap();
+            if output.len() == 3 {
+                let y = output.pop().unwrap();
+                let x = output.pop().unwrap();
+                let to = output.pop().unwrap();
 
-            //println!("Sending packet ({}, {}) to {}", x, y, to);
+                //println!("Sending packet ({}, {}) to {}", x, y, to);
 
-            let input = inputs.get_mut(&to).unwrap();
-            input.push_back(x);
-            input.push_back(y);
-        }
-    };
+                let input = inputs.get_mut(&to).unwrap();
+                input.push_back(x);
+                input.push_back(y);
+            }
+        };
 
     let mut idle_ctr = 0;
     let mut sent_y_to_0 = HashSet::new();
     while !all_finished(&computers) {
         for i in 0..50 {
-            computers[i].step(
-                i as i64,
-                &mut inputs,
-                &mut outputs,
-                &input_callback,
-                &output_callback,
-            );
+            computers[i].step(i as i64, &mut inputs, &mut outputs, &input_callback, &output_callback);
         }
         if all_idling(&inputs, &outputs) {
             idle_ctr += 1;
@@ -161,10 +138,7 @@ fn part_b(code: &Vec<i64>) {
                 //println!("Sending packet ({}, {}) to 0 from NAT", last_x, last_y);
 
                 if !sent_y_to_0.insert(last_y) {
-                    println!(
-                        "The first y packet to be sent twice from NAT to 0 is {:?}",
-                        last_y
-                    );
+                    println!("The first y packet to be sent twice from NAT to 0 is {:?}", last_y);
                     return;
                 }
 

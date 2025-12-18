@@ -1,9 +1,7 @@
 use std::fs;
 
 pub fn day25(print: fn(usize)) {
-    print(part_a(
-        fs::read_to_string("input/2024/day25/input.txt").unwrap(),
-    ));
+    print(part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -75,17 +73,11 @@ mod day25_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            3,
-            part_a(fs::read_to_string("input/2024/day25/test.txt").unwrap())
-        );
+        assert_eq!(3, part_a(fs::read_to_string("input/2024/day25/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            3690,
-            part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap())
-        );
+        assert_eq!(3690, part_a(fs::read_to_string("input/2024/day25/input.txt").unwrap()));
     }
 }

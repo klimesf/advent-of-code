@@ -26,11 +26,7 @@ fn solve(input: String) -> (usize, usize) {
         // Run dijkstra from each point into the others and find distances
         let mut stack = BinaryHeap::new();
         let mut visited = HashSet::new();
-        stack.push(Pos {
-            x: *i,
-            y: *j,
-            dist: 0,
-        });
+        stack.push(Pos { x: *i, y: *j, dist: 0 });
         let mut dests = HashMap::new();
 
         while let Some(pos) = stack.pop() {
@@ -98,11 +94,7 @@ fn solve(input: String) -> (usize, usize) {
             .map(|(a, b)| distances.get(a).unwrap().get(b).unwrap())
             .sum::<usize>()
             + distances.get(&'0').unwrap().get(perm[0]).unwrap()
-            + distances
-                .get(perm[perm.len() - 1])
-                .unwrap()
-                .get(&'0')
-                .unwrap();
+            + distances.get(perm[perm.len() - 1]).unwrap().get(&'0').unwrap();
         if dist_a < min_a {
             min_a = dist_a
         }
@@ -141,17 +133,11 @@ mod day24_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            (14, 20),
-            solve(fs::read_to_string("input/2016/day24/test.txt").unwrap())
-        );
+        assert_eq!((14, 20), solve(fs::read_to_string("input/2016/day24/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (502, 724),
-            solve(fs::read_to_string("input/2016/day24/input.txt").unwrap())
-        );
+        assert_eq!((502, 724), solve(fs::read_to_string("input/2016/day24/input.txt").unwrap()));
     }
 }

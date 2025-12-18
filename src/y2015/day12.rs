@@ -4,21 +4,13 @@ use serde_json::Value;
 use std::fs;
 
 pub(crate) fn day12() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> i32 {
     let re = Regex::new("(:|\\[|,)(-?[0-9]+)").unwrap();
-    re.captures_iter(input.as_str())
-        .map(|x| parse_i32(x.get(2)))
-        .sum()
+    re.captures_iter(input.as_str()).map(|x| parse_i32(x.get(2))).sum()
 }
 
 fn part_b(input: String) -> i64 {
@@ -68,22 +60,13 @@ mod day12_tests {
 
         assert_eq!(6, part_b("[1,2,3]".to_string()));
         assert_eq!(4, part_b("[1,{\"c\":\"red\",\"b\":2},3]".to_string()));
-        assert_eq!(
-            0,
-            part_b("{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}".to_string())
-        );
+        assert_eq!(0, part_b("{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}".to_string()));
         assert_eq!(6, part_b("[1,\"red\",5]".to_string()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            119433,
-            part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap())
-        );
-        assert_eq!(
-            68466,
-            part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap())
-        );
+        assert_eq!(119433, part_a(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
+        assert_eq!(68466, part_b(fs::read_to_string("input/2015/day12/input.txt").unwrap()));
     }
 }

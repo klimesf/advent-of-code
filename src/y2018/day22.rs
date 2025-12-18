@@ -3,14 +3,8 @@ use std::collections::{BinaryHeap, HashSet};
 use std::fs;
 
 pub(crate) fn day22() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
@@ -53,11 +47,9 @@ fn part_b(input: String) -> usize {
 
         // Move left, right, up, down if possible
         if pos.x > 0
-            && pos.tool.compatible_with(
-                erosion_level[pos.y][pos.x - 1] % 3,
-                (pos.x - 1, pos.y),
-                target,
-            )
+            && pos
+                .tool
+                .compatible_with(erosion_level[pos.y][pos.x - 1] % 3, (pos.x - 1, pos.y), target)
         {
             stack.push(Pos {
                 x: pos.x - 1,
@@ -66,11 +58,10 @@ fn part_b(input: String) -> usize {
                 tool: pos.tool,
             })
         }
-        if pos.tool.compatible_with(
-            erosion_level[pos.y][pos.x + 1] % 3,
-            (pos.x + 1, pos.y),
-            target,
-        ) {
+        if pos
+            .tool
+            .compatible_with(erosion_level[pos.y][pos.x + 1] % 3, (pos.x + 1, pos.y), target)
+        {
             stack.push(Pos {
                 x: pos.x + 1,
                 y: pos.y,
@@ -79,11 +70,9 @@ fn part_b(input: String) -> usize {
             })
         }
         if pos.y > 0
-            && pos.tool.compatible_with(
-                erosion_level[pos.y - 1][pos.x] % 3,
-                (pos.x, pos.y - 1),
-                target,
-            )
+            && pos
+                .tool
+                .compatible_with(erosion_level[pos.y - 1][pos.x] % 3, (pos.x, pos.y - 1), target)
         {
             stack.push(Pos {
                 x: pos.x,
@@ -92,11 +81,10 @@ fn part_b(input: String) -> usize {
                 tool: pos.tool,
             })
         }
-        if pos.tool.compatible_with(
-            erosion_level[pos.y + 1][pos.x] % 3,
-            (pos.x, pos.y + 1),
-            target,
-        ) {
+        if pos
+            .tool
+            .compatible_with(erosion_level[pos.y + 1][pos.x] % 3, (pos.x, pos.y + 1), target)
+        {
             stack.push(Pos {
                 x: pos.x,
                 y: pos.y + 1,
@@ -117,11 +105,7 @@ fn part_b(input: String) -> usize {
             })
         }
         if pos.tool != Tool::ClimbingGear
-            && Tool::ClimbingGear.compatible_with(
-                erosion_level[pos.y][pos.x] % 3,
-                (pos.x, pos.y),
-                target,
-            )
+            && Tool::ClimbingGear.compatible_with(erosion_level[pos.y][pos.x] % 3, (pos.x, pos.y), target)
         {
             stack.push(Pos {
                 x: pos.x,
@@ -131,11 +115,7 @@ fn part_b(input: String) -> usize {
             })
         }
         if pos.tool != Tool::Neither
-            && Tool::Neither.compatible_with(
-                erosion_level[pos.y][pos.x] % 3,
-                (pos.x, pos.y),
-                target,
-            )
+            && Tool::Neither.compatible_with(erosion_level[pos.y][pos.x] % 3, (pos.x, pos.y), target)
         {
             stack.push(Pos {
                 x: pos.x,
@@ -171,8 +151,7 @@ fn get_erosion_level(depth: usize, target: (usize, usize)) -> Vec<Vec<usize>> {
             } else if y == 0 {
                 erosion_level[y][x] = (x * 16807 + depth) % 20183;
             } else {
-                erosion_level[y][x] =
-                    (erosion_level[y - 1][x] * erosion_level[y][x - 1] + depth) % 20183;
+                erosion_level[y][x] = (erosion_level[y - 1][x] * erosion_level[y][x - 1] + depth) % 20183;
             }
         }
     }
@@ -234,25 +213,13 @@ mod day22_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            114,
-            part_a(fs::read_to_string("input/2018/day22/test.txt").unwrap())
-        );
-        assert_eq!(
-            45,
-            part_b(fs::read_to_string("input/2018/day22/test.txt").unwrap())
-        );
+        assert_eq!(114, part_a(fs::read_to_string("input/2018/day22/test.txt").unwrap()));
+        assert_eq!(45, part_b(fs::read_to_string("input/2018/day22/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            8090,
-            part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap())
-        );
-        assert_eq!(
-            992,
-            part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap())
-        );
+        assert_eq!(8090, part_a(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
+        assert_eq!(992, part_b(fs::read_to_string("input/2018/day22/input.txt").unwrap()));
     }
 }

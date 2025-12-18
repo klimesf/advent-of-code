@@ -2,24 +2,15 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day17() {
-    println!(
-        "{}",
-        part_a(fs::read_to_string("input/2018/day17/input.txt").unwrap())
-    );
-    println!(
-        "{}",
-        part_b(fs::read_to_string("input/2018/day17/input.txt").unwrap())
-    );
+    println!("{}", part_a(fs::read_to_string("input/2018/day17/input.txt").unwrap()));
+    println!("{}", part_b(fs::read_to_string("input/2018/day17/input.txt").unwrap()));
 }
 
 fn part_a(input: String) -> usize {
     let (min_y, max_y, clay) = parse_input(input);
     let mut water = HashMap::new();
     rec_floodfil(500, 0, max_y, &mut water, &clay);
-    water
-        .keys()
-        .filter(|(_, y)| *y >= min_y && *y <= max_y)
-        .count()
+    water.keys().filter(|(_, y)| *y >= min_y && *y <= max_y).count()
 }
 
 fn part_b(input: String) -> usize {
@@ -66,13 +57,7 @@ fn parse_input(input: String) -> (i32, i32, HashSet<(i32, i32)>) {
     (min_y, max_y, clay)
 }
 
-fn rec_floodfil(
-    x: i32,
-    y: i32,
-    max_y: i32,
-    water: &mut HashMap<(i32, i32), bool>,
-    clay: &HashSet<(i32, i32)>,
-) -> bool {
+fn rec_floodfil(x: i32, y: i32, max_y: i32, water: &mut HashMap<(i32, i32), bool>, clay: &HashSet<(i32, i32)>) -> bool {
     if y > max_y {
         return true;
     }
@@ -87,8 +72,7 @@ fn rec_floodfil(
         water.insert((x, y), og_dripping);
 
         if !og_dripping
-            && (*water.get(&(x - 1, y + 1)).unwrap_or(&true) == false
-                || clay.contains(&(x - 1, y + 1)))
+            && (*water.get(&(x - 1, y + 1)).unwrap_or(&true) == false || clay.contains(&(x - 1, y + 1)))
             && !clay.contains(&(x - 1, y))
         {
             if rec_floodfil(x - 1, y, max_y, water, clay) {
@@ -97,8 +81,7 @@ fn rec_floodfil(
         }
 
         if !og_dripping
-            && (*water.get(&(x + 1, y + 1)).unwrap_or(&true) == false
-                || clay.contains(&(x + 1, y + 1)))
+            && (*water.get(&(x + 1, y + 1)).unwrap_or(&true) == false || clay.contains(&(x + 1, y + 1)))
             && !clay.contains(&(x + 1, y))
         {
             if rec_floodfil(x + 1, y, max_y, water, clay) {
@@ -152,25 +135,13 @@ mod day17_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            57,
-            part_a(fs::read_to_string("input/2018/day17/test.txt").unwrap())
-        );
-        assert_eq!(
-            29,
-            part_b(fs::read_to_string("input/2018/day17/test.txt").unwrap())
-        );
+        assert_eq!(57, part_a(fs::read_to_string("input/2018/day17/test.txt").unwrap()));
+        assert_eq!(29, part_b(fs::read_to_string("input/2018/day17/test.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            31641,
-            part_a(fs::read_to_string("input/2018/day17/input.txt").unwrap())
-        );
-        assert_eq!(
-            26321,
-            part_b(fs::read_to_string("input/2018/day17/input.txt").unwrap())
-        );
+        assert_eq!(31641, part_a(fs::read_to_string("input/2018/day17/input.txt").unwrap()));
+        assert_eq!(26321, part_b(fs::read_to_string("input/2018/day17/input.txt").unwrap()));
     }
 }

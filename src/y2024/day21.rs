@@ -23,12 +23,7 @@ fn solve(input: String) -> (usize, usize) {
     // +---+---+---+
     //     | 0 | A |
     //     +---+---+
-    let numeric_keypad = [
-        ['7', '8', '9'],
-        ['4', '5', '6'],
-        ['1', '2', '3'],
-        [' ', '0', 'A'],
-    ];
+    let numeric_keypad = [['7', '8', '9'], ['4', '5', '6'], ['1', '2', '3'], [' ', '0', 'A']];
     let arm_pos_num = |c: char| -> (usize, usize) {
         match c {
             '7' => (0, 0),
@@ -113,10 +108,7 @@ fn solve(input: String) -> (usize, usize) {
                     });
                 }
             }
-            numeric_keypad_map.insert(
-                (from, to),
-                paths.iter().unique().map(|c| c.clone()).collect(),
-            );
+            numeric_keypad_map.insert((from, to), paths.iter().unique().map(|c| c.clone()).collect());
         }
     }
 
@@ -204,10 +196,7 @@ fn solve(input: String) -> (usize, usize) {
                     });
                 }
             }
-            arrow_keypad_map.insert(
-                (from, to),
-                paths.iter().unique().map(|c| c.clone()).collect(),
-            );
+            arrow_keypad_map.insert((from, to), paths.iter().unique().map(|c| c.clone()).collect());
         }
     }
 
@@ -265,13 +254,7 @@ fn shortest_arrow(
 ) -> usize {
     if level > max_level {
         // All paths should be the same size, so just get the length of the first one, plus 'A'
-        return arrow_keypad_map
-            .get(&(from, to))
-            .unwrap()
-            .first()
-            .unwrap()
-            .len()
-            + 1;
+        return arrow_keypad_map.get(&(from, to)).unwrap().first().unwrap().len() + 1;
     }
 
     if cache.contains_key(&(from, to, level, max_level)) {
@@ -327,21 +310,12 @@ mod day21_tests {
 
     #[test]
     fn test_works() {
-        assert_eq!(
-            (68 * 29, 2379451789590),
-            solve(fs::read_to_string("input/2024/day21/test.txt").unwrap())
-        );
-        assert_eq!(
-            (126384, 154115708116294),
-            solve(fs::read_to_string("input/2024/day21/test_2.txt").unwrap())
-        );
+        assert_eq!((68 * 29, 2379451789590), solve(fs::read_to_string("input/2024/day21/test.txt").unwrap()));
+        assert_eq!((126384, 154115708116294), solve(fs::read_to_string("input/2024/day21/test_2.txt").unwrap()));
     }
 
     #[test]
     fn input_works() {
-        assert_eq!(
-            (202648, 248919739734728),
-            solve(fs::read_to_string("input/2024/day21/input.txt").unwrap())
-        );
+        assert_eq!((202648, 248919739734728), solve(fs::read_to_string("input/2024/day21/input.txt").unwrap()));
     }
 }

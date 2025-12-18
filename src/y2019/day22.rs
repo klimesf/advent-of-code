@@ -21,10 +21,7 @@ fn part_a(instructions: Vec<(i128, i128)>) {
         .reduce(|(a, b), (c, d)| ((a * c) % len, (((b * c) % len) + d) % len))
         .unwrap();
 
-    println!(
-        "Position of card 2019 is {}",
-        (2019 * shuffle_fn.0 + shuffle_fn.1) % len
-    );
+    println!("Position of card 2019 is {}", (2019 * shuffle_fn.0 + shuffle_fn.1) % len);
 }
 
 fn part_b(instructions: Vec<(i128, i128)>) {
@@ -43,8 +40,7 @@ fn part_b(instructions: Vec<(i128, i128)>) {
     let a_to_the_k = pow_mod(shuffle_fn.0, k, m);
     let fn_to_the_k: (i128, i128) = (
         a_to_the_k,
-        ((((shuffle_fn.1 % m) * ((1 - a_to_the_k) % m)) % m) * pow_mod(1 - shuffle_fn.0, m - 2, m))
-            % m,
+        ((((shuffle_fn.1 % m) * ((1 - a_to_the_k) % m)) % m) * pow_mod(1 - shuffle_fn.0, m - 2, m)) % m,
     );
 
     // And finally, we need to inverse the function

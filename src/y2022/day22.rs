@@ -28,11 +28,7 @@ pub(crate) fn day22() {
 }
 
 #[allow(dead_code)]
-fn load_test() -> (
-    Vec<(usize, usize)>,
-    usize,
-    HashMap<usize, HashMap<Direction, (usize, Direction)>>,
-) {
+fn load_test() -> (Vec<(usize, usize)>, usize, HashMap<usize, HashMap<Direction, (usize, Direction)>>) {
     // Test
     // __1_
     // 234_
@@ -80,11 +76,7 @@ fn load_test() -> (
     (start_coords, size, moves)
 }
 
-fn load_input() -> (
-    Vec<(usize, usize)>,
-    usize,
-    HashMap<usize, HashMap<Direction, (usize, Direction)>>,
-) {
+fn load_input() -> (Vec<(usize, usize)>, usize, HashMap<usize, HashMap<Direction, (usize, Direction)>>) {
     // _12
     // _3_
     // 45_
@@ -229,12 +221,8 @@ fn part_b(
                         || new_pos.1 < quadrant_bounds.2
                         || new_pos.1 > quadrant_bounds.3
                     {
-                        let (to_quadrant, to_direction) =
-                            moves.get(&quadrant).unwrap().get(&direction).unwrap();
-                        let relative_pos = (
-                            pos.0 - start_coords[quadrant - 1].0,
-                            pos.1 - start_coords[quadrant - 1].1,
-                        );
+                        let (to_quadrant, to_direction) = moves.get(&quadrant).unwrap().get(&direction).unwrap();
+                        let relative_pos = (pos.0 - start_coords[quadrant - 1].0, pos.1 - start_coords[quadrant - 1].1);
                         to_bounds = (
                             start_coords[to_quadrant - 1].0,
                             start_coords[to_quadrant - 1].0 + size - 1,
@@ -242,54 +230,22 @@ fn part_b(
                             start_coords[to_quadrant - 1].1 + size - 1,
                         );
                         new_pos = match (direction, to_direction) {
-                            (Direction::UP, Direction::UP) => {
-                                (to_bounds.1, to_bounds.2 + relative_pos.1)
-                            }
-                            (Direction::UP, Direction::DOWN) => {
-                                (to_bounds.0, to_bounds.3 - relative_pos.1)
-                            }
-                            (Direction::UP, Direction::RIGHT) => {
-                                (to_bounds.0 + relative_pos.1, to_bounds.2)
-                            }
-                            (Direction::UP, Direction::LEFT) => {
-                                (to_bounds.1 - relative_pos.1, to_bounds.3)
-                            }
-                            (Direction::DOWN, Direction::UP) => {
-                                (to_bounds.1, to_bounds.3 - relative_pos.1)
-                            }
-                            (Direction::DOWN, Direction::DOWN) => {
-                                (to_bounds.0, to_bounds.2 + relative_pos.1)
-                            }
-                            (Direction::DOWN, Direction::RIGHT) => {
-                                (to_bounds.1 - relative_pos.1, to_bounds.2)
-                            }
-                            (Direction::DOWN, Direction::LEFT) => {
-                                (to_bounds.0 + relative_pos.1, to_bounds.3)
-                            }
-                            (Direction::LEFT, Direction::UP) => {
-                                (to_bounds.1, to_bounds.3 - relative_pos.0)
-                            }
-                            (Direction::LEFT, Direction::DOWN) => {
-                                (to_bounds.0, to_bounds.2 + relative_pos.0)
-                            }
-                            (Direction::LEFT, Direction::RIGHT) => {
-                                (to_bounds.1 - relative_pos.0, to_bounds.2)
-                            }
-                            (Direction::LEFT, Direction::LEFT) => {
-                                (to_bounds.0 + relative_pos.0, to_bounds.3)
-                            }
-                            (Direction::RIGHT, Direction::UP) => {
-                                (to_bounds.1, to_bounds.2 + relative_pos.0)
-                            }
-                            (Direction::RIGHT, Direction::DOWN) => {
-                                (to_bounds.0, to_bounds.3 - relative_pos.0)
-                            }
-                            (Direction::RIGHT, Direction::RIGHT) => {
-                                (to_bounds.0 + relative_pos.0, to_bounds.2)
-                            }
-                            (Direction::RIGHT, Direction::LEFT) => {
-                                (to_bounds.1 - relative_pos.0, to_bounds.3)
-                            }
+                            (Direction::UP, Direction::UP) => (to_bounds.1, to_bounds.2 + relative_pos.1),
+                            (Direction::UP, Direction::DOWN) => (to_bounds.0, to_bounds.3 - relative_pos.1),
+                            (Direction::UP, Direction::RIGHT) => (to_bounds.0 + relative_pos.1, to_bounds.2),
+                            (Direction::UP, Direction::LEFT) => (to_bounds.1 - relative_pos.1, to_bounds.3),
+                            (Direction::DOWN, Direction::UP) => (to_bounds.1, to_bounds.3 - relative_pos.1),
+                            (Direction::DOWN, Direction::DOWN) => (to_bounds.0, to_bounds.2 + relative_pos.1),
+                            (Direction::DOWN, Direction::RIGHT) => (to_bounds.1 - relative_pos.1, to_bounds.2),
+                            (Direction::DOWN, Direction::LEFT) => (to_bounds.0 + relative_pos.1, to_bounds.3),
+                            (Direction::LEFT, Direction::UP) => (to_bounds.1, to_bounds.3 - relative_pos.0),
+                            (Direction::LEFT, Direction::DOWN) => (to_bounds.0, to_bounds.2 + relative_pos.0),
+                            (Direction::LEFT, Direction::RIGHT) => (to_bounds.1 - relative_pos.0, to_bounds.2),
+                            (Direction::LEFT, Direction::LEFT) => (to_bounds.0 + relative_pos.0, to_bounds.3),
+                            (Direction::RIGHT, Direction::UP) => (to_bounds.1, to_bounds.2 + relative_pos.0),
+                            (Direction::RIGHT, Direction::DOWN) => (to_bounds.0, to_bounds.3 - relative_pos.0),
+                            (Direction::RIGHT, Direction::RIGHT) => (to_bounds.0 + relative_pos.0, to_bounds.2),
+                            (Direction::RIGHT, Direction::LEFT) => (to_bounds.1 - relative_pos.0, to_bounds.3),
                         };
                         new_quadrant = *to_quadrant;
                         new_dir = *to_direction;

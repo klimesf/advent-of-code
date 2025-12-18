@@ -59,10 +59,7 @@ fn part_a(mut moons: Vec<Moon>) {
             moon.apply_vel();
         }
     }
-    println!(
-        "{}",
-        moons.iter().map(|m| m.calculate_energy()).sum::<i32>()
-    )
+    println!("{}", moons.iter().map(|m| m.calculate_energy()).sum::<i32>())
 }
 
 fn part_b(mut moons: Vec<Moon>) {

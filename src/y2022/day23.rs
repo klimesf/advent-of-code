@@ -18,16 +18,7 @@ pub(crate) fn day23() {
         })
     });
 
-    let all_dirs = [
-        (1, 0),
-        (-1, 0),
-        (0, 1),
-        (0, -1),
-        (1, -1),
-        (1, 1),
-        (-1, 1),
-        (-1, -1),
-    ];
+    let all_dirs = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (1, 1), (-1, 1), (-1, -1)];
     let north_dirs = ([(-1, 0), (-1, -1), (-1, 1)], (-1, 0));
     let south_dirs = ([(1, 0), (1, -1), (1, 1)], (1, 0));
     let west_dirs = ([(0, -1), (1, -1), (-1, -1)], (0, -1));
@@ -40,16 +31,10 @@ pub(crate) fn day23() {
         new_map.clear();
 
         'outer: for elf in &map {
-            if all_dirs
-                .iter()
-                .any(|(dx, dy)| map.contains(&(elf.0 + dx, elf.1 + dy)))
-            {
+            if all_dirs.iter().any(|(dx, dy)| map.contains(&(elf.0 + dx, elf.1 + dy))) {
                 for j in i..i + 4 {
                     let (dirs, mv) = ordnung[j % 4];
-                    if dirs
-                        .iter()
-                        .all(|(dx, dy)| !map.contains(&(elf.0 + dx, elf.1 + dy)))
-                    {
+                    if dirs.iter().all(|(dx, dy)| !map.contains(&(elf.0 + dx, elf.1 + dy))) {
                         let new_pos = (elf.0 + mv.0, elf.1 + mv.1);
                         if new_map.contains(&(new_pos)) {
                             // There is another elf in the position, so we cannot move there

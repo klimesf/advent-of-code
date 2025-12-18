@@ -35,19 +35,11 @@ pub(crate) fn day07() {
         *dir_sizes.entry(current_path.join("/")).or_insert(0) += final_size;
     }
 
-    let total: u64 = dir_sizes
-        .values()
-        .into_iter()
-        .filter(|size| **size < 100000)
-        .sum();
+    let total: u64 = dir_sizes.values().into_iter().filter(|size| **size < 100000).sum();
     println!("{}", total);
 
     let unused = 70000000 - *dir_sizes.get(&*"/").unwrap_or(&0);
     let min = 30000000 - unused;
-    let to_delete = dir_sizes
-        .values()
-        .into_iter()
-        .filter(|size| **size >= min)
-        .min();
+    let to_delete = dir_sizes.values().into_iter().filter(|size| **size >= min).min();
     println!("{}", to_delete.unwrap())
 }
