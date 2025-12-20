@@ -132,11 +132,37 @@ impl Grid<u8> {
     pub fn render(&self) {
         for x in 0..self.x_len {
             for y in 0..self.y_len {
-                print!("{}", self[(x, y)]);
+                print!("{}", self[(x, y)] as char);
             }
             println!();
         }
         println!();
+    }
+
+    pub fn flip_x(&mut self) {
+        let old_items: Vec<u8> = self.items.clone();
+        let x_len = self.x_len;
+        let y_len = self.y_len;
+        for x in 0..x_len {
+            for y in 0..y_len {
+                self[(x_len - x - 1, y)] = old_items[(x * y_len + y) as usize];
+            }
+        }
+    }
+
+    pub fn rotate_left(&mut self) {
+        if self.x_len != self.y_len {
+            panic!("Rotation not implemented for non-square grid");
+        }
+
+        let old_items: Vec<u8> = self.items.clone();
+        let x_len = self.x_len;
+        let y_len = self.y_len;
+        for x in 0..x_len {
+            for y in 0..y_len {
+                self[(y_len - y - 1, x)] = old_items[(x * y_len + y) as usize];
+            }
+        }
     }
 }
 
@@ -238,5 +264,21 @@ mod grid_tests {
         assert_eq!(Some(P::new(1, 2)), map.find_first(b'x'));
         assert_eq!(Some(P::new(2, 2)), map.find_first(b'y'));
         assert_eq!(None, map.find_first(b'X'));
+    }
+
+    #[test]
+    fn flip_x_works() {
+        let mut map = Grid::parse("#####\n# x #\n# y #\n.....");
+        map.flip_x();
+        let expected = Grid::parse(".....\n# y #\n# x #\n#####");
+        assert_eq!(expected, map);
+    }
+
+    #[test]
+    fn rotate_left_works() {
+        let mut map = Grid::parse("#####\n     \n     \n     \n.....");
+        map.rotate_left();
+        let expected = Grid::parse("#   .\n#   .\n#   .\n#   .\n#   .");
+        assert_eq!(expected, map);
     }
 }
