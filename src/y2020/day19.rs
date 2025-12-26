@@ -1,6 +1,6 @@
 use itertools::Itertools;
 use regex::Regex;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 
 pub(crate) fn day19() {
@@ -11,23 +11,17 @@ pub(crate) fn day19() {
 fn part_a(input: String) -> usize {
     let (rules_str, messages) = input.split_once("\n\n").unwrap();
     let rules = parse_rules(rules_str);
-
-    let re = Regex::new(format!("^{}$", build_regex(0, &rules)).as_str()).unwrap();
-    messages.lines().filter(|msg| re.is_match(msg)).count()
+    let strings = build_strings(0, &rules);
+    messages.lines().filter(|msg| strings.contains(*msg)).count()
 }
 
 fn part_b(input: String) -> usize {
     let (rules_str, messages) = input.split_once("\n\n").unwrap();
-    let mut rules = parse_rules(rules_str);
-    rules.insert(8, Rule::Or(vec![42], vec![42, 8]));
-    rules.insert(11, Rule::Or(vec![42, 31], vec![42, 11, 31]));
-
-    let re0 = Regex::new(format!("^{}$", build_regex(0, &rules)).as_str()).unwrap();
-    let re8 = Regex::new(format!("^{}$", build_regex(8, &rules)).as_str()).unwrap();
-    let re11 = Regex::new(format!("^{}$", build_regex(11, &rules)).as_str()).unwrap();
+    let rules = parse_rules(rules_str);
+    let re = Regex::new(format!("^{}$", build_regex(0, &rules, true)).as_str()).unwrap();
     messages
         .lines()
-        .filter(|msg| match_rec(msg.to_string(), 0, &re0, &re8, &re11))
+        .filter(|msg| match_rec(msg.to_string(), &re, &rules))
         .count()
 }
 
@@ -56,65 +50,111 @@ fn parse_rules(rules_str: &str) -> HashMap<usize, Rule> {
         .collect::<HashMap<usize, Rule>>()
 }
 
-fn build_regex(rule: usize, rules: &HashMap<usize, Rule>) -> String {
+fn build_strings(rule: usize, rules: &HashMap<usize, Rule>) -> HashSet<String> {
+    match rules.get(&rule).unwrap() {
+        Rule::Literal(c) => HashSet::from_iter(vec![c.to_string()]),
+        Rule::Sequence(seq) => {
+            let mut ans = HashSet::new();
+            ans.insert(String::new());
+            for i in 0..seq.len() {
+                let mut new_ans = HashSet::new();
+                let app = build_strings(seq[i], rules);
+                for s in &ans {
+                    for s2 in &app {
+                        let res = format!("{}{}", s, s2);
+                        new_ans.insert(res);
+                    }
+                }
+                ans = new_ans;
+            }
+            ans
+        }
+        Rule::Or(ls, rs) => {
+            let mut ans1 = HashSet::new();
+            ans1.insert(String::new());
+            for i in 0..ls.len() {
+                let mut new_ans = HashSet::new();
+                let app = build_strings(ls[i], rules);
+                for s in &ans1 {
+                    for s2 in &app {
+                        let res = format!("{}{}", s, s2);
+                        new_ans.insert(res);
+                    }
+                }
+                ans1 = new_ans;
+            }
+
+            let mut ans2 = HashSet::new();
+            ans2.insert(String::new());
+            for i in 0..rs.len() {
+                let mut new_ans = HashSet::new();
+                let app = build_strings(rs[i], rules);
+                for s in &ans2 {
+                    for s2 in &app {
+                        let res = format!("{}{}", s, s2);
+                        new_ans.insert(res);
+                    }
+                }
+                ans2 = new_ans;
+            }
+
+            ans1.union(&ans2).cloned().collect()
+        }
+    }
+}
+
+fn build_regex(rule: usize, rules: &HashMap<usize, Rule>, part_b: bool) -> String {
+    if part_b && rule == 8 {
+        return format!("({})+", build_regex(42, &rules, part_b));
+    }
+    if part_b && rule == 11 {
+        return format!(
+            "(?P<left>{})+?(?P<right>{})+?",
+            build_regex(42, &rules, part_b),
+            build_regex(31, &rules, part_b)
+        );
+    }
     match rules.get(&rule).unwrap() {
         Rule::Literal(char) => format!("{}", char),
-        Rule::Sequence(seq) => seq.iter().map(|rule| build_regex(*rule, rules)).join(""),
+        Rule::Sequence(seq) => seq.iter().map(|rule| build_regex(*rule, rules, part_b)).join(""),
         Rule::Or(l, r) => {
-            let ls = l.iter().map(|rrr| build_regex(*rrr, rules)).join("");
-            let rs = r
-                .iter()
-                .map(|rrr| {
-                    if *rrr == rule {
-                        format!("(?P<rec{}>.+)", rrr) // The recursive is always on right
-                    } else {
-                        build_regex(*rrr, rules)
-                    }
-                })
-                .join("");
+            let ls = l.iter().map(|ru| build_regex(*ru, rules, part_b)).join("");
+            let rs = r.iter().map(|ru| build_regex(*ru, rules, part_b)).join("");
             format!("({}|{})", ls, rs)
         }
     }
 }
 
-fn match_rec(msg: String, re_use: usize, re0: &Regex, re8: &Regex, re11: &Regex) -> bool {
-    let regex = match re_use {
-        0 => re0,
-        8 => re8,
-        11 => re11,
-        _ => panic!("Unsupported regex use: {}", re_use),
-    };
-
+fn match_rec(msg: String, regex: &Regex, rules: &HashMap<usize, Rule>) -> bool {
     if !regex.is_match(msg.as_str()) {
         return false;
     }
 
-    regex
+    let left_match = regex
         .captures_iter(msg.as_str())
-        .filter(|caps| caps.name("rec8").is_some())
-        .map(|caps| caps.name("rec8").unwrap())
-        .filter(|cap| cap.as_str().len() > 0)
-        .map(|cap| {
-            let res = match_rec(cap.as_str().to_string(), 8, re0, re8, re11);
-            if !res {
-                println!("{:?} {}", regex, cap.as_str())
-            }
-            res
-        })
-        .all(|ok| ok)
-        && regex
-            .captures_iter(msg.as_str())
-            .filter(|caps| caps.name("rec11").is_some())
-            .map(|caps| caps.name("rec11").unwrap())
-            .filter(|cap| cap.as_str().len() > 0)
-            .map(|cap| {
-                let res = match_rec(cap.as_str().to_string(), 11, re0, re8, re11);
-                if !res {
-                    println!("{:?} {}", regex, cap.as_str())
-                }
-                res
-            })
-            .all(|ok| ok)
+        .filter(|caps| caps.name("left").is_some())
+        .map(|caps| caps.name("left").unwrap().as_str())
+        .last()
+        .unwrap();
+
+    let right_match = regex
+        .captures_iter(msg.as_str())
+        .filter(|caps| caps.name("right").is_some())
+        .map(|caps| caps.name("right").unwrap().as_str())
+        .last()
+        .unwrap();
+
+    if left_match.len() == 0 || right_match.len() == 0 {
+        return true;
+    }
+
+    let left_re = Regex::new(build_regex(42, &rules, false).as_str()).unwrap();
+    let right_re = Regex::new(build_regex(31, &rules, false).as_str()).unwrap();
+
+    let left_cnt = left_re.find_iter(left_match).count();
+    let right_cnt = right_re.find_iter(right_match).count();
+
+    left_cnt == right_cnt
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
