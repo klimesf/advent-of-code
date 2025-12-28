@@ -36,36 +36,31 @@ fn part_a(input: String) -> usize {
 }
 
 fn part_b(input: String) -> usize {
-    let mut nums = input
+    let nums = input
         .split(",")
         .map(|x| x.parse::<usize>().unwrap())
         .collect::<Vec<usize>>();
-    nums.reserve(30_000_000);
 
-    let mut seen_1 = vec![usize::MAX; 30_000_000];
-    let mut seen_2 = vec![usize::MAX; 30_000_000];
+    let mut seen = vec![usize::MAX; 30_000_000];
     for i in 0..nums.len() - 1 {
         let num = nums[i];
-        seen_1[num] = i;
+        seen[num] = i;
     }
 
     let mut i = nums.len() - 1;
+    let mut last = nums[i];
     while i < 30_000_000 - 1 {
-        let last = nums[i];
-
-        if seen_1[last] != usize::MAX {
-            let last_seen_1 = seen_1[last];
-            seen_2[last] = last_seen_1;
-            debug_assert!(i > last_seen_1);
-            nums.push(i - last_seen_1);
-            seen_1[last] = i;
+        if seen[last] != usize::MAX {
+            let last_seen = seen[last];
+            seen[last] = i;
+            last = i - last_seen;
         } else {
-            seen_1[last] = i;
-            nums.push(0);
+            seen[last] = i;
+            last = 0;
         }
         i += 1;
     }
-    nums[nums.len() - 1]
+    last
 }
 
 #[cfg(test)]
