@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::fs;
 
 pub(crate) fn day15() {
@@ -41,25 +40,27 @@ fn part_b(input: String) -> usize {
         .split(",")
         .map(|x| x.parse::<usize>().unwrap())
         .collect::<Vec<usize>>();
+    nums.reserve(30_000_000);
 
-    let mut seen_1 = HashMap::new();
-    let mut seen_2 = HashMap::new();
+    let mut seen_1 = vec![usize::MAX; 30_000_000];
+    let mut seen_2 = vec![usize::MAX; 30_000_000];
     for i in 0..nums.len() - 1 {
         let num = nums[i];
-        seen_1.insert(num, i);
+        seen_1[num] = i;
     }
 
     let mut i = nums.len() - 1;
-    while i < 29999999 {
+    while i < 30_000_000 - 1 {
         let last = nums[i];
 
-        if seen_1.contains_key(&last) {
-            let last_seen_1 = *seen_1.get(&last).unwrap();
-            seen_2.insert(last, last_seen_1);
+        if seen_1[last] != usize::MAX {
+            let last_seen_1 = seen_1[last];
+            seen_2[last] = last_seen_1;
+            debug_assert!(i > last_seen_1);
             nums.push(i - last_seen_1);
-            seen_1.insert(last, i);
+            seen_1[last] = i;
         } else {
-            seen_1.insert(last, i);
+            seen_1[last] = i;
             nums.push(0);
         }
         i += 1;

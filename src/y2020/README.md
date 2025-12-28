@@ -9,101 +9,101 @@ Advent of Code
 --- day01:
 1014624
 80072256
-Elapsed: 1.591292ms
+Elapsed: 473.708µs
 --- day02:
 622
 263
-Elapsed: 756.417µs
+Elapsed: 323.375µs
 --- day03:
 278
 9709761600
-Elapsed: 1.232458ms
+Elapsed: 234.416µs
 --- day04:
 254
 184
-Elapsed: 1.616625ms
+Elapsed: 547.083µs
 --- day05:
 938
 696
-Elapsed: 675.75µs
+Elapsed: 406.375µs
 --- day06:
 6680
 3117
-Elapsed: 2.496458ms
+Elapsed: 1.519ms
 --- day07:
 179
 18925
-Elapsed: 2.431875ms
+Elapsed: 995.875µs
 --- day08:
 1521
 1016
-Elapsed: 5.227375ms
+Elapsed: 4.855875ms
 --- day09:
 375054920
 54142584
-Elapsed: 784.583µs
+Elapsed: 371.75µs
 --- day10:
 2046
 1157018619904
-Elapsed: 1.119416ms
+Elapsed: 66.417µs
 --- day11:
 2438
 2174
-Elapsed: 42.19525ms
+Elapsed: 41.406667ms
 --- day12:
 1106
 107281
-Elapsed: 683.083µs
+Elapsed: 228.584µs
 --- day13:
 203
 905694340256752
-Elapsed: 181.375µs
+Elapsed: 32.375µs
 --- day14:
 9879607673316
 3435342392262
-Elapsed: 60.227834ms
+Elapsed: 60.651167ms
 --- day15:
 492
 63644
-Elapsed: 3.112401166s
+Elapsed: 788.0945ms
 --- day16:
 28882
 1429779530273
-Elapsed: 925.334µs
+Elapsed: 624.792µs
 --- day17:
 232
 1620
-Elapsed: 11.368917ms
+Elapsed: 11.005791ms
 --- day18:
 5019432542701
 70518821989947
-Elapsed: 1.746166ms
+Elapsed: 1.556542ms
 --- day19:
 147
 263
-Elapsed: 3.474708ms
+Elapsed: 2.961167ms
 --- day20:
 63187742854073
 2152
-Elapsed: 8.776833ms
+Elapsed: 7.932667ms
 --- day21:
 2734
 kbmlt,mrccxm,lpzgzmk,ppj,stj,jvgnc,gxnr,plrlg
-Elapsed: 3.061916ms
+Elapsed: 3.757625ms
 --- day22:
 32677
 33661
-Elapsed: 591.149917ms
+Elapsed: 602.767208ms
 --- day23:
 58427369
 111057672960
-Elapsed: 219.062833ms
+Elapsed: 311.726583ms
 --- day24:
 382
 3964
-Elapsed: 94.131916ms
+Elapsed: 93.426375ms
 --- day25:
 6408263
-Elapsed: 48.987708ms
-target/release/adventofcode 2020 all  4,09s user 0,11s system 98% cpu 4,253 total
+Elapsed: 47.784208ms
+target/release/adventofcode 2020 all  1,90s user 0,09s system 98% cpu 2,007 total
 ```
