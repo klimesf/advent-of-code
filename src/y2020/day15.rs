@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, thread};
 
 pub(crate) fn day15() {
     println!("{}", part_a(fs::read_to_string("input/2020/day15/input.txt").unwrap()));
@@ -35,32 +35,39 @@ fn part_a(input: String) -> usize {
     nums[nums.len() - 1]
 }
 
-fn part_b(input: String) -> usize {
-    let nums = input
-        .split(",")
-        .map(|x| x.parse::<usize>().unwrap())
-        .collect::<Vec<usize>>();
+fn part_b(input: String) -> u32 {
+    thread::Builder::new()
+        .stack_size(30_000_000 * 4)
+        .spawn(move || {
+            let nums = input
+                .split(",")
+                .map(|x| x.parse::<u32>().unwrap())
+                .collect::<Vec<u32>>();
 
-    let mut seen = vec![usize::MAX; 30_000_000];
-    for i in 0..nums.len() - 1 {
-        let num = nums[i];
-        seen[num] = i;
-    }
+            let mut seen = [u32::MAX; 30_000_000];
+            for i in 0..nums.len() - 1 {
+                let num = nums[i];
+                seen[num as usize] = i as u32;
+            }
 
-    let mut i = nums.len() - 1;
-    let mut last = nums[i];
-    while i < 30_000_000 - 1 {
-        if seen[last] != usize::MAX {
-            let last_seen = seen[last];
-            seen[last] = i;
-            last = i - last_seen;
-        } else {
-            seen[last] = i;
-            last = 0;
-        }
-        i += 1;
-    }
-    last
+            let mut i = nums.len() - 1;
+            let mut last = nums[i];
+            while i < 30_000_000 - 1 {
+                if seen[last as usize] != u32::MAX {
+                    let last_seen = seen[last as usize];
+                    seen[last as usize] = i as u32;
+                    last = i as u32 - last_seen;
+                } else {
+                    seen[last as usize] = i as u32;
+                    last = 0;
+                }
+                i += 1;
+            }
+            last
+        })
+        .unwrap()
+        .join()
+        .unwrap()
 }
 
 #[cfg(test)]
